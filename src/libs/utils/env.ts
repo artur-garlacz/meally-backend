@@ -10,7 +10,6 @@ type NameToType = {
   readonly POSTGRES_USER: string;
   readonly POSTGRES_PASSWORD: string;
   readonly POSTGRES_DB: string;
-  readonly POSTGRES_DATABASE: string;
   readonly POSTGRES_PORT: number;
   readonly APP_PORT: number;
   readonly APP_VERSION: string;

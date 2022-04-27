@@ -5,6 +5,7 @@ export enum ErrorType {
   Unhandled = 'unhandled',
   HttpErrorResponse = 'HttpErrorResponse',
   Transform = 'Transform',
+  CognitoError = 'CognitoError',
 }
 
 export type HttpErrorResponseBody = {

@@ -14,9 +14,9 @@ const migration: Migration = {
           "updatedAt"   timestamp   NOT NULL DEFAULT NOW()
         );
         
-        CREATE TABLE "userAddress"(
-            "userAddressId" uuid PRIMARY KEY CHECK (
-                "userAddressId" <> '00000000-0000-0000-0000-000000000000'
+        CREATE TABLE "userDetails"(
+            "userDetailsId" uuid PRIMARY KEY CHECK (
+                "userDetailsId" <> '00000000-0000-0000-0000-000000000000'
             ),
             "address1"      varchar(60) NOT NULL,
             "address2"      varchar(60),

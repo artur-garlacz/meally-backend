@@ -20,6 +20,7 @@ async function run() {
 
   const config = await getAppConfig();
   const dbPool = await createDbPool(config);
+  console.log(dbPool, 'dbPool');
   await runMigrations({ force, db: dbPool });
   if (seed) {
     await runSeed(dbPool);

@@ -6,6 +6,7 @@ import logger from '@libs/utils/logger';
 export type AppServices = {
   appConfig: AppConfig;
   dbClient: DbClient;
+  cognitoClient: CognitoClient;
 };
 
 export const buildAppServices = async (
@@ -16,6 +17,7 @@ export const buildAppServices = async (
 
   const dbClient =
     args.dbClient || (await createDbClient(await createDbPool(appConfig)));
+  const cognitoClient = args.cognitoClient || createCognitoClient(appConfig);
 
   return {
     appConfig,

@@ -2,8 +2,10 @@ import express from 'express';
 import { wrap } from '@libs/utils/express';
 import { AppServices } from '@app-services';
 import { validateMiddleware } from '@api/middlewares/validator-middleware';
-import { registerUserController } from './controller/register-user-controller';
-import { createUserSchema } from './user-schema';
+import {
+  registerUserController,
+  createUserSchema,
+} from '@api/controllers/users/register-user-controller';
 
 export const userApiRouter = (services: AppServices) => {
   const router = express.Router();

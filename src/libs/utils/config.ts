@@ -1,5 +1,6 @@
 import {
   IsIn,
+  IsNotEmpty,
   IsObject,
   IsPort,
   IsString,
@@ -16,8 +17,10 @@ export async function getAppConfig(): Promise<AppConfig> {
   return transformToClass(AppConfig, {
     environment: getEnv('ENV') || 'local',
     appUrl: readOptionalString('APP_URL', 'no-url'),
+    awsRegion: readOptionalString('AWS_REGION', 'eu-west-1'),
     appVersion: readOptionalString('APP_VERSION', 'no-version-env'), // cannot use env readers fns with webpack DefineModule
     dbConfig: readDbConfig(),
+    cognitoConfig: readCognitoConfig(),
   });
 }
 
@@ -30,12 +33,20 @@ export class AppConfig {
   readonly appVersion: string;
 
   @IsString()
+  readonly awsRegion: string;
+
+  @IsString()
   readonly appUrl: string;
 
   @IsObject()
   @ValidateNested()
   @Type(() => DbConfig)
   readonly dbConfig: DbConfig;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => CognitoConfig)
+  readonly cognitoConfig: CognitoConfig;
 }
 
 export function getDbConfig(): Promise<DbConfig> {
@@ -46,7 +57,7 @@ function readDbConfig(): DbConfig {
   const { readOptionalString } = createEnvReader();
   const host = readOptionalString('POSTGRES_HOST', 'localhost');
   const port = readOptionalString('POSTGRES_PORT', '5432');
-  const database = readOptionalString('POSTGRES_DATABASE', 'meally');
+  const database = readOptionalString('POSTGRES_DB', 'meally');
   const user = readOptionalString('POSTGRES_USER', 'lambda');
   const password = readOptionalString('POSTGRES_PASSWORD', 'changeme');
   const databaseUrl = `postgresql://${user}:${password}@${host}:${port}/${database}`;
@@ -79,4 +90,19 @@ export class DbConfig {
 
   @IsString()
   readonly databaseUrl: string;
+}
+
+function readCognitoConfig(): CognitoConfig {
+  const { readOptionalString } = createEnvReader(process.env);
+  return {
+    userPoolId: readOptionalString(
+      'AWS_COGNITO_USER_POOL_ID',
+      'no-cognito-user-pool',
+    ),
+  };
+}
+export class CognitoConfig {
+  @IsString()
+  @IsNotEmpty()
+  readonly userPoolId: string;
 }

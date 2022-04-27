@@ -1,10 +1,10 @@
 import { AppServices } from '@app-services';
 import { wrap } from '@libs/utils/express';
 import logger from '@libs/utils/logger';
-import { userApiRouter } from '@modules/users/router';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import { userApiRouter } from './controllers/users';
 import { errorsMiddleware } from './middlewares/errors-middleware';
 
 export async function buildRouter(services: AppServices) {
@@ -19,7 +19,7 @@ export async function buildRouter(services: AppServices) {
   app.use(
     cors({
       origin: '*',
-      // origin: [/http:\/\/localhost\:\d+/, /najbamjusik\.com$/],
+      // origin: [/http:\/\/localhost\:\d+/, /\.com$/],
       optionsSuccessStatus: 200,
     }),
   );

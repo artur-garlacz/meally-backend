@@ -52,5 +52,10 @@ export function usersQueries(db: CommonQueryMethods) {
                 ${userDetails.userId},
             ) RETURNING *`);
     },
+    getUserDetails(userId: string): Promise<UserDetailsEntity> {
+      logger.debug('DbClient.getUserDetails');
+      return db.one(sql`
+      SELECT * FROM "userDetails" WHERE userId=${userId} `);
+    },
   });
 }

@@ -25,6 +25,7 @@ export const createUserDetailsController = (app: AppServices) => {
 
 export const getUserDetailsController = (app: AppServices) => {
   return async (req: Request, res: Response<any>) => {
+    const userId = 'sad'; // get from req
     const userDetails = await app.dbClient.getUserDetails(userId);
 
     return res.status(200).send({ userDetails });

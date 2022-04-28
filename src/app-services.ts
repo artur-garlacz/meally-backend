@@ -1,3 +1,7 @@
+import {
+  CognitoClient,
+  createCognitoClient,
+} from '@clients/aws/cognito-client';
 import { createDbClient, DbClient } from '@libs/db';
 import { createDbPool } from '@libs/db/setup';
 import { AppConfig, getAppConfig } from '@libs/utils/config';
@@ -22,5 +26,6 @@ export const buildAppServices = async (
   return {
     appConfig,
     dbClient,
+    cognitoClient,
   };
 };

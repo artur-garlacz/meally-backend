@@ -9,6 +9,8 @@ import { HttpErrorResponse } from '@libs/utils/errors';
 import logger from '@libs/utils/logger';
 import CognitoExpress, { JwtToken } from 'cognito-express';
 
+export type CognitoClient = ReturnType<typeof createCognitoClient>;
+
 export function createCognitoClient(
   config: Pick<AppConfig, 'awsRegion' | 'cognitoConfig'>,
 ) {

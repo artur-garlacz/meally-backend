@@ -4,7 +4,11 @@ import { Migration } from '.';
 const migration: Migration = {
   async run(db) {
     await db.query(sql`
-          DROP TABLE IF EXISTS "users" CASCADE;
+          DROP TABLE IF EXISTS "user" CASCADE;
+          DROP TABLE IF EXISTS "userDetails" CASCADE;
+          DROP TABLE IF EXISTS "offer" CASCADE;
+          DROP TYPE IF EXISTS "offerStatus" CASCADE;
+          DROP TABLE IF EXISTS "offerCategory" CASCADE;
       `);
 
     await db.query(sql`

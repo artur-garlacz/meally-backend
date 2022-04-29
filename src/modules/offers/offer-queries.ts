@@ -14,3 +14,5 @@ export function offersQueries(db: CommonQueryMethods) {
     },
   });
 }
+
+export function getOfferFilter() {}

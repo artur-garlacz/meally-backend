@@ -1,3 +1,4 @@
+import { offersQueries } from '@modules/offers/offer-queries';
 import { usersQueries } from '@modules/users/user-queries';
 import {
   CommonQueryMethods,
@@ -29,5 +30,6 @@ export function createDbQueries(
       return fn(db);
     },
     ...usersQueries(db),
+    ...offersQueries(db),
   });
 }

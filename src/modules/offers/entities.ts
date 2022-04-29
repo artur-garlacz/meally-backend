@@ -24,6 +24,9 @@ export class OfferEntity {
   @IsUUID('4')
   @IsNotEmpty()
   readonly offerId: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly title: string;
   @IsDecimal()
   @IsNotEmpty()
   readonly price: number;

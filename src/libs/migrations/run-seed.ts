@@ -5,12 +5,14 @@
 // import { uuid } from 'najba/commons';
 // import { dummies } from 'najba/tests/dummies';
 
+import { createDbClient } from '@libs/db';
 import logger from '@libs/utils/logger';
+import { dummies } from '@tests/dummies';
 import { DatabasePool } from 'slonik';
 
 export async function runSeed(dbPool: DatabasePool) {
   logger.info('Running db seed', {});
-  //   const dbClient = createDbClient(dbPool);
+  const dbClient = createDbClient(dbPool);
 
   //   await dbClient.createMintingOption({
   //     mintingOptionId: '22b06884-7149-42e6-a4ec-4c75ca551c66',
@@ -29,12 +31,11 @@ export async function runSeed(dbPool: DatabasePool) {
   //     isrc: 'PL57G2100365',
   //   });
 
-  //   const user1 = await dbClient.createUser(
-  //     dummies.user({
-  //       email: 'najbamjusik+dev1@gmail.com',
-  //       cognitoUserId: '898e3290-a1b1-4e72-b7f7-7c08f3d55619',
-  //     }),
-  //   );
+  const user1 = await dbClient.createUser(
+    dummies.user({
+      email: 'dev1@gmail.com',
+    }),
+  );
   //   const user2 = await dbClient.createUser(
   //     dummies.user({ email: 'najbamjusik+dev2@gmail.com' }),
   //   );

@@ -14,63 +14,44 @@ export async function runSeed(dbPool: DatabasePool) {
   logger.info('Running db seed', {});
   const dbClient = createDbClient(dbPool);
 
-  //   await dbClient.createMintingOption({
-  //     mintingOptionId: '22b06884-7149-42e6-a4ec-4c75ca551c66',
-  //     name: 'Ballada o dojrzałości 2',
-  //     cover: 'https://app.dev.cloud.najbacoin.com/b-o-d-2.jpg',
-  //     embedUrl: 'https://open.spotify.com/embed/track/65YtWeTpusS7BvGjz78Apr',
-  //     expectedMentions: ['kruligh'],
-  //     isrc: 'PL57G2000280',
-  //   });
-  //   await dbClient.createMintingOption({
-  //     mintingOptionId: 'a99be76a-564c-4454-8386-69898e5557e4',
-  //     name: 'Ballada o starej nokii',
-  //     cover: 'https://app.dev.cloud.najbacoin.com/b-o-starej-nokii.jpg',
-  //     embedUrl: 'https://open.spotify.com/embed/track/6pFudKm37STaoMX5fYgdLR',
-  //     expectedMentions: ['kruligh'],
-  //     isrc: 'PL57G2100365',
-  //   });
-
   const user1 = await dbClient.createUser(
     dummies.user({
       email: 'dev1@gmail.com',
     }),
   );
-  //   const user2 = await dbClient.createUser(
-  //     dummies.user({ email: 'najbamjusik+dev2@gmail.com' }),
-  //   );
-  //   await dbClient.createUser(
-  //     dummies.user({ email: 'najbamjusik+dev3@gmail.com' }),
-  //   );
 
-  //   await dbClient.createInstagramAccount({
-  //     userId: user1.userId,
-  //     nickname: 'kruligh_2',
-  //   });
-  //   await dbClient.createInstagramAccount({
-  //     userId: user2.userId,
-  //     nickname: 'najbacoin',
-  //   });
+  console.log('User created');
 
-  //   await dbClient.createTransaction({
-  //     txId: uuid(),
-  //     fromUser: null,
-  //     toUser: user1.userId,
-  //     amount: 100,
-  //     requestedAt: new Date(),
-  //     comment: 'starter pack',
-  //   });
+  const offerCategory1 = await dbClient.createOfferCategory(
+    dummies.offerCategory({
+      name: 'Kuchnia włoska',
+    }),
+  );
 
-  //   for (let i = 0; i < 10; i++) {
-  //     await dbClient.createPromotion([
-  //       {
-  //         price: 10,
-  //         discountValue: 0.5,
-  //         discountType: PromotionDiscountType.Percentage,
-  //         promotionId: uuid(),
-  //         promotionCode: uuid().split('-')[0],
-  //         createdAt: new Date(),
-  //       },
-  //     ]);
-  //   }
+  console.log('Category 1 created');
+
+  const offerCategory2 = await dbClient.createOfferCategory(
+    dummies.offerCategory({
+      name: 'Kuchnia polska',
+    }),
+  );
+  const offerCategory3 = await dbClient.createOfferCategory(
+    dummies.offerCategory({
+      name: 'Kuchnia chińska',
+    }),
+  );
+
+  for (let i = 0; i < 20; i++) {
+    await dbClient.createOffer(
+      dummies.offer({
+        userId: user1.userId,
+        offerCategoryId:
+          i % 3 == 0
+            ? offerCategory3.offerCategoryId
+            : i % 2 == 0
+            ? offerCategory2.offerCategoryId
+            : offerCategory1.offerCategoryId,
+      }),
+    );
+  }
 }

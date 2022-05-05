@@ -13,18 +13,18 @@ export function usersQueries(db: CommonQueryMethods) {
       logger.debug('DbClient.createUser', user);
 
       return db.one(sql`
-            INSERT INTO "users" (
+            INSERT INTO "user" (
                 "userId",
                 "email",
                 "password",
                 "createdAt",
-                "updatedAt",
+                "updatedAt"
             ) VALUES (
                 ${user.userId},
                 ${user.email},
                 ${user.password},
                 ${serializeDate(user.createdAt)},
-                ${serializeDate(user.updatedAt)},
+                ${serializeDate(user.updatedAt)}
             ) RETURNING *`);
     },
     createUserDetails(
@@ -49,7 +49,7 @@ export function usersQueries(db: CommonQueryMethods) {
                 ${userDetails.postalCode},
                 ${userDetails.country},
                 ${userDetails.phoneNumber},
-                ${userDetails.userId},
+                ${userDetails.userId}
             ) RETURNING *`);
     },
     getUserDetails(userId: string): Promise<UserDetailsEntity> {

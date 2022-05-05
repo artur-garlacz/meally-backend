@@ -4,12 +4,12 @@ import { Migration } from '.';
 const migration: Migration = {
   async run(db) {
     await db.query(sql`
-        CREATE TABLE "offerCategory"(
+        CREATE TABLE "offerCategory" (
             "offerCategoryId" uuid PRIMARY KEY CHECK (
                 "offerCategoryId" <> '00000000-0000-0000-0000-000000000000'
             ),
             "shortDesc"   varchar(300)    NOT NULL,
-            "name"        varchar(150)    NOT NULL,
+            "name"        varchar(150)    NOT NULL
         );
 
         CREATE TYPE "offerStatus" AS ENUM ('draft', 'published', 'archived');
@@ -19,16 +19,16 @@ const migration: Migration = {
             "offerId" <> '00000000-0000-0000-0000-000000000000'
           ),
           "title"               varchar(200)    NOT NULL,
-          "unitPrice"           decimal(2,2)    NOT NULL,
+          "unitPrice"           decimal(10,2)   NOT NULL,
           "longDesc"            text            NOT NULL,
           "shortDesc"           varchar(300)    NOT NULL,
-          "status"              offerStatus     NOT NULL,
+          "status"              "offerStatus"   NOT NULL,
           "availableQuantity"   int             NOT NULL,
           "promoted"            boolean         NULL,
           "createdAt"           timestamp       NOT NULL DEFAULT NOW(),
           "updatedAt"           timestamp       NOT NULL DEFAULT NOW(),
           "userId"              uuid NULL REFERENCES "user" ("userId"),
-          "offerCategoryId"     uuid NULL REFERENCES "offerCategory" ("offerCategoryId"),
+          "offerCategoryId"     uuid NULL REFERENCES "offerCategory" ("offerCategoryId")
         );
 
         CREATE TABLE "offerDetails" (
@@ -41,6 +41,9 @@ const migration: Migration = {
           "country"       varchar(40) NOT NULL,
           "offerId"       uuid NULL REFERENCES "offer" ("offerId")
         );
+
+        ALTER TABLE "user" 
+          ALTER COLUMN "password" TYPE varchar;
     `);
   },
 };

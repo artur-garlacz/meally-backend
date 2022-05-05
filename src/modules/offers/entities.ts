@@ -1,5 +1,7 @@
+import { OfferStatusType } from '@commons/api/offers';
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsDate,
   IsDecimal,
   IsNotEmpty,
@@ -29,16 +31,21 @@ export class OfferEntity {
   readonly title: string;
   @IsDecimal()
   @IsNotEmpty()
-  readonly price: number;
+  readonly unitPrice: number;
   @IsString()
   @IsNotEmpty()
   readonly longDesc: string;
   @IsString()
   @IsNotEmpty()
   readonly shortDesc: string;
+  @IsNotEmpty()
+  readonly status: OfferStatusType;
   @IsNumber()
   @IsNotEmpty()
   readonly availableQuantity: number;
+  @IsBoolean()
+  @IsNotEmpty()
+  readonly promoted: boolean;
   @IsDate()
   @Type(() => Date)
   readonly createdAt: Date;

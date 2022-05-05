@@ -11,3 +11,17 @@ export type PaginationRequest = {
     limit: number;
   };
 };
+
+export function setPaginationResponse<T>({
+  items,
+  page,
+}: {
+  items: T[];
+  page?: number;
+}) {
+  return {
+    items,
+    itemsCount: items.length,
+    page,
+  };
+}

@@ -1,4 +1,5 @@
 import { PaginationRequest } from '@commons/pagination';
+import { OfferEntity } from '@modules/offers/entities';
 
 export type OfferFilterQuery = {
   categoryId: string;
@@ -10,5 +11,11 @@ export type OfferFilterQuery = {
 } & PaginationRequest;
 
 export enum OfferStatus {
-  Draft = 'draft',
+  draft = 'draft',
+  published = 'published',
+  archived = 'archived',
 }
+
+export type UpdateOfferType = Partial<Omit<OfferEntity, 'userId'>>;
+
+export type OfferStatusType = keyof typeof OfferStatus;

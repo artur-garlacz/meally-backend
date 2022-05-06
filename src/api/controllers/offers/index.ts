@@ -7,7 +7,7 @@ import { getOffersController } from '@api/controllers/offers/get-offers-controll
 export const offerApiRouter = (services: AppServices) => {
   const router = express.Router();
 
-  router.post('/all', wrap(getOffersController(services)));
+  router.get('/all', wrap(getOffersController(services)));
 
   return router;
 };

@@ -3,8 +3,8 @@ import { AppServices } from '@app-services';
 
 export const createOfferController = (app: AppServices) => {
   return async (req: Request, res: Response) => {
-    const offers = await app.dbClient.getAllOffers();
+    // const offer = await app.dbClient.createOffer({});
 
-    return res.status(200).send({ data: offers, dataCount: offers.length });
+    return res.status(200);
   };
 };

@@ -1,11 +1,17 @@
-import { UpdateOfferType } from '@commons/api/offers';
+import { OfferFilterQuery, UpdateOfferType } from '@commons/api/offers';
+import { setPaginationQuery } from '@commons/pagination';
 import logger from '@libs/utils/logger';
-import { chainOptionalUpdate, toMany } from '@libs/utils/query';
+import { chainOptional, toMany } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 import { CommonQueryMethods, sql } from 'slonik';
 import { OfferCategoryEntity, OfferEntity } from './entities';
 
-export function getOffersWithParams() {}
+export function getOffersParams({ page, perPage, ...args }: OfferFilterQuery) {
+  return {
+    paginateCondition: setPaginationQuery({ page, perPage }),
+    whereCondition: chainOptional(args as any, 'select'),
+  };
+}
 
 export function offersQueries(db: CommonQueryMethods) {
   return Object.freeze({
@@ -53,22 +59,31 @@ export function offersQueries(db: CommonQueryMethods) {
       return db.one(sql`
         UPDATE "offer"
         SET
-        ${chainOptionalUpdate({
-          title: updateOffer.title,
-          unitPrice: updateOffer.unitPrice,
-          longDesc: updateOffer.longDesc,
-          shortDesc: updateOffer.shortDesc,
-          status: updateOffer.status,
-          availableQuantity: updateOffer.availableQuantity,
-          promoted: updateOffer.promoted,
-        })}
+        ${chainOptional(
+          {
+            title: updateOffer.title,
+            unitPrice: updateOffer.unitPrice,
+            longDesc: updateOffer.longDesc,
+            shortDesc: updateOffer.shortDesc,
+            status: updateOffer.status,
+            availableQuantity: updateOffer.availableQuantity,
+            promoted: updateOffer.promoted,
+          },
+          'update',
+        )}
         WHERE "offerId" = ${offerId}
         RETURNING *`);
     },
-    getAllOffers(): Promise<OfferEntity[]> {
+    getAllOffers(args: OfferFilterQuery): Promise<OfferEntity[]> {
       logger.debug('DbClient.getAllOffers');
 
-      return db.query(sql`SELECT * FROM "offer"`).then(toMany(OfferEntity));
+      const { paginateCondition, whereCondition } = getOffersParams(args);
+
+      return db
+        .query(
+          sql`SELECT * FROM "offer" WHERE ${whereCondition} ORDER BY "offerId" ${paginateCondition}`,
+        )
+        .then(toMany(OfferEntity));
     },
     createOfferCategory(
       offer: OfferCategoryEntity,

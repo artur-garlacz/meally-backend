@@ -36,8 +36,9 @@ export type NamedAssignmentPayloadType = {
   [key: string]: string | string[] | number | Date | boolean | undefined | null;
 };
 
-export function chainOptionalUpdate(
+export function chainOptional(
   namedAssignment: NamedAssignmentPayloadType,
+  type: 'update' | 'select',
 ) {
   const queries: Array<TaggedTemplateLiteralInvocation<QueryResultRow>> = [];
   Object.entries(namedAssignment).forEach(([column, value]) => {
@@ -45,5 +46,5 @@ export function chainOptionalUpdate(
     const normalizedValue = normalizeValue(value);
     queries.push(sql`${sql.identifier([column])} = ${normalizedValue}`);
   });
-  return sql.join(queries, sql`, `);
+  return sql.join(queries, type === 'select' ? sql`AND` : sql`, `);
 }

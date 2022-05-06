@@ -1,13 +1,14 @@
 import express from 'express';
 import { wrap } from '@libs/utils/express';
 import { AppServices } from '@app-services';
-import { validateMiddleware } from '@api/middlewares/validator-middleware';
 import { getOffersController } from '@api/controllers/offers/get-offers-controller';
+import { getOfferController } from './get-offer-controller';
 
 export const offerApiRouter = (services: AppServices) => {
   const router = express.Router();
 
-  router.get('/all', wrap(getOffersController(services)));
+  router.get('/:offerId', wrap(getOfferController(services)));
+  router.get('/', wrap(getOffersController(services)));
 
   return router;
 };

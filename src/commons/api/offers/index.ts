@@ -1,3 +1,4 @@
+import { ResponseDetails } from '@commons/data';
 import { PaginationRequest, PaginationResponse } from '@commons/pagination';
 import { OfferEntity } from '@modules/offers/entities';
 
@@ -31,3 +32,5 @@ export type OfferFilterQuery = Omit<
 } & PaginationRequest;
 
 export type GetOffersResponse = PaginationResponse<OfferEntity>;
+
+export type GetOfferResponse = ResponseDetails<OfferEntity>;

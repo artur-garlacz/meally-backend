@@ -85,6 +85,11 @@ export function offersQueries(db: CommonQueryMethods) {
         )
         .then(toMany(OfferEntity));
     },
+    getOfferById(offerId: OfferEntity['offerId']): Promise<OfferEntity> {
+      logger.debug('DbClient.getOfferById');
+
+      return db.one(sql`SELECT * FROM "offer" WHERE "offerId"=${offerId}`);
+    },
     createOfferCategory(
       offer: OfferCategoryEntity,
     ): Promise<OfferCategoryEntity> {

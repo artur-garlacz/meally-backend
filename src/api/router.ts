@@ -26,7 +26,7 @@ export async function buildRouter(services: AppServices) {
   );
 
   app.use('/api/user', express.json(), wrap(userApiRouter(services)));
-  app.use('/api/offer', express.json(), wrap(offerApiRouter(services)));
+  app.use('/api/offers', express.json(), wrap(offerApiRouter(services)));
   // ---
   // end middlewares
   // ---

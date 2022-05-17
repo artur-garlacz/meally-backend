@@ -22,12 +22,12 @@ export class UserEntity {
 export class UserDetailsEntity {
   @IsUUID('4')
   @IsNotEmpty()
-  readonly userAddressId: string;
+  readonly userDetailsId: string;
   @IsString()
   @IsNotEmpty()
   readonly address1: string;
   @IsString()
-  readonly address2: string;
+  readonly address2: string | null;
   @IsString()
   @IsNotEmpty()
   readonly city: string;

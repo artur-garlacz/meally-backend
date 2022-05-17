@@ -8,9 +8,11 @@ export type Migration = {
 import m0001 from './0001-recreate-schema';
 import m0002 from './0002-add-users';
 import m0003 from './0003-create-offers';
+import m0004 from './0004-add-user-schedule';
 
 export default [
   { migrationId: '0001-recreate-schema', ...m0001 },
   { migrationId: '0002-add-users', ...m0002 },
   { migrationId: '0003-create-offers', ...m0003 },
+  { migrationId: '0004-add-user-schedule', ...m0004 },
 ];

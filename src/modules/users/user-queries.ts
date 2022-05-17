@@ -33,7 +33,8 @@ export function usersQueries(db: CommonQueryMethods) {
       logger.debug('DbClient.createUserDetails', userDetails);
 
       return db.one(sql`
-            INSERT INTO "users" (
+            INSERT INTO "userDetails" (
+              "userDetailsId",
               "address1",
               "address2",
               "city",
@@ -42,7 +43,7 @@ export function usersQueries(db: CommonQueryMethods) {
               "phoneNumber",
               "userId"
             ) VALUES (
-                ${userDetails.userId},
+                ${userDetails.userDetailsId},
                 ${userDetails.address1},
                 ${userDetails.address2},
                 ${userDetails.city},
@@ -55,7 +56,7 @@ export function usersQueries(db: CommonQueryMethods) {
     getUserDetails(userId: string): Promise<UserDetailsEntity> {
       logger.debug('DbClient.getUserDetails');
       return db.one(sql`
-      SELECT * FROM "userDetails" WHERE userId=${userId} `);
+      SELECT * FROM "userDetails" WHERE "userId"=${userId} `);
     },
   });
 }

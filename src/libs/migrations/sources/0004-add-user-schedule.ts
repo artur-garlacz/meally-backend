@@ -12,8 +12,7 @@ const migration: Migration = {
                 ),
                 "isMainSchedule"        boolean     DEFAULT false,
                 "userScheduleName"      varchar(200),
-                "scheduleId"            uuid NULL REFERENCES "userSchedule" ("userScheduleId"),
-                "userId"                uuid NULL REFERENCES "user" ("userId")
+                "userId"                uuid NOT NULL REFERENCES "user" ("userId") ON DELETE CASCADE
             );
 
             CREATE UNIQUE INDEX user_schedule_single_main_schedule ON "userSchedule" ("userId") WHERE "isMainSchedule";
@@ -25,7 +24,7 @@ const migration: Migration = {
                 "day"               "dayName"    NOT NULL,
                 "hourFrom"          time         NOT NULL CHECK ("hourFrom" < "hourTo"),
                 "hourTo"            time         NOT NULL CHECK ("hourTo" > "hourFrom"),
-                "userScheduleId"    uuid         NULL REFERENCES "userSchedule" ("userScheduleId"),
+                "userScheduleId"    uuid         NOT NULL REFERENCES "userSchedule" ("userScheduleId") ON DELETE CASCADE,
                 CONSTRAINT          unique_user_schedule UNIQUE("day", "userScheduleId")
             );
       `);

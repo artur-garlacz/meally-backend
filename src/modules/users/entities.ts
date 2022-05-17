@@ -1,8 +1,10 @@
+import { IsNullable } from '@libs/utils/validation';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
+  IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -33,6 +35,7 @@ export class UserDetailsEntity {
   @IsNotEmpty()
   readonly address1: string;
   @IsString()
+  @IsNullable()
   readonly address2: string | null;
   @IsString()
   @IsNotEmpty()

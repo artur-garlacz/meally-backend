@@ -3,6 +3,8 @@ import { isDeepStrictEqual } from 'util';
 import { DbClient } from '@libs/db';
 import { getTestDbClient } from '@setup-integration-tests.spec';
 import { dummies } from '@tests/dummies';
+import { OfferCategoryEntity, OfferEntity } from './entities';
+import { UserEntity } from '@modules/users/entities';
 
 describe('@Integration Offer queries', () => {
   let dbClient: DbClient;
@@ -13,32 +15,40 @@ describe('@Integration Offer queries', () => {
     dbClient = await getTestDbClient();
   });
 
-  //   describe('DbClient.createOffer', () => {
-  //     it('should insert offer with created category', async () => {
-  //       await dbClient.createUser(user);
-  //       assert.isTrue(true);
-  //       const category = await dbClient.createOfferCategory(offerCategory);
-  //       assert.isTrue(true);
-  //       const offer = dummies.offer({
-  //         offerCategoryId: category.offerCategoryId,
-  //         userId: user.userId,
-  //       });
-  //       await dbClient.createOffer(offer);
-  //       assert.isTrue(true);
-  //     });
-  //   });
+  describe('DbClient.createOffer', () => {
+    it('should insert offer with created category', async () => {
+      await dbClient.createUser(user);
+      const category = await dbClient.createOfferCategory(offerCategory);
+      assert.isTrue(true);
+      const offer = dummies.offer({
+        offerCategoryId: category.offerCategoryId,
+        userId: user.userId,
+      });
+      await dbClient.createOffer(offer);
+    });
+  });
 
-  describe('DbClient.getOffers', () => {
+  describe('DbClient.getOffers & DbClient.getOffer', () => {
+    let user1: UserEntity,
+      offerCategory1: OfferCategoryEntity,
+      offerCategory2: OfferCategoryEntity;
+
     beforeEach(async () => {
-      const user1 = await dbClient.createUser(
+      user1 = await dbClient.createUser(
         dummies.user({
           email: 'dev1@gmail.com',
         }),
       );
 
-      const offerCategory1 = await dbClient.createOfferCategory(
+      offerCategory1 = await dbClient.createOfferCategory(
         dummies.offerCategory({
           name: 'Kuchnia włoska',
+        }),
+      );
+
+      offerCategory2 = await dbClient.createOfferCategory(
+        dummies.offerCategory({
+          name: 'Kuchnia polska',
         }),
       );
 
@@ -46,15 +56,73 @@ describe('@Integration Offer queries', () => {
         await dbClient.createOffer(
           dummies.offer({
             userId: user1.userId,
-            offerCategoryId: offerCategory1.offerCategoryId,
+            offerCategoryId:
+              i % 2 == 0
+                ? offerCategory2.offerCategoryId
+                : offerCategory1.offerCategoryId,
           }),
         );
       }
     });
 
-    it('get offers with default filters', async () => {
-      const offers = await dbClient.getAllOffers({});
-      console.log(offers.length);
+    describe('DbClient.getOffers', () => {
+      it('get offers with default filters', async () => {
+        const offers = await dbClient.getOffers({});
+        assert.equal(offers.length, 10);
+      });
+
+      it('get offers with default perPage and page is 2', async () => {
+        const offers = await dbClient.getOffers({ page: 2 });
+        assert.equal(offers.length, 10);
+      });
+
+      it('get offers with default page and perPage is 20', async () => {
+        const offers = await dbClient.getOffers({ perPage: 20 });
+        assert.equal(offers.length, 20);
+      });
+
+      it('get offers with page 3 and perPage is 5', async () => {
+        const offers = await dbClient.getOffers({ perPage: 5, page: 3 });
+        assert.equal(offers.length, 5);
+      });
+
+      it('get offers with offerCategoryId filter', async () => {
+        const offers = await dbClient.getOffers({
+          offerCategoryId: offerCategory2.offerCategoryId,
+          perPage: 15,
+        });
+        assert.equal(offers.length, 10);
+        offers.forEach((offer) => {
+          assert.equal(offer.offerCategoryId, offerCategory2.offerCategoryId);
+        });
+      });
+    });
+
+    describe('DbClient.getOfferById', () => {
+      it('should return offer with proper offerId', async () => {
+        const offer1 = await dbClient.createOffer(
+          dummies.offer({
+            userId: user1.userId,
+            offerCategoryId: offerCategory1.offerCategoryId,
+          }),
+        );
+
+        await dbClient.createOffer(
+          dummies.offer({
+            userId: user1.userId,
+            offerCategoryId: offerCategory2.offerCategoryId,
+          }),
+        );
+
+        const offer = await dbClient.getOfferById(offer1.offerId);
+        assert.notEqual(offer, null);
+        assert.equal(offer?.offerId, offer1.offerId);
+      });
+
+      it('should return null if offer does not exist', async () => {
+        const offer = await dbClient.getOfferById(user1.userId);
+        assert.equal(offer, null);
+      });
     });
   });
 });

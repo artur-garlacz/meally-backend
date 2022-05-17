@@ -3,6 +3,7 @@
 // order
 
 import logger from '@libs/utils/logger';
+import { toOptional, toRequired } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 import { CommonQueryMethods, sql } from 'slonik';
 import { UserDetailsEntity, UserEntity } from './entities';
@@ -26,6 +27,14 @@ export function usersQueries(db: CommonQueryMethods) {
                 ${serializeDate(user.createdAt)},
                 ${serializeDate(user.updatedAt)}
             ) RETURNING *`);
+    },
+    getUser(userId: UserEntity['userId']): Promise<UserEntity | null> {
+      return db
+        .maybeOne(
+          sql`
+        SELECT * FROM "user" WHERE "userId"=${userId} `,
+        )
+        .then(toOptional(UserEntity));
     },
     createUserDetails(
       userDetails: UserDetailsEntity,
@@ -53,10 +62,14 @@ export function usersQueries(db: CommonQueryMethods) {
                 ${userDetails.userId}
             ) RETURNING *`);
     },
-    getUserDetails(userId: string): Promise<UserDetailsEntity> {
+    getUserDetails(userId: string): Promise<UserDetailsEntity | null> {
       logger.debug('DbClient.getUserDetails');
-      return db.one(sql`
-      SELECT * FROM "userDetails" WHERE "userId"=${userId} `);
+      return db
+        .maybeOne(
+          sql`
+      SELECT * FROM "userDetails" WHERE "userId"=${userId} `,
+        )
+        .then(toOptional(UserDetailsEntity));
     },
   });
 }

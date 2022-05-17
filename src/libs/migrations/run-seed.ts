@@ -20,15 +20,11 @@ export async function runSeed(dbPool: DatabasePool) {
     }),
   );
 
-  console.log('User created');
-
   const offerCategory1 = await dbClient.createOfferCategory(
     dummies.offerCategory({
       name: 'Kuchnia włoska',
     }),
   );
-
-  console.log('Category 1 created');
 
   const offerCategory2 = await dbClient.createOfferCategory(
     dummies.offerCategory({

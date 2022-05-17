@@ -8,7 +8,7 @@ const migration: Migration = {
           "userId" uuid PRIMARY KEY CHECK (
             "userId" <> '00000000-0000-0000-0000-000000000000'
           ),
-          "email"       text        NOT NULL,
+          "email"       text        NOT NULL UNIQUE,
           "password"    varchar(30) NOT NULL,
           "createdAt"   timestamp   NOT NULL DEFAULT NOW(),
           "updatedAt"   timestamp   NOT NULL DEFAULT NOW()
@@ -24,7 +24,7 @@ const migration: Migration = {
             "postalCode"    varchar(10) NOT NULL,
             "country"       varchar(40) NOT NULL,
             "phoneNumber"   varchar(20) NOT NULL,
-            "userId"        uuid NULL REFERENCES "user" ("userId")
+            "userId"        uuid NOT NULL REFERENCES "user" ("userId") ON DELETE CASCADE
         );
     `);
   },

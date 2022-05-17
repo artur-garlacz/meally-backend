@@ -26,7 +26,7 @@ export const userDetails: MockBuilder<UserDetailsEntity> = (
     city: faker.address.city(),
     postalCode: faker.address.zipCode(),
     country: faker.address.country(),
-    phoneNumber: faker.phone.phoneNumber(),
+    phoneNumber: faker.phone.phoneNumber('###-###-###'),
     ...partial,
   };
 };

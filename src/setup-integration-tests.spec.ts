@@ -15,10 +15,10 @@ beforeEach('Clean up after test', async () => {
     await dbClient.adhoc(async (db) => {
       await db.query(sql`
         DELETE FROM "user";
-        DELETE FROM "userDetails";
-        DELETE FROM "offer";
-        DELETE FROM "offerDetails";
         DELETE FROM "offerCategory";
+        DELETE FROM "offer";
+        DELETE FROM "userDetails";
+        DELETE FROM "offerDetails";
         DELETE FROM "userSchedule";
         DELETE FROM "schedule";
       `);

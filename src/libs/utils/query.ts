@@ -20,6 +20,22 @@ export const toMany =
       result.rows.map((row) => transformToClassUnsafe(classType, row, options)),
     );
 
+export const toRequired =
+  <T extends object>(
+    classType: ClassConstructor<T>,
+    options?: ValidatorOptions,
+  ) =>
+  (row: object) =>
+    transformToClassUnsafe(classType, row, options);
+
+export const toOptional =
+  <T extends object>(
+    classType: ClassConstructor<T>,
+    options?: ValidatorOptions,
+  ) =>
+  (row: object | null) =>
+    row ? transformToClassUnsafe(classType, row, options) : null;
+
 export function normalizeValue(
   value: string | string[] | number | Date | boolean | undefined | null,
 ): ValueExpression {
@@ -46,5 +62,10 @@ export function chainOptional(
     const normalizedValue = normalizeValue(value);
     queries.push(sql`${sql.identifier([column])} = ${normalizedValue}`);
   });
-  return sql.join(queries, type === 'select' ? sql`AND` : sql`, `);
+
+  if (type === 'select') {
+    return !!queries.length ? sql.join(queries, sql` AND `) : sql`1=1`;
+  }
+
+  return sql.join(queries, sql`, `);
 }

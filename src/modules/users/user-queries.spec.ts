@@ -13,14 +13,14 @@ describe('@Integration User queries', () => {
   });
 
   describe('DbClient.CreateUser', () => {
-    it('Should insert user', async () => {
+    it('should insert user', async () => {
       await dbClient.createUser(user);
       assert.isTrue(true);
     });
   });
 
   describe('DbClient.CreateUserDetails | DbClient.GetUserDetails', () => {
-    it('Should insert data to user details and then verify returned data', async () => {
+    it('should insert data to user details and then verify returned data', async () => {
       await dbClient.createUser(user);
       const userDetails = dummies.userDetails({
         userId: user.userId,

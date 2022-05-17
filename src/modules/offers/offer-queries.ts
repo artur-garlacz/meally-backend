@@ -6,7 +6,11 @@ import { serializeDate } from '@libs/utils/serialization';
 import { CommonQueryMethods, sql } from 'slonik';
 import { OfferCategoryEntity, OfferEntity } from './entities';
 
-export function getOffersParams({ page, perPage, ...args }: OfferFilterQuery) {
+export function getOffersParams({
+  page = 1,
+  perPage = 10,
+  ...args
+}: OfferFilterQuery) {
   return {
     paginateCondition: setPaginationQuery({ page, perPage }),
     whereCondition: chainOptional(args as any, 'select'),

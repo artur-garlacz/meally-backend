@@ -10,7 +10,7 @@ export const offer: MockBuilder<OfferEntity> = (partial = {}): OfferEntity => {
     title: faker.name.jobTitle(),
     unitPrice: faker.datatype.float({ min: 0, max: 1000 }),
     longDesc: faker.lorem.paragraphs(1),
-    shortDesc: faker.lorem.paragraphs(1),
+    shortDesc: faker.lorem.sentences(2),
     status: faker.helpers.arrayElement([
       OfferStatus.published,
       OfferStatus.draft,
@@ -32,7 +32,7 @@ export const offerCategory: MockBuilder<OfferCategoryEntity> = (
   return {
     offerCategoryId: uuid(),
     name: faker.name.jobTitle(),
-    shortDesc: faker.lorem.paragraphs(1),
+    shortDesc: faker.lorem.sentences(2),
     ...partial,
   };
 };

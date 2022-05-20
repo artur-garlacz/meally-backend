@@ -5,6 +5,7 @@ import { getTestDbClient } from '@setup-integration-tests.spec';
 import { dummies } from '@tests/dummies';
 import { OfferCategoryEntity, OfferEntity } from './entities';
 import { UserEntity } from '@modules/users/entities';
+import { uuid } from '@libs/utils/common';
 
 describe('@Integration Offer queries', () => {
   let dbClient: DbClient;
@@ -120,7 +121,7 @@ describe('@Integration Offer queries', () => {
       });
 
       it('should return null if offer does not exist', async () => {
-        const offer = await dbClient.getOfferById(user1.userId);
+        const offer = await dbClient.getOfferById(uuid());
         assert.equal(offer, null);
       });
     });

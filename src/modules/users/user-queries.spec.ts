@@ -3,6 +3,7 @@ import { DbClient } from '@libs/db';
 import { getTestDbClient } from '@setup-integration-tests.spec';
 import { dummies } from '@tests/dummies';
 import { assertThrows } from '@tests/assertions';
+import { UniqueIntegrityConstraintViolationError } from 'slonik';
 
 describe('@Integration User queries', () => {
   let dbClient: DbClient;
@@ -28,8 +29,7 @@ describe('@Integration User queries', () => {
           await dbClient.createUser(dummies.user({ email: user.email }));
         },
         assertions: (err) => {
-          console.log(err);
-          // UniqueIntegrityConstraintViolationError
+          assert.instanceOf(err, UniqueIntegrityConstraintViolationError);
         },
       });
     });

@@ -7,6 +7,7 @@ import { getOfferController } from './get-offer-controller';
 export const offerApiRouter = (services: AppServices) => {
   const router = Router();
 
+  // /:offerId/order
   router.get('/:offerId/details', wrap(getOfferController(services)));
   router.get('/', wrap(getOffersController(services)));
 

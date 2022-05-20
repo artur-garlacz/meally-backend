@@ -13,6 +13,10 @@ type NameToType = {
   readonly POSTGRES_PORT: number;
   readonly APP_PORT: number;
   readonly APP_VERSION: string;
+  readonly ACCESS_TOKEN_SECRET: string;
+  readonly REFRESH_TOKEN_SECRET: string;
+  readonly ACCESS_TOKEN_TTL: string;
+  readonly REFRESH_TOKEN_TTL: string;
 };
 
 export function getEnv<Env extends keyof NameToType>(

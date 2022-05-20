@@ -1,9 +1,8 @@
 import { assert } from 'chai';
-import { isDeepStrictEqual } from 'util';
 import { DbClient } from '@libs/db';
 import { getTestDbClient } from '@setup-integration-tests.spec';
 import { dummies } from '@tests/dummies';
-import { OfferCategoryEntity, OfferEntity } from './entities';
+import { OfferCategoryEntity } from './entities';
 import { UserEntity } from '@modules/users/entities';
 import { uuid } from '@libs/utils/common';
 

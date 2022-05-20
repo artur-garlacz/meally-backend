@@ -32,7 +32,15 @@ export function usersQueries(db: CommonQueryMethods) {
       return db
         .maybeOne(
           sql`
-        SELECT * FROM "user" WHERE "userId"=${userId} `,
+        SELECT * FROM "user" WHERE "userId"=${userId}`,
+        )
+        .then(toOptional(UserEntity));
+    },
+    getUserByEmail(userEmail: UserEntity['email']): Promise<UserEntity | null> {
+      return db
+        .maybeOne(
+          sql`
+        SELECT * FROM "user" WHERE "email"=${userEmail}`,
         )
         .then(toOptional(UserEntity));
     },

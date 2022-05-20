@@ -1,27 +1,32 @@
 import { Request, Response } from 'express';
+import createError from 'http-errors';
 import { AppServices } from '@app-services';
-import { uuid } from '@libs/utils/common';
 import { z } from 'zod';
-import bcrypt from 'bcrypt';
+import AuthService from '@api/services/auth-service';
 
 export const registerUserController = (app: AppServices) => {
   return async (req: Request, res: Response) => {
-    const {
-      user: { email, password },
-    } = req.body;
+    try {
+      const {
+        user: { email },
+      } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+      const userExists = await app.dbClient.getUserByEmail(email);
 
-    const createdUser = await app.dbClient.createUser({
-      userId: uuid(),
-      email,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      password: hashPassword,
-    });
+      if (userExists) {
+        throw new createError[401]('User already exists');
+      }
 
-    return res.status(200).send({ userId: createdUser.userId, email });
+      const newUser = await new AuthService(app.dbClient).register(
+        req.body.user,
+      );
+
+      console.log(newUser, 'newUser');
+
+      return res.status(200).send(newUser);
+    } catch (e) {
+      return res.status(e.statusCode || 404).send(e.message);
+    }
   };
 };
 

@@ -1,5 +1,5 @@
 import { ClassConstructor, plainToClass } from 'class-transformer';
-import { validate, ValidatorOptions } from 'class-validator';
+import { validate, ValidateIf, ValidatorOptions } from 'class-validator';
 import { TransformError } from './errors';
 
 import logger from './logger';
@@ -34,4 +34,10 @@ export function transformToClassUnsafe<T extends object>(
   options: ValidatorOptions = defaultValidatorOptions,
 ): Promise<T> {
   return transformToClass<T>(classType, plain as T, options);
+}
+
+export function IsNullable() {
+  return function (obj: object, propertyName: string) {
+    ValidateIf((o) => o[propertyName] !== null)(obj, propertyName);
+  };
 }

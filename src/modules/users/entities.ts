@@ -1,5 +1,13 @@
+import { IsNullable } from '@libs/utils/validation';
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class UserEntity {
   @IsUUID('4')
@@ -22,12 +30,13 @@ export class UserEntity {
 export class UserDetailsEntity {
   @IsUUID('4')
   @IsNotEmpty()
-  readonly userAddressId: string;
+  readonly userDetailsId: string;
   @IsString()
   @IsNotEmpty()
   readonly address1: string;
   @IsString()
-  readonly address2: string;
+  @IsNullable()
+  readonly address2: string | null;
   @IsString()
   @IsNotEmpty()
   readonly city: string;
@@ -42,4 +51,40 @@ export class UserDetailsEntity {
   readonly phoneNumber: string;
   @IsString()
   readonly userId: string;
+}
+
+export class UserSchedule {
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly userScheduleId: string;
+  @IsBoolean()
+  @IsNotEmpty()
+  readonly isMainSchedule: boolean;
+  @IsString()
+  @IsNotEmpty()
+  readonly userScheduleName: string;
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly scheduleId: string;
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly userId: string;
+}
+
+export class Schedule {
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly scheduleId: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly day: boolean;
+  @IsString()
+  @IsNotEmpty()
+  readonly hourFrom: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly hourTo: string;
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly userScheduleId: string;
 }

@@ -7,8 +7,12 @@ const migration: Migration = {
           DROP TABLE IF EXISTS "user" CASCADE;
           DROP TABLE IF EXISTS "userDetails" CASCADE;
           DROP TABLE IF EXISTS "offer" CASCADE;
+          DROP TABLE IF EXISTS "offerDetails" CASCADE;
           DROP TYPE IF EXISTS "offerStatus" CASCADE;
           DROP TABLE IF EXISTS "offerCategory" CASCADE;
+          DROP TYPE IF EXISTS "dayName" CASCADE;
+          DROP TABLE IF EXISTS "userSchedule" CASCADE;
+          DROP TABLE IF EXISTS "schedule" CASCADE;
       `);
 
     await db.query(sql`

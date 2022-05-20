@@ -21,9 +21,7 @@ export const registerUserController = (app: AppServices) => {
       password: hashPassword,
     });
 
-    return res
-      .status(200)
-      .send({ userId: createdUser.userId, roles: [], email });
+    return res.status(200).send({ userId: createdUser.userId, email });
   };
 };
 

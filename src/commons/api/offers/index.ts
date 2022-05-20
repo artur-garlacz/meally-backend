@@ -29,7 +29,7 @@ export type OfferFilterQuery = Omit<
   'page' | 'perPage'
 > & {
   status?: OfferStatusType;
-} & PaginationRequest;
+} & Partial<PaginationRequest>;
 
 export type GetOffersResponse = PaginationResponse<OfferEntity>;
 

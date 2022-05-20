@@ -1,12 +1,16 @@
 import { OfferFilterQuery, UpdateOfferType } from '@commons/api/offers';
 import { setPaginationQuery } from '@commons/pagination';
 import logger from '@libs/utils/logger';
-import { chainOptional, toMany } from '@libs/utils/query';
+import { chainOptional, toMany, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 import { CommonQueryMethods, sql } from 'slonik';
 import { OfferCategoryEntity, OfferEntity } from './entities';
 
-export function getOffersParams({ page, perPage, ...args }: OfferFilterQuery) {
+export function getOffersParams({
+  page = 1,
+  perPage = 10,
+  ...args
+}: OfferFilterQuery) {
   return {
     paginateCondition: setPaginationQuery({ page, perPage }),
     whereCondition: chainOptional(args as any, 'select'),
@@ -74,7 +78,7 @@ export function offersQueries(db: CommonQueryMethods) {
         WHERE "offerId" = ${offerId}
         RETURNING *`);
     },
-    getAllOffers(args: OfferFilterQuery): Promise<OfferEntity[]> {
+    getOffers(args: OfferFilterQuery): Promise<OfferEntity[]> {
       logger.debug('DbClient.getAllOffers');
 
       const { paginateCondition, whereCondition } = getOffersParams(args);
@@ -85,10 +89,12 @@ export function offersQueries(db: CommonQueryMethods) {
         )
         .then(toMany(OfferEntity));
     },
-    getOfferById(offerId: OfferEntity['offerId']): Promise<OfferEntity> {
+    getOfferById(offerId: OfferEntity['offerId']): Promise<OfferEntity | null> {
       logger.debug('DbClient.getOfferById');
 
-      return db.one(sql`SELECT * FROM "offer" WHERE "offerId"=${offerId}`);
+      return db
+        .maybeOne(sql`SELECT * FROM "offer" WHERE "offerId"=${offerId}`)
+        .then(toOptional(OfferEntity));
     },
     createOfferCategory(
       offer: OfferCategoryEntity,

@@ -27,7 +27,7 @@ const migration: Migration = {
           "promoted"            boolean         NULL,
           "createdAt"           timestamp       NOT NULL DEFAULT NOW(),
           "updatedAt"           timestamp       NOT NULL DEFAULT NOW(),
-          "userId"              uuid NULL REFERENCES "user" ("userId"),
+          "userId"              uuid NOT NULL REFERENCES "user" ("userId") ON DELETE CASCADE,
           "offerCategoryId"     uuid NULL REFERENCES "offerCategory" ("offerCategoryId")
         );
 
@@ -39,7 +39,7 @@ const migration: Migration = {
           "city"          varchar(50) NOT NULL,
           "postalCode"    varchar(10) NOT NULL,
           "country"       varchar(40) NOT NULL,
-          "offerId"       uuid NULL REFERENCES "offer" ("offerId")
+          "offerId"       uuid NOT NULL REFERENCES "offer" ("offerId") ON DELETE CASCADE
         );
 
         ALTER TABLE "user" 

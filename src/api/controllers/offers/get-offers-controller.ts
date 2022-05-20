@@ -14,7 +14,7 @@ export const getOffersController = (app: AppServices) => {
   ) => {
     const { page, perPage, offerCategoryId } = getQueryParams(req.query);
 
-    const offers = await app.dbClient.getAllOffers({
+    const offers = await app.dbClient.getOffers({
       offerCategoryId,
       status: OfferStatus.published,
       perPage,

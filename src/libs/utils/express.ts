@@ -1,6 +1,7 @@
+import { UserRequest } from '@commons/api/users';
 import { NextFunction, Request, Response, RequestHandler } from 'express';
 
-export function wrap<T extends RequestHandler>(fn: T) {
+export function wrap<T extends RequestHandler | UserRequest>(fn: T) {
   return (req: Request, res: Response, next: NextFunction) =>
     Promise.resolve()
       .then(() => fn(req as any, res, next))

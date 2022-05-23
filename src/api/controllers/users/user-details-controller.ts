@@ -9,7 +9,7 @@ export const createUserDetailsController = (app: AppServices) => {
       req.body;
 
     const userDetails = await app.dbClient.createUserDetails({
-      userAddressId: uuid(),
+      userDetailsId: uuid(),
       address1,
       address2,
       city,

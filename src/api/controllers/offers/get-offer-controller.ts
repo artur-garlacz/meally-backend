@@ -15,6 +15,10 @@ export const getOfferController = (app: AppServices) => {
 
     const offer = await app.dbClient.getOfferById(offerId);
 
-    return res.status(200).send({ data: offer });
+    if (offer) {
+      return res.status(200).send({ data: offer });
+    }
+
+    return res.status(404).send({ message: 'N', status: 'failed' });
   };
 };

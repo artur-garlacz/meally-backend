@@ -1,4 +1,4 @@
-import { ResponseDetails } from '@commons/data';
+import { ResponseAction, ResponseDetails } from '@commons/data';
 import { PaginationRequest, PaginationResponse } from '@commons/pagination';
 import { OfferEntity } from '@modules/offers/entities';
 
@@ -33,4 +33,15 @@ export type OfferFilterQuery = Omit<
 
 export type GetOffersResponse = PaginationResponse<OfferEntity>;
 
-export type GetOfferResponse = ResponseDetails<OfferEntity>;
+export type GetOfferResponse = ResponseDetails<OfferEntity> | ResponseAction;
+
+export type CreateOfferBody = {
+  offer: {
+    title: string;
+    unitPrice: number;
+    longDesc: string;
+    shortDesc: string;
+    availableQuantity: number;
+    offerCategoryId: string;
+  };
+};

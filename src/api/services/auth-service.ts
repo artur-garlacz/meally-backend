@@ -27,8 +27,6 @@ class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const isUserExist = this.dbClient.getUserByEmail(email);
-
     const {
       password: { p },
       ...user

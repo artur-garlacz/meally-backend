@@ -49,15 +49,3 @@ const migration: Migration = {
 };
 
 export default migration;
-
-// workingDays
-// CREATE TABLE "days" (
-//   "offerAvailableDaysId" uuid PRIMARY KEY CHECK (
-//     "offerAvailableDaysId" <> '00000000-0000-0000-0000-000000000000'
-//   ),
-//   "mon"      varchar(60) NOT NULL,
-//   "tue"          varchar(50) NOT NULL,
-//   "wen"    varchar(10) NOT NULL,
-//   "country"       varchar(40) NOT NULL,
-//   "offerId"       uuid NULL REFERENCES "offer" ("offerId"),
-// );

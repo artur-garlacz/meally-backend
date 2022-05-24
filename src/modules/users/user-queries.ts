@@ -32,7 +32,7 @@ export function usersQueries(db: CommonQueryMethods) {
       return db
         .maybeOne(
           sql`
-        SELECT "userId", "email", "createdAt", "updatedAt" FROM "user" WHERE "userId"=${userId}`,
+        SELECT * FROM "user" WHERE "userId"=${userId}`,
         )
         .then(toOptional(UserEntity));
     },

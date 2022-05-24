@@ -1,6 +1,6 @@
 import { ResponseAction, ResponseDetails } from '@commons/data';
 import { PaginationRequest, PaginationResponse } from '@commons/pagination';
-import { OfferEntity } from '@modules/offers/entities';
+import { OfferCategoryEntity, OfferEntity } from '@modules/offers/entities';
 
 export type RangeFilter = {
   from: number;
@@ -34,6 +34,8 @@ export type OfferFilterQuery = Omit<
 export type GetOffersResponse = PaginationResponse<OfferEntity>;
 
 export type GetOfferResponse = ResponseDetails<OfferEntity> | ResponseAction;
+
+export type GetOfferCategoriesResponse = ResponseDetails<OfferCategoryEntity[]>;
 
 export type CreateOfferBody = {
   offer: {

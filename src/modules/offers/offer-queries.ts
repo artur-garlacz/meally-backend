@@ -53,9 +53,11 @@ export function offersQueries(db: CommonQueryMethods) {
     },
     updateOffer({
       offerId,
+      userId,
       updateOffer,
     }: {
       offerId: OfferEntity['offerId'];
+      userId: OfferEntity['userId'];
       updateOffer: UpdateOfferType;
     }): Promise<OfferEntity> {
       logger.debug('DbClient.updateOffer');
@@ -76,6 +78,7 @@ export function offersQueries(db: CommonQueryMethods) {
           'update',
         )}
         WHERE "offerId" = ${offerId}
+        AND "userId" = ${userId}
         RETURNING *`);
     },
     getOffers(args: OfferFilterQuery): Promise<OfferEntity[]> {

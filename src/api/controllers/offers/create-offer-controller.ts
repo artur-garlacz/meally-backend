@@ -1,23 +1,18 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { z } from 'zod';
 import { AppServices } from '@app-services';
-import {
-  CreateOfferBody,
-  GetOfferResponse,
-  OfferStatus,
-} from '@commons/api/offers';
-import { UserRequest } from '@commons/api/users';
+import { CreateOfferBody, OfferStatus } from '@commons/api/offers';
 import { uuid } from '@libs/utils/common';
+import { AuthRequest } from '@commons/request';
 
 export const createOfferController = (app: AppServices) => {
   return async (
-    req: UserRequest<{ offerId?: string }, {}, CreateOfferBody, {}>,
+    req: AuthRequest<{}, {}, CreateOfferRequestBody['body'], {}>,
     res: Response,
   ) => {
     const {
-      params: { offerId },
       body: { offer },
-      user,
+      sender,
     } = req;
 
     const newOffer = await app.dbClient.createOffer({
@@ -31,13 +26,15 @@ export const createOfferController = (app: AppServices) => {
       promoted: false,
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: user.userId,
+      userId: sender.userId,
       offerCategoryId: offer.offerCategoryId,
     });
 
     return res.status(200).send({ data: newOffer });
   };
 };
+
+type CreateOfferRequestBody = z.infer<typeof createOfferSchema>;
 
 export const createOfferSchema = z.object({
   body: z.object({
@@ -50,9 +47,9 @@ export const createOfferSchema = z.object({
       shortDesc: z
         .string({ required_error: 'Short description is required' })
         .max(300, 'Max length is 300 chars'),
-      availableQuantity: z
-        .string({ required_error: 'Short description is required' })
-        .max(300, 'Max length is 300 chars'),
+      availableQuantity: z.number({
+        required_error: 'Available quantity is required',
+      }),
       offerCategoryId: z.string({ required_error: 'Category id is required' }),
     }),
   }),

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { wrap } from '@libs/utils/express';
 import { AppServices } from '@app-services';
 import { getOffersController } from '@api/controllers/offers/get-offers-controller';
@@ -9,20 +9,38 @@ import {
 } from './create-offer-controller';
 import { validateMiddleware } from '@api/middlewares/validator-middleware';
 import { authMiddleware } from '@api/middlewares/auth-middleware';
+import { getOfferCategoriesController } from './get-offer-categories-controller';
+import {
+  updateOfferStatusController,
+  updateOfferStatusSchema,
+} from './update-offer-status-controller';
 
 export const offerApiRouter = (services: AppServices) => {
   const router = Router();
 
+  const auth = authMiddleware(services.dbClient);
   // /:offerId/order   -
   // /:offerId/updateStatus  - PUT
-  router.get('/:offerId/details', wrap(getOfferController(services)));
 
-  router.get(
+  router.put(
+    '/:offerId/update-status',
+    express.json(),
+    auth,
+    validateMiddleware(updateOfferStatusSchema),
+    wrap(updateOfferStatusController(services)),
+  );
+
+  router.get('/:offerId', wrap(getOfferController(services)));
+
+  router.post(
     '/create',
+    express.json(),
+    auth,
     validateMiddleware(createOfferSchema),
-    authMiddleware(services.dbClient),
     wrap(createOfferController(services)),
   );
+
+  router.get('/category', wrap(getOfferCategoriesController(services)));
 
   router.get('/', wrap(getOffersController(services)));
 

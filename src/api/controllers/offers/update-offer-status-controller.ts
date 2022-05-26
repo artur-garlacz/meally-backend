@@ -1,6 +1,10 @@
 import { Response } from 'express';
 import { AppServices } from '@app-services';
-import { GetOfferResponse, OfferStatus } from '@commons/api/offers';
+import {
+  GetOfferResponse,
+  OfferStatus,
+  OfferStatusType,
+} from '@commons/api/offers';
 import { AuthRequest } from '@commons/request';
 import { z } from 'zod';
 
@@ -15,9 +19,20 @@ export const updateOfferStatusController = (app: AppServices) => {
       body: { offer },
     } = req;
 
+    const currOffer = await app.dbClient.getOfferById(offerId!);
+
+    if (!currOffer) {
+      return res.status(404).send({
+        message: 'Not found',
+        status: 'failed',
+      });
+    }
+
     const updatedOffer = await app.dbClient.updateOffer({
       offerId: offerId!,
-      updateOffer: { status: offer.status },
+      updateOffer: {
+        status: verifyOfferStatus(currOffer?.status!, offer.status),
+      },
       userId,
     });
 
@@ -40,3 +55,13 @@ export const updateOfferStatusSchema = z.object({
     }),
   }),
 });
+
+export function verifyOfferStatus(
+  currStatus: OfferStatusType,
+  newStatus: OfferStatusType,
+) {
+  if (currStatus === 'archived') {
+    return newStatus === 'draft' ? newStatus : currStatus;
+  }
+  return newStatus;
+}

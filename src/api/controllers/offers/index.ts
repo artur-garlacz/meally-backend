@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { wrap } from '@libs/utils/express';
 import { AppServices } from '@app-services';
 import { getOffersController } from '@api/controllers/offers/get-offers-controller';
@@ -24,7 +24,6 @@ export const offerApiRouter = (services: AppServices) => {
 
   router.put(
     '/:offerId/update-status',
-    express.json(),
     auth,
     validateMiddleware(updateOfferStatusSchema),
     wrap(updateOfferStatusController(services)),
@@ -34,7 +33,6 @@ export const offerApiRouter = (services: AppServices) => {
 
   router.post(
     '/create',
-    express.json(),
     auth,
     validateMiddleware(createOfferSchema),
     wrap(createOfferController(services)),

@@ -1,4 +1,4 @@
-import { OfferStatusType } from '@commons/api/offers';
+import { OfferOrderStatusType, OfferStatusType } from '@commons/api/offers';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -58,4 +58,27 @@ export class OfferEntity {
   @IsUUID('4')
   @IsNotEmpty()
   readonly offerCategoryId: string;
+}
+
+export class OfferOrderEntity {
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly offerOrderId: string;
+  @IsDate()
+  @Type(() => Date)
+  readonly createdAt: Date;
+  @IsDate()
+  @Type(() => Date)
+  readonly updatedAt: Date;
+  @IsNumber()
+  @IsNotEmpty()
+  readonly quantity: number;
+  @IsNotEmpty()
+  readonly status: OfferOrderStatusType;
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly offerId: string;
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly customerId: string;
 }

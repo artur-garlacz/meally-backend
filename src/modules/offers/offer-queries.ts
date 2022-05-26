@@ -4,7 +4,7 @@ import logger from '@libs/utils/logger';
 import { chainOptional, toMany, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 import { CommonQueryMethods, sql } from 'slonik';
-import { OfferCategoryEntity, OfferEntity } from './entities';
+import { OfferCategoryEntity, OfferEntity, OfferOrderEntity } from './entities';
 
 export function getOffersParams({
   page = 1,
@@ -80,6 +80,29 @@ export function offersQueries(db: CommonQueryMethods) {
         WHERE "offerId" = ${offerId}
         AND "userId" = ${userId}
         RETURNING *`);
+    },
+    createOfferOrder(order: OfferOrderEntity): Promise<OfferOrderEntity> {
+      logger.debug('DbClient.createOffer');
+
+      return db.one(sql`
+        INSERT INTO "offerOrder" (
+            "offerOrderId",
+            "status",
+            "quantity",
+            "createdAt",
+            "updatedAt",
+            "offerId",
+            "customerId") 
+        VALUES (${order.offerOrderId},
+                ${order.status},
+                ${order.quantity},
+                ${order.status},
+                ${serializeDate(order.createdAt)},
+                ${serializeDate(order.updatedAt)},
+                ${order.offerId},
+                ${order.customerId}
+        ) RETURNING *
+      `);
     },
     getOffers(args: OfferFilterQuery): Promise<OfferEntity[]> {
       logger.debug('DbClient.getAllOffers');

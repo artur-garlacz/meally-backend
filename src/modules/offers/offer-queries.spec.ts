@@ -125,4 +125,33 @@ describe('@Integration Offer queries', () => {
       });
     });
   });
+
+  describe('DbClient.createOfferOrder', () => {
+    let user1: UserEntity, offerCategory1: OfferCategoryEntity;
+
+    beforeEach(async () => {
+      user1 = await dbClient.createUser(
+        dummies.user({
+          email: 'dev1@gmail.com',
+        }),
+      );
+
+      offerCategory1 = await dbClient.createOfferCategory(
+        dummies.offerCategory({
+          name: 'Kuchnia włoska',
+        }),
+      );
+
+      for (let i = 0; i < 20; i++) {
+        await dbClient.createOffer(
+          dummies.offer({
+            userId: user1.userId,
+            offerCategoryId: offerCategory1.offerCategoryId,
+          }),
+        );
+      }
+    });
+
+    it('create order', () => {});
+  });
 });

@@ -7,7 +7,7 @@ import { authMiddleware } from '@api/middlewares/auth-middleware';
 import { getMyUserController } from './get-my-user-controller';
 import { authUserSchema, loginUserController } from './login-user-controller';
 
-export const userApiRouter = (services: AppServices) => {
+export function userApiRouter(services: AppServices) {
   const router = express.Router();
   const auth = authMiddleware(services.dbClient);
 
@@ -26,4 +26,4 @@ export const userApiRouter = (services: AppServices) => {
   router.get('/me', auth, wrap(getMyUserController(services)));
 
   return router;
-};
+}

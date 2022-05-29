@@ -5,13 +5,9 @@ import AuthService from '@api/services/auth-service';
 
 export const loginUserController = (app: AppServices) => {
   return async (req: Request, res: Response) => {
-    try {
-      const data = await new AuthService(app.dbClient).login(req.body.user);
+    const data = await new AuthService(app.dbClient).login(req.body.user);
 
-      return res.status(200).send(data);
-    } catch (e) {
-      return res.status(e.statusCode || 404).send(e.message);
-    }
+    return res.status(200).send(data);
   };
 };
 

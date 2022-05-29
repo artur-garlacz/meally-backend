@@ -15,7 +15,7 @@ import {
   updateOfferStatusSchema,
 } from './update-offer-status-controller';
 
-export const offerApiRouter = (services: AppServices) => {
+export function offerApiRouter(services: AppServices) {
   const router = Router();
 
   const auth = authMiddleware(services.dbClient);
@@ -43,4 +43,4 @@ export const offerApiRouter = (services: AppServices) => {
   router.get('/', wrap(getOffersController(services)));
 
   return router;
-};
+}

@@ -10,12 +10,10 @@ export function errorsMiddleware() {
     res: Response<HttpErrorResponseBody>,
     _next: NextFunction,
   ): Promise<void> => {
-    const traceId = (req as any).traceId;
     const request = {
       method: req.method,
       url: req.originalUrl,
       organizationId: res.locals.organizationId,
-      traceId,
     };
 
     if (err instanceof HttpErrorResponse) {

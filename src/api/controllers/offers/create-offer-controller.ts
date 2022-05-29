@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { z } from 'zod';
 import { AppServices } from '@app-services';
-import { CreateOfferBody, OfferStatus } from '@commons/api/offers';
+import { OfferStatus } from '@commons/api/offers';
 import { uuid } from '@libs/utils/common';
 import { AuthRequest } from '@commons/request';
 

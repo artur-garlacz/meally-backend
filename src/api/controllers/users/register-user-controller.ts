@@ -3,30 +3,29 @@ import createError from 'http-errors';
 import { AppServices } from '@app-services';
 import { z } from 'zod';
 import AuthService from '@api/services/auth-service';
+import { HttpErrorResponse } from '@libs/utils/errors';
+import { ErrorType } from '@commons/errors';
 
 export const registerUserController = (app: AppServices) => {
   return async (req: Request, res: Response) => {
-    try {
-      const {
-        user: { email },
-      } = req.body;
+    const {
+      user: { email },
+    } = req.body;
 
-      const userExists = await app.dbClient.getUserByEmail(email);
+    const userExists = await app.dbClient.getUserByEmail(email);
 
-      if (userExists) {
-        throw new createError[401]('User already exists');
-      }
-
-      const newUser = await new AuthService(app.dbClient).register(
-        req.body.user,
-      );
-
-      console.log(newUser, 'newUser');
-
-      return res.status(200).send(newUser);
-    } catch (e) {
-      return res.status(e.statusCode || 404).send(e.message);
+    if (userExists) {
+      throw new HttpErrorResponse(401, {
+        message: 'User already exists',
+        kind: ErrorType.HttpErrorResponse,
+      });
     }
+
+    const newUser = await new AuthService(app.dbClient).register(req.body.user);
+
+    console.log(newUser, 'newUser');
+
+    return res.status(200).send(newUser);
   };
 };
 

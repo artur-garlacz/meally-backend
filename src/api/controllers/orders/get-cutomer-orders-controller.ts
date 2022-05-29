@@ -11,11 +11,7 @@ export const getOfferController = (app: AppServices) => {
   ) => {
     const { offerId } = req.params;
 
-    if (!offerId) {
-      return res.status(404);
-    }
-
-    const offer = await app.dbClient.getOfferById(offerId);
+    const offer = await app.dbClient.getOfferById(offerId!);
 
     if (offer) {
       return res.status(200).send({ data: offer });

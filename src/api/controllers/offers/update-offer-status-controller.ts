@@ -7,6 +7,8 @@ import {
 } from '@commons/api/offers';
 import { AuthRequest } from '@commons/request';
 import { z } from 'zod';
+import { ErrorType } from '@commons/errors';
+import { HttpErrorResponse } from '@libs/utils/errors';
 
 export const updateOfferStatusController = (app: AppServices) => {
   return async (
@@ -22,9 +24,9 @@ export const updateOfferStatusController = (app: AppServices) => {
     const currOffer = await app.dbClient.getOfferById(offerId!);
 
     if (!currOffer) {
-      return res.status(404).send({
-        message: 'Not found',
-        status: 'failed',
+      throw new HttpErrorResponse(404, {
+        message: 'Offer not found',
+        kind: ErrorType.NotFound,
       });
     }
 

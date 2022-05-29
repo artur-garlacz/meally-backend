@@ -4,29 +4,36 @@ import { verifyAccessToken } from '@libs/utils/jwt';
 import { DbClient } from '@libs/db';
 import logger from '@libs/utils/logger';
 import { AuthRequest } from '@commons/request';
+import { HttpErrorResponse } from '@libs/utils/errors';
+import { ErrorType } from '@commons/errors';
 
 export function authMiddleware(dbClient: DbClient) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.headers.authorization, 'authorization');
-      console.log(req.headers, 'req.headers');
       if (!req.headers.authorization) {
-        throw new createError.Unauthorized('Access token is required');
+        throw new HttpErrorResponse(401, {
+          message: 'Access token is required',
+          kind: ErrorType.Unauthorized,
+        });
       }
       const token: string | null = req.headers.authorization.split(' ')[1];
       if (!token) {
-        throw new createError.Unauthorized();
+        throw new HttpErrorResponse(401, {
+          message: 'Access token is required',
+          kind: ErrorType.Unauthorized,
+        });
       }
 
-      console.log(token, 'token');
       const data = (await verifyAccessToken(token)) as {
         userId: string;
       } | null;
-      console.log(data, 'userId');
 
       logger.info(data && data.userId);
       if (!data) {
-        throw new createError.Unauthorized();
+        throw new HttpErrorResponse(401, {
+          message: 'Access token is required',
+          kind: ErrorType.Unauthorized,
+        });
       }
 
       const user = await dbClient.getUser(data.userId);

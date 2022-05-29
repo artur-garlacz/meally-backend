@@ -1,9 +1,13 @@
 import { ValidationError } from 'class-validator';
 
 export enum ErrorType {
+  BadRequest = 'BadRequest',
   NotFound = 'NotFound',
-  Unhandled = 'unhandled',
+  InsufficientQuantity = 'InsufficientQuantity',
+  Unhandled = 'Unhandled',
+  Unauthorized = 'Unauthorized',
   HttpErrorResponse = 'HttpErrorResponse',
+  UnprocessableEntity = 'UnprocessableEntity',
   Transform = 'Transform',
   CognitoError = 'CognitoError',
 }

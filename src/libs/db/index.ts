@@ -1,4 +1,5 @@
 import { offersQueries } from '@modules/offers/offer-queries';
+import { ordersQueries } from '@modules/orders/order-quieres';
 import { usersQueries } from '@modules/users/user-queries';
 import {
   CommonQueryMethods,
@@ -8,7 +9,7 @@ import {
 import { wrapDbClientByErrorLogger } from './setup';
 
 export type DbClient = ReturnType<typeof createDbClient>;
-export type DbQueries = any;
+export type DbQueries = ReturnType<typeof createDbQueries>;
 
 export function createDbClient(pool: DatabasePool) {
   return Object.freeze({
@@ -31,5 +32,6 @@ export function createDbQueries(
     },
     ...usersQueries(db),
     ...offersQueries(db),
+    ...ordersQueries(db),
   });
 }

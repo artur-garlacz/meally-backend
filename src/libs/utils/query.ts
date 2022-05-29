@@ -52,8 +52,8 @@ export type NamedAssignmentPayloadType = {
   [key: string]: string | string[] | number | Date | boolean | undefined | null;
 };
 
-export function chainOptional(
-  namedAssignment: NamedAssignmentPayloadType,
+export function chainOptional<T extends NamedAssignmentPayloadType>(
+  namedAssignment: T,
   type: 'update' | 'select',
 ) {
   const queries: Array<TaggedTemplateLiteralInvocation<QueryResultRow>> = [];

@@ -5,6 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import { offerApiRouter } from './controllers/offers';
+import { orderApiRouter } from './controllers/orders';
 import { userApiRouter } from './controllers/users';
 import { errorsMiddleware } from './middlewares/errors-middleware';
 
@@ -26,6 +27,7 @@ export async function buildRouter(services: AppServices) {
   );
 
   app.use('/api/user', express.json(), wrap(userApiRouter(services)));
+  app.use('/api/orders', express.json(), wrap(orderApiRouter(services)));
   app.use('/api/offers', express.json(), wrap(offerApiRouter(services)));
   // ---
   // end middlewares

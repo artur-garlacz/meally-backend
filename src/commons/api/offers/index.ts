@@ -1,10 +1,6 @@
 import { ResponseAction, ResponseDetails } from '@commons/data';
 import { PaginationRequest, PaginationResponse } from '@commons/pagination';
-import {
-  OfferCategoryEntity,
-  OfferEntity,
-  OfferOrderEntity,
-} from '@modules/offers/entities';
+import { OfferCategoryEntity, OfferEntity } from '@modules/offers/entities';
 
 export type RangeFilter = {
   from: number;
@@ -17,7 +13,7 @@ export enum OfferStatus {
   archived = 'archived',
 }
 
-export enum OfferOrderStatus {
+export enum OrderStatus {
   created = 'created',
   accepted = 'accepted',
   prepared = 'prepared',
@@ -28,7 +24,6 @@ export enum OfferOrderStatus {
 export type UpdateOfferType = Partial<Omit<OfferEntity, 'userId'>>;
 
 export type OfferStatusType = keyof typeof OfferStatus;
-export type OfferOrderStatusType = keyof typeof OfferOrderStatus;
 
 export type GetOffersRequestQuery = {
   offerCategoryId?: string;
@@ -48,19 +43,4 @@ export type GetOffersResponse = PaginationResponse<OfferEntity>;
 
 export type GetOfferResponse = ResponseDetails<OfferEntity> | ResponseAction;
 
-export type GetOfferOrderResponse =
-  | ResponseDetails<OfferOrderEntity>
-  | ResponseAction;
-
 export type GetOfferCategoriesResponse = ResponseDetails<OfferCategoryEntity[]>;
-
-export type CreateOfferBody = {
-  offer: {
-    title: string;
-    unitPrice: number;
-    longDesc: string;
-    shortDesc: string;
-    availableQuantity: number;
-    offerCategoryId: string;
-  };
-};

@@ -16,24 +16,40 @@ describe('@Integration Offer queries', () => {
   });
 
   describe('DbClient.createOrder', () => {
-    it('should insert offer with created category', async () => {
+    it('should create and return order', async () => {
       await dbClient.createUser(user);
+      const customer = await dbClient.createUser(dummies.user());
       const category = await dbClient.createOfferCategory(offerCategory);
-      const offer = dummies.offer({
-        offerCategoryId: category.offerCategoryId,
-        userId: user.userId,
-      });
+
+      const offer = await dbClient.createOffer(
+        dummies.offer({
+          offerCategoryId: category.offerCategoryId,
+          userId: user.userId,
+        }),
+      );
 
       const createdOrder = await dbClient.createOrder(
         dummies.order({
           offerId: offer.offerId,
+          customerId: customer.userId,
         }),
+      );
+
+      const receivedOrder = await dbClient.getOrderById({
+        offerOrderId: createdOrder.offerOrderId,
+      });
+
+      assert.deepEqual(
+        receivedOrder,
+        createdOrder,
+        'Received order values are not equal to created order',
       );
     });
   });
 
   describe('DbClient.getOffers & DbClient.getOffer', () => {
     let user1: UserEntity,
+      user2: UserEntity,
       offerCategory1: OfferCategoryEntity,
       offerCategory2: OfferCategoryEntity;
 
@@ -44,15 +60,21 @@ describe('@Integration Offer queries', () => {
         }),
       );
 
+      user2 = await dbClient.createUser(
+        dummies.user({
+          email: 'dev2@gmail.com',
+        }),
+      );
+
       offerCategory1 = await dbClient.createOfferCategory(
         dummies.offerCategory({
-          name: 'Kuchnia włoska',
+          name: 'Italian kitchen',
         }),
       );
 
       offerCategory2 = await dbClient.createOfferCategory(
         dummies.offerCategory({
-          name: 'Kuchnia polska',
+          name: 'Polish kitchen',
         }),
       );
 
@@ -67,11 +89,16 @@ describe('@Integration Offer queries', () => {
           }),
         );
 
-        // await dbClient.createOrder({});
+        await dbClient.createOrder(
+          dummies.order({
+            offerId: offer.offerId,
+            customerId: user2.userId,
+          }),
+        );
       }
     });
 
-    describe('DbClient.getOffers', () => {
+    describe('DbClient.getOrders', () => {
       it('get offers with default filters', async () => {
         const offers = await dbClient.getOffers({});
         assert.equal(offers.length, 10);

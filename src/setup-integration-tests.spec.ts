@@ -17,6 +17,7 @@ beforeEach('Clean up after test', async () => {
         DELETE FROM "user";
         DELETE FROM "offerCategory";
         DELETE FROM "offer";
+        DELETE FROM "offerOrder";
         DELETE FROM "userDetails";
         DELETE FROM "offerDetails";
         DELETE FROM "userSchedule";

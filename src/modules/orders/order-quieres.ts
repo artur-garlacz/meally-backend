@@ -17,14 +17,13 @@ export function ordersQueries(db: CommonQueryMethods) {
       return db.one(sql`
               INSERT INTO "offerOrder" (
                   "offerOrderId",
-                  "status",
                   "quantity",
+                  "status",
                   "createdAt",
                   "updatedAt",
                   "offerId",
                   "customerId") 
               VALUES (${order.offerOrderId},
-                      ${order.status},
                       ${order.quantity},
                       ${order.status},
                       ${serializeDate(order.createdAt)},
@@ -33,6 +32,21 @@ export function ordersQueries(db: CommonQueryMethods) {
                       ${order.customerId}
               ) RETURNING *
             `);
+    },
+    getOrderById<T extends { offerOrderId: OrderEntity['offerOrderId'] }>(
+      args: T,
+    ): Promise<OrderEntity | null> {
+      return db
+        .maybeOne(
+          sql`
+              SELECT * FROM "offerOrder" WHERE ${chainOptional(
+                { offerOrderId: args.offerOrderId },
+                'select',
+              )}
+                ORDER BY "offerOrderId"
+            `,
+        )
+        .then(toOptional(OrderEntity));
     },
     getCustomerOrders<T extends { customerId: OrderEntity['customerId'] }>(
       args: T,
@@ -60,6 +74,14 @@ export function ordersQueries(db: CommonQueryMethods) {
             `,
         )
         .then(toMany(OrderEntity));
+    },
+     getOrdersCount(): number{
+      return db.query(
+        sql`
+              SELECT COUNT("order".) FROM "offerOrder" as "order" INNER JOIN "offer" on "order"."offerId" = "offer"."offerId"
+              WHERE "offer"."offerId"=${args.userId} ORDER BY "order"."offerOrderId";
+            `,
+      );
     },
   });
 }

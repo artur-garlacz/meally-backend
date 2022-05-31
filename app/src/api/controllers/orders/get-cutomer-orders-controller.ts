@@ -1,26 +1,21 @@
 import { AppServices } from '@app-services';
-import { GetOfferResponse } from '@commons/api/offers';
-import { ErrorType } from '@commons/errors';
-import { Request, Response } from 'express';
+import { Orders } from '@commons/api';
+import { AuthRequest } from '@commons/request';
+import { Response } from 'express';
 
-import { HttpErrorResponse } from '@libs/utils/errors';
-
-export const getOfferController = (app: AppServices) => {
+export const getCutomerOrdersController = (app: AppServices) => {
   return async (
-    req: Request<{ offerId?: string }, GetOfferResponse, {}, {}>,
-    res: Response<GetOfferResponse>,
+    req: AuthRequest<Orders.GetCustomerOrdersRequestQuery, {}, {}, {}>,
+    res: Response,
   ) => {
-    const { offerId } = req.params;
+    const {
+      sender: { userId },
+      params,
+    } = req;
 
-    const offer = await app.dbClient.getOfferById(offerId!);
-
-    if (offer) {
-      return res.status(200).send({ data: offer });
-    }
-
-    throw new HttpErrorResponse(404, {
-      message: 'Offer not found',
-      kind: ErrorType.NotFound,
+    const orders = await app.dbClient.getPaginatedCustomerOrders({
+      customerId: userId,
+      ...params,
     });
   };
 };

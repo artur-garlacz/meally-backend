@@ -1,27 +1,28 @@
 import { AppServices } from '@app-services';
-import {
-  GetOffersRequestQuery,
-  GetOffersResponse,
-  OfferStatus,
-} from '@commons/api/offers';
+import { Offers } from '@commons/api';
 import { setPaginationResponse } from '@commons/pagination';
 import { Request, Response } from 'express';
 
 export const getOffersController = (app: AppServices) => {
   return async (
-    req: Request<{}, GetOffersResponse, {}, GetOffersRequestQuery>,
-    res: Response<GetOffersResponse>,
+    req: Request<
+      {},
+      Offers.GetOffersResponse,
+      {},
+      Offers.GetOffersRequestQuery
+    >,
+    res: Response<Offers.GetOffersResponse>,
   ) => {
     const { page, perPage, offerCategoryId } = getQueryParams(req.query);
 
-    const offers = await app.dbClient.getOffers({
+    const offers = await app.dbClient.getPaginatedOffers({
       offerCategoryId,
-      status: OfferStatus.published,
+      status: Offers.OfferStatus.published,
       perPage,
       page,
     });
 
-    const response: GetOffersResponse = setPaginationResponse({
+    const response: Offers.GetOffersResponse = setPaginationResponse({
       items: offers,
       perPage,
       page,
@@ -30,7 +31,7 @@ export const getOffersController = (app: AppServices) => {
   };
 };
 
-function getQueryParams(args: GetOffersRequestQuery) {
+function getQueryParams(args: Offers.GetOffersRequestQuery) {
   return {
     ...args,
     page: Number(args.page ?? 1),

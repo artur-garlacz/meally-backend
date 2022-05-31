@@ -1,13 +1,30 @@
 import { AppServices } from '@app-services';
-import { Request, Response } from 'express';
+import { AuthRequest } from '@commons/request';
+import { Response } from 'express';
 import { z } from 'zod';
 
 import { uuid } from '@libs/utils/common';
 
-export const createUserDetailsController = (app: AppServices) => {
-  return async (req: Request, res: Response<any>) => {
+export const createOrUpdateUserDetailsController = (app: AppServices) => {
+  return async (req: AuthRequest, res: Response<any>) => {
     const { address1, address2, city, postalCode, country, phoneNumber } =
       req.body;
+    const { userId } = req.sender;
+
+    const isUserDetailExists = await app.dbClient.getUserDetails(userId);
+
+    if (isUserDetailExists) {
+      const userDetails = await app.dbClient.createUserDetails({
+        userDetailsId: uuid(),
+        address1,
+        address2,
+        city,
+        postalCode,
+        country,
+        phoneNumber,
+        userId,
+      });
+    }
 
     const userDetails = await app.dbClient.createUserDetails({
       userDetailsId: uuid(),
@@ -17,7 +34,7 @@ export const createUserDetailsController = (app: AppServices) => {
       postalCode,
       country,
       phoneNumber,
-      userId: '',
+      userId,
     });
 
     return res.status(200).send({ userDetails });
@@ -25,11 +42,11 @@ export const createUserDetailsController = (app: AppServices) => {
 };
 
 export const getUserDetailsController = (app: AppServices) => {
-  return async (req: Request, res: Response<any>) => {
-    const userId = 'sad'; // get from req
+  return async (req: AuthRequest, res: Response<any>) => {
+    const { userId } = req.sender;
     const userDetails = await app.dbClient.getUserDetails(userId);
 
-    return res.status(200).send({ userDetails });
+    return res.status(200).send({ data: userDetails });
   };
 };
 

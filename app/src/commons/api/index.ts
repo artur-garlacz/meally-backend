@@ -1,7 +1,5 @@
-import * as offers from './offers';
-import * as users from './users';
+import * as Offers from './offers';
+import * as Orders from './orders';
+import * as Users from './users';
 
-export default {
-  users,
-  offers,
-};
+export { Users, Offers, Orders };

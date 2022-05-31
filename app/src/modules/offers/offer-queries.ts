@@ -1,5 +1,9 @@
-import { OfferFilterQuery, UpdateOfferType } from '@commons/api/offers';
-import { setPaginationQuery } from '@commons/pagination';
+import { Offers } from '@commons/api';
+import {
+  PaginationResponse,
+  setPaginationParams,
+  setPaginationResponse,
+} from '@commons/pagination';
 import { CommonQueryMethods, sql } from 'slonik';
 
 import logger from '@libs/utils/logger';
@@ -7,17 +11,6 @@ import { chainOptional, toMany, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
 import { OfferCategoryEntity, OfferEntity } from './entities';
-
-export function getOffersParams({
-  page = 1,
-  perPage = 10,
-  ...args
-}: OfferFilterQuery) {
-  return {
-    paginateCondition: setPaginationQuery({ page, perPage }),
-    whereCondition: chainOptional(args as any, 'select'),
-  };
-}
 
 export function offersQueries(db: CommonQueryMethods) {
   return Object.freeze({
@@ -60,7 +53,7 @@ export function offersQueries(db: CommonQueryMethods) {
     }: {
       offerId: OfferEntity['offerId'];
       userId: OfferEntity['userId'];
-      updateOffer: UpdateOfferType;
+      updateOffer: Offers.UpdateOfferType;
     }): Promise<OfferEntity> {
       logger.debug('DbClient.updateOffer');
 
@@ -83,16 +76,25 @@ export function offersQueries(db: CommonQueryMethods) {
         AND "userId" = ${userId}
         RETURNING *`);
     },
-    getOffers(args: OfferFilterQuery): Promise<OfferEntity[]> {
+    async getPaginatedOffers(
+      args: Offers.GetOffersRequestQuery,
+    ): Promise<PaginationResponse<OfferEntity>> {
       logger.debug('DbClient.getAllOffers');
 
-      const { paginateCondition, whereCondition } = getOffersParams(args);
+      const { paginateCondition, whereCondition, page, perPage } =
+        setPaginationParams<Offers.GetOffersRequestQuery>(args);
 
-      return db
+      const items = await db
         .query(
           sql`SELECT * FROM "offer" WHERE ${whereCondition} ORDER BY "offerId" ${paginateCondition}`,
         )
         .then(toMany(OfferEntity));
+
+      return setPaginationResponse<OfferEntity>({
+        items,
+        perPage,
+        page,
+      });
     },
     getOfferById(offerId: OfferEntity['offerId']): Promise<OfferEntity | null> {
       logger.debug('DbClient.getOfferById');

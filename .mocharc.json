@@ -1,9 +1,0 @@
-{
-  "extension": ["ts"],
-  "require": "ts-node/register",
-  "spec": "src/**/*.spec.ts",
-  "reporter": "mocha-dd-reporter",
-  "colors": true,
-  "exit": true,
-  "timeout": 10000
-}

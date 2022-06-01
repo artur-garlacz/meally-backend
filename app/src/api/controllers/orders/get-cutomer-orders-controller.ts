@@ -5,17 +5,26 @@ import { Response } from 'express';
 
 export const getCutomerOrdersController = (app: AppServices) => {
   return async (
-    req: AuthRequest<Orders.GetCustomerOrdersRequestQuery, {}, {}, {}>,
+    req: AuthRequest<
+      {},
+      Orders.GetOrdersResponse,
+      {},
+      Orders.GetCustomerOrdersRequestQuery
+    >,
     res: Response,
   ) => {
     const {
       sender: { userId },
-      params,
+      query: { page, perPage, status },
     } = req;
 
-    const orders = await app.dbClient.getPaginatedCustomerOrders({
+    const response = await app.dbClient.getPaginatedCustomerOrders({
       customerId: userId,
-      ...params,
+      page,
+      perPage,
+      status,
     });
+
+    return res.status(200).send(response);
   };
 };

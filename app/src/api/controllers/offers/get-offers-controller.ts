@@ -13,28 +13,15 @@ export const getOffersController = (app: AppServices) => {
     >,
     res: Response<Offers.GetOffersResponse>,
   ) => {
-    const { page, perPage, offerCategoryId } = getQueryParams(req.query);
+    const { page, perPage, offerCategoryId } = req.query;
 
-    const offers = await app.dbClient.getPaginatedOffers({
+    const response = await app.dbClient.getPaginatedOffers({
       offerCategoryId,
       status: Offers.OfferStatus.published,
       perPage,
       page,
     });
 
-    const response: Offers.GetOffersResponse = setPaginationResponse({
-      items: offers,
-      perPage,
-      page,
-    });
     return res.status(200).send(response);
   };
 };
-
-function getQueryParams(args: Offers.GetOffersRequestQuery) {
-  return {
-    ...args,
-    page: Number(args.page ?? 1),
-    perPage: Number(args.perPage ?? 10),
-  };
-}

@@ -1,4 +1,4 @@
-import { OrderStatus } from '@commons/api/offers';
+import { Orders } from '@commons/api';
 import faker from '@faker-js/faker';
 
 import { uuid } from '@libs/utils/common';
@@ -11,11 +11,11 @@ export const order: MockBuilder<OrderEntity> = (partial = {}): OrderEntity => {
   return {
     offerOrderId: uuid(),
     status: faker.helpers.arrayElement([
-      OrderStatus.accepted,
-      OrderStatus.created,
-      OrderStatus.delivered,
-      OrderStatus.prepared,
-      OrderStatus.rejected,
+      Orders.OrderStatus.accepted,
+      Orders.OrderStatus.created,
+      Orders.OrderStatus.delivered,
+      Orders.OrderStatus.prepared,
+      Orders.OrderStatus.rejected,
     ]),
     quantity: faker.datatype.number({ min: 0, max: 1000 }),
     createdAt: new Date(),

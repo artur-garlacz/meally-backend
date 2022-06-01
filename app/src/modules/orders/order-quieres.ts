@@ -10,6 +10,8 @@ import logger from '@libs/utils/logger';
 import { chainOptional, toMany, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
+import { OfferEntity } from '@modules/offers/entities';
+
 import { OrderEntity } from './entities';
 
 export function ordersQueries(db: CommonQueryMethods) {
@@ -55,7 +57,7 @@ export function ordersQueries(db: CommonQueryMethods) {
       args: Orders.GetCustomerOrdersRequestQuery & {
         customerId: OrderEntity['customerId'];
       },
-    ): Promise<PaginationResponse<OrderEntity>> {
+    ): Promise<Orders.GetOrdersResponse> {
       const { paginateCondition, whereCondition, perPage, page } =
         setPaginationParams<Orders.GetCustomerOrdersRequestQuery>(args);
 
@@ -74,17 +76,28 @@ export function ordersQueries(db: CommonQueryMethods) {
         page,
       });
     },
-    getPaginatedMerchantOrders<T extends { userId: OrderEntity['customerId'] }>(
-      args: T,
-    ): Promise<OrderEntity[]> {
-      return db
+    async getPaginatedMerchantOrders({
+      userId,
+      ...args
+    }: Orders.GetMerchantOrdersRequestQuery &
+      Pick<OfferEntity, 'userId'>): Promise<Orders.GetOrdersResponse> {
+      const { paginateCondition, page, perPage } =
+        setPaginationParams<Orders.GetMerchantOrdersRequestQuery>(args);
+
+      const items = await db
         .query(
           sql`
-              SELECT * FROM "offerOrder" as "order" INNER JOIN "offer" on "order"."offerId" = "offer"."offerId"
-              WHERE "offer"."offerId"=${args.userId} ORDER BY "order"."offerOrderId";
+              SELECT * FROM "offerOrder" JOIN "offer" on "offerOrder"."offerId"="offer"."offerId"
+              WHERE "offer"."offerId"=${userId} ORDER BY "offerOrder"."offerOrderId" ${paginateCondition};
             `,
         )
         .then(toMany(OrderEntity));
+
+      return setPaginationResponse<OrderEntity>({
+        items,
+        perPage,
+        page,
+      });
     },
     // getOrdersCount(): number {
     //   return db.query(

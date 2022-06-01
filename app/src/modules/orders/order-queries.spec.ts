@@ -1,3 +1,4 @@
+import { Orders } from '@commons/api';
 import { getTestDbClient } from '@setup-integration-tests.spec';
 import { assert } from 'chai';
 
@@ -9,7 +10,7 @@ import { UserEntity } from '@modules/users/entities';
 
 import { dummies } from '@tests/dummies';
 
-describe('@Integration Offer queries', () => {
+describe('@Integration Order queries', () => {
   let dbClient: DbClient;
   const offerCategory = dummies.offerCategory();
   const user = dummies.user();
@@ -31,12 +32,12 @@ describe('@Integration Offer queries', () => {
         }),
       );
 
-      const createdOrder = await dbClient.createOrder(
-        dummies.order({
-          offerId: offer.offerId,
-          customerId: customer.userId,
-        }),
-      );
+      const mockOrder = dummies.order({
+        offerId: offer.offerId,
+        customerId: customer.userId,
+      });
+
+      const createdOrder = await dbClient.createOrder(mockOrder);
 
       const receivedOrder = await dbClient.getOrderById({
         offerOrderId: createdOrder.offerOrderId,
@@ -50,7 +51,7 @@ describe('@Integration Offer queries', () => {
     });
   });
 
-  describe('DbClient.getOffers & DbClient.getOffer', () => {
+  describe('DbClient.getPaginatedCustomerOrders & DbClient.getPaginatedMerchantOrders', () => {
     let user1: UserEntity,
       user2: UserEntity,
       offerCategory1: OfferCategoryEntity,
@@ -96,68 +97,136 @@ describe('@Integration Offer queries', () => {
           dummies.order({
             offerId: offer.offerId,
             customerId: user2.userId,
+            status:
+              i % 2 == 0
+                ? Orders.OrderStatus.accepted
+                : Orders.OrderStatus.delivered,
           }),
         );
       }
     });
 
-    describe('DbClient.getOrders', () => {
-      it('get offers with default filters', async () => {
-        const offers = await dbClient.getOffers({});
-        assert.equal(offers.length, 10);
-      });
-
-      it('get offers with default perPage and page is 2', async () => {
-        const offers = await dbClient.getOffers({ page: 2 });
-        assert.equal(offers.length, 10);
-      });
-
-      it('get offers with default page and perPage is 20', async () => {
-        const offers = await dbClient.getOffers({ perPage: 20 });
-        assert.equal(offers.length, 20);
-      });
-
-      it('get offers with page 3 and perPage is 5', async () => {
-        const offers = await dbClient.getOffers({ perPage: 5, page: 3 });
-        assert.equal(offers.length, 5);
-      });
-
-      it('get offers with offerCategoryId filter', async () => {
-        const offers = await dbClient.getOffers({
-          offerCategoryId: offerCategory2.offerCategoryId,
-          perPage: 15,
+    describe('DbClient.getPaginatedCustomerOrders', () => {
+      it('get orders with default filters', async () => {
+        const data = await dbClient.getPaginatedCustomerOrders({
+          customerId: user2.userId,
         });
-        assert.equal(offers.length, 10);
-        offers.forEach((offer) => {
-          assert.equal(offer.offerCategoryId, offerCategory2.offerCategoryId);
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 10);
+        assert.equal(data.page, 1);
+      });
+
+      it('get orders with default perPage and page is 2', async () => {
+        const data = await dbClient.getPaginatedCustomerOrders({
+          customerId: user2.userId,
+          page: '2',
         });
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 10);
+        assert.equal(data.page, 2);
+      });
+
+      it('get orders with default page and perPage is 20', async () => {
+        const data = await dbClient.getPaginatedCustomerOrders({
+          customerId: user2.userId,
+          perPage: '20',
+        });
+
+        assert.equal(data.items.length, 20);
+        assert.equal(data.itemsCount, 20);
+        assert.equal(data.perPage, 20);
+        assert.equal(data.page, 1);
+      });
+
+      it('get orders with page 3 and perPage is 5', async () => {
+        const data = await dbClient.getPaginatedCustomerOrders({
+          customerId: user2.userId,
+          perPage: '5',
+          page: '3',
+        });
+
+        assert.equal(data.items.length, 5);
+        assert.equal(data.itemsCount, 5);
+        assert.equal(data.perPage, 5);
+        assert.equal(data.page, 3);
+      });
+
+      it('get orders with offerCategoryId filter', async () => {
+        const data = await dbClient.getPaginatedCustomerOrders({
+          customerId: user2.userId,
+          status: Orders.OrderStatus.accepted,
+          perPage: '15',
+        });
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 15);
+        assert.equal(data.page, 1);
       });
     });
 
-    describe('DbClient.getOfferById', () => {
-      it('should return offer with proper offerId', async () => {
-        const offer1 = await dbClient.createOffer(
-          dummies.offer({
-            userId: user1.userId,
-            offerCategoryId: offerCategory1.offerCategoryId,
-          }),
-        );
-
-        await dbClient.createOffer(
-          dummies.offer({
-            userId: user1.userId,
-            offerCategoryId: offerCategory2.offerCategoryId,
-          }),
-        );
-
-        const offer = await dbClient.getOfferById(offer1.offerId);
-        assert.notEqual(offer, null);
-        assert.equal(offer?.offerId, offer1.offerId);
+    describe('DbClient.getPaginatedMerchantOrders', () => {
+      it('get orders with default filters', async () => {
+        const data = await dbClient.getPaginatedMerchantOrders({
+          userId: user1.userId,
+        });
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 10);
+        assert.equal(data.page, 1);
       });
 
-      it('should return null if offer does not exist', async () => {
-        const offer = await dbClient.getOfferById(uuid());
-        assert.equal(offer, null);
+      it('get orders with default perPage and page is 2', async () => {
+        const data = await dbClient.getPaginatedMerchantOrders({
+          userId: user1.userId,
+          page: '2',
+        });
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 10);
+        assert.equal(data.page, 2);
+      });
+
+      it('get orders with default page and perPage is 20', async () => {
+        const data = await dbClient.getPaginatedMerchantOrders({
+          userId: user1.userId,
+          perPage: '20',
+        });
+
+        assert.equal(data.items.length, 20);
+        assert.equal(data.itemsCount, 20);
+        assert.equal(data.perPage, 20);
+        assert.equal(data.page, 1);
+      });
+
+      it('get orders with page 3 and perPage is 5', async () => {
+        const data = await dbClient.getPaginatedMerchantOrders({
+          userId: user1.userId,
+          perPage: '5',
+          page: '3',
+        });
+
+        assert.equal(data.items.length, 5);
+        assert.equal(data.itemsCount, 5);
+        assert.equal(data.perPage, 5);
+        assert.equal(data.page, 3);
+      });
+
+      it('get orders with offerCategoryId filter', async () => {
+        const data = await dbClient.getPaginatedMerchantOrders({
+          userId: user1.userId,
+          status: Orders.OrderStatus.accepted,
+          perPage: '15',
+        });
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 15);
+        assert.equal(data.page, 1);
       });
     });
   });

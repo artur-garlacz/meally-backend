@@ -7,27 +7,59 @@ import logger from '@libs/utils/logger';
 import { chainOptional, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
-import { UserDetailsEntity, UserEntity } from './entities';
+import { UserDetailsEntity, UserEntity, UserPasswordEntity } from './entities';
 
 export function usersQueries(db: CommonQueryMethods) {
   return Object.freeze({
     createUser(user: UserEntity): Promise<UserEntity> {
-      logger.debug('DbClient.createUser', user);
+      logger.info('DbClient.createUser');
 
       return db.one(sql`
             INSERT INTO "user" (
                 "userId",
                 "email",
-                "password",
                 "createdAt",
                 "updatedAt"
             ) VALUES (
                 ${user.userId},
                 ${user.email},
-                ${user.password},
                 ${serializeDate(user.createdAt)},
                 ${serializeDate(user.updatedAt)}
             ) RETURNING *`);
+    },
+    createUserPassword(
+      userPassword: UserPasswordEntity,
+    ): Promise<UserPasswordEntity> {
+      logger.info('DbClient.createUserPassword');
+
+      return db.one(sql`
+            INSERT INTO "userPassword" (
+                "userPasswordId",
+                "password",
+                "createdAt",
+                "updatedAt",
+                "userId"
+            ) VALUES (
+                ${userPassword.userPasswordId},
+                ${userPassword.password},
+                ${serializeDate(userPassword.createdAt)},
+                ${serializeDate(userPassword.updatedAt)},
+                ${userPassword.userId}
+            ) RETURNING *`);
+    },
+    getUserPassword({
+      userId,
+    }: {
+      userId: UserPasswordEntity['userId'];
+    }): Promise<UserPasswordEntity | null> {
+      logger.info('DbClient.getUserPassword');
+
+      return db
+        .maybeOne(
+          sql`
+        SELECT * FROM "userPassword" WHERE "userId"=${userId}`,
+        )
+        .then(toOptional(UserPasswordEntity));
     },
     getUser(userId: UserEntity['userId']): Promise<UserEntity | null> {
       return db
@@ -48,7 +80,7 @@ export function usersQueries(db: CommonQueryMethods) {
     createUserDetails(
       userDetails: UserDetailsEntity,
     ): Promise<UserDetailsEntity> {
-      logger.debug('DbClient.createUserDetails', userDetails);
+      logger.info('DbClient.createUserDetails');
 
       return db.one(sql`
             INSERT INTO "userDetails" (
@@ -77,7 +109,7 @@ export function usersQueries(db: CommonQueryMethods) {
       > &
         Pick<UserDetailsEntity, 'userDetailsId'>,
     ): Promise<UserDetailsEntity> {
-      logger.debug('DbClient.updateUserDetails', userDetails);
+      logger.info('DbClient.updateUserDetails', userDetails);
 
       return db.one(sql`
           UPDATE "offer"
@@ -97,7 +129,7 @@ export function usersQueries(db: CommonQueryMethods) {
           RETURNING *`);
     },
     getUserDetails(userId: string): Promise<UserDetailsEntity | null> {
-      logger.debug('DbClient.getUserDetails');
+      logger.info('DbClient.getUserDetails');
       return db
         .maybeOne(
           sql`

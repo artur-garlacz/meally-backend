@@ -23,6 +23,8 @@ beforeEach('Clean up after test', async () => {
         DELETE FROM "offerDetails";
         DELETE FROM "userSchedule";
         DELETE FROM "schedule";
+        DELETE FROM "userPassword";
+        DELETE FROM "userReview";
       `);
     });
   }

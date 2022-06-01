@@ -4,7 +4,6 @@ import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
-  IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
@@ -16,9 +15,6 @@ export class UserEntity {
   @IsString()
   @IsNotEmpty()
   readonly email: string;
-  @IsString()
-  @IsNotEmpty()
-  readonly password: string;
   @IsDate()
   @Type(() => Date)
   readonly createdAt: Date;
@@ -49,6 +45,25 @@ export class UserDetailsEntity {
   @IsString()
   @IsNotEmpty()
   readonly phoneNumber: string;
+  @IsUUID('4')
+  @IsString()
+  readonly userId: string;
+}
+
+export class UserPasswordEntity {
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly userPasswordId: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly password: string;
+  @IsDate()
+  @Type(() => Date)
+  readonly createdAt: Date;
+  @IsDate()
+  @Type(() => Date)
+  readonly updatedAt: Date;
+  @IsUUID('4')
   @IsString()
   readonly userId: string;
 }

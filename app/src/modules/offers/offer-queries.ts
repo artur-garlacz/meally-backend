@@ -15,7 +15,7 @@ import { OfferCategoryEntity, OfferEntity } from './entities';
 export function offersQueries(db: CommonQueryMethods) {
   return Object.freeze({
     createOffer(offer: OfferEntity): Promise<OfferEntity> {
-      logger.debug('DbClient.createOffer');
+      logger.info('[Command] DbClient.createOffer');
 
       return db.one(sql`
         INSERT INTO "offer" (
@@ -55,7 +55,7 @@ export function offersQueries(db: CommonQueryMethods) {
       userId: OfferEntity['userId'];
       updateOffer: Offers.UpdateOfferType;
     }): Promise<OfferEntity> {
-      logger.debug('DbClient.updateOffer');
+      logger.info('[Command] DbClient.updateOffer');
 
       return db.one(sql`
         UPDATE "offer"
@@ -79,7 +79,7 @@ export function offersQueries(db: CommonQueryMethods) {
     async getPaginatedOffers(
       args: Offers.GetOffersRequestQuery,
     ): Promise<PaginationResponse<OfferEntity>> {
-      logger.debug('DbClient.getAllOffers');
+      logger.info('[Command] DbClient.getAllOffers');
 
       const { paginateCondition, whereCondition, page, perPage } =
         setPaginationParams<Offers.GetOffersRequestQuery>(args);
@@ -97,7 +97,7 @@ export function offersQueries(db: CommonQueryMethods) {
       });
     },
     getOfferById(offerId: OfferEntity['offerId']): Promise<OfferEntity | null> {
-      logger.debug('DbClient.getOfferById');
+      logger.info('[Command] DbClient.getOfferById');
 
       return db
         .maybeOne(sql`SELECT * FROM "offer" WHERE "offerId"=${offerId}`)
@@ -106,7 +106,7 @@ export function offersQueries(db: CommonQueryMethods) {
     createOfferCategory(
       offer: OfferCategoryEntity,
     ): Promise<OfferCategoryEntity> {
-      logger.debug('DbClient.createOfferCategory');
+      logger.info('[Command] DbClient.createOfferCategory');
 
       return db.one(
         sql`
@@ -122,7 +122,7 @@ export function offersQueries(db: CommonQueryMethods) {
       );
     },
     getAllOfferCategories(): Promise<OfferCategoryEntity[]> {
-      logger.debug('DbClient.getAllOfferCategories');
+      logger.info('[Command] DbClient.getAllOfferCategories');
 
       return db
         .query(sql`SELECT * FROM "offerCategory"`)

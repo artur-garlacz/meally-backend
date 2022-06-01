@@ -1,5 +1,5 @@
 import { AppServices } from '@app-services';
-import { OrderStatus } from '@commons/api/offers';
+import { Orders } from '@commons/api';
 import { GetOrderResponse } from '@commons/api/orders';
 import { ErrorType } from '@commons/errors';
 import { AuthRequest } from '@commons/request';
@@ -12,7 +12,7 @@ import { HttpErrorResponse } from '@libs/utils/errors';
 export const createOrderController = (app: AppServices) => {
   return async (
     req: AuthRequest<{ offerId?: string }, {}, CreateOrderRequestBody['body']>,
-    res: Response<GetOrderResponse>,
+    res: Response<Orders.GetOrderResponse>,
   ) => {
     const {
       sender: { userId },
@@ -45,7 +45,7 @@ export const createOrderController = (app: AppServices) => {
           customerId: userId,
           createdAt: new Date(),
           updatedAt: new Date(),
-          status: OrderStatus.created,
+          status: Orders.OrderStatus.created,
         });
 
         return order;

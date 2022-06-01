@@ -1,9 +1,12 @@
 import { AppServices } from '@app-services';
-import { GetOfferCategoriesResponse } from '@commons/api/offers';
+import { Offers } from '@commons/api';
 import { Request, Response } from 'express';
 
 export const getOfferCategoriesController = (app: AppServices) => {
-  return async (req: Request, res: Response<GetOfferCategoriesResponse>) => {
+  return async (
+    req: Request,
+    res: Response<Offers.GetOfferCategoriesResponse>,
+  ) => {
     const offerCategories = await app.dbClient.getAllOfferCategories();
     return res.status(200).send({
       data: offerCategories,

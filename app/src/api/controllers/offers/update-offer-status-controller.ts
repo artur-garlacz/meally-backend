@@ -1,9 +1,5 @@
 import { AppServices } from '@app-services';
-import {
-  GetOfferResponse,
-  OfferStatus,
-  OfferStatusType,
-} from '@commons/api/offers';
+import { Offers } from '@commons/api';
 import { ErrorType } from '@commons/errors';
 import { AuthRequest } from '@commons/request';
 import { Response } from 'express';
@@ -14,7 +10,7 @@ import { HttpErrorResponse } from '@libs/utils/errors';
 export const updateOfferStatusController = (app: AppServices) => {
   return async (
     req: AuthRequest<{ offerId?: string }, {}, UpdateOfferRequestBody['body']>,
-    res: Response<GetOfferResponse>,
+    res: Response<Offers.GetOfferResponse>,
   ) => {
     const {
       sender: { userId },
@@ -51,17 +47,17 @@ export const updateOfferStatusSchema = z.object({
   body: z.object({
     offer: z.object({
       status: z.enum([
-        OfferStatus.archived,
-        OfferStatus.draft,
-        OfferStatus.published,
+        Offers.OfferStatus.archived,
+        Offers.OfferStatus.draft,
+        Offers.OfferStatus.published,
       ]),
     }),
   }),
 });
 
 export function verifyOfferStatus(
-  currStatus: OfferStatusType,
-  newStatus: OfferStatusType,
+  currStatus: Offers.OfferStatusType,
+  newStatus: Offers.OfferStatusType,
 ) {
   if (currStatus === 'archived') {
     return newStatus === 'draft' ? newStatus : currStatus;

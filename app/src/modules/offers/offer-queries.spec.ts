@@ -71,32 +71,56 @@ describe('@Integration Offer queries', () => {
 
     describe('DbClient.getOffers', () => {
       it('get offers with default filters', async () => {
-        const offers = await dbClient.getOffers({});
-        assert.equal(offers.length, 10);
+        const data = await dbClient.getPaginatedOffers({});
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 10);
+        assert.equal(data.page, 1);
       });
 
       it('get offers with default perPage and page is 2', async () => {
-        const offers = await dbClient.getOffers({ page: 2 });
-        assert.equal(offers.length, 10);
+        const data = await dbClient.getPaginatedOffers({ page: '2' });
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 10);
+        assert.equal(data.page, 2);
       });
 
       it('get offers with default page and perPage is 20', async () => {
-        const offers = await dbClient.getOffers({ perPage: 20 });
-        assert.equal(offers.length, 20);
+        const data = await dbClient.getPaginatedOffers({ perPage: '20' });
+
+        assert.equal(data.items.length, 20);
+        assert.equal(data.itemsCount, 20);
+        assert.equal(data.perPage, 20);
+        assert.equal(data.page, 1);
       });
 
       it('get offers with page 3 and perPage is 5', async () => {
-        const offers = await dbClient.getOffers({ perPage: 5, page: 3 });
-        assert.equal(offers.length, 5);
+        const data = await dbClient.getPaginatedOffers({
+          perPage: '5',
+          page: '3',
+        });
+
+        assert.equal(data.items.length, 5);
+        assert.equal(data.itemsCount, 5);
+        assert.equal(data.perPage, 5);
+        assert.equal(data.page, 3);
       });
 
       it('get offers with offerCategoryId filter', async () => {
-        const offers = await dbClient.getOffers({
+        const data = await dbClient.getPaginatedOffers({
           offerCategoryId: offerCategory2.offerCategoryId,
-          perPage: 15,
+          perPage: '15',
         });
-        assert.equal(offers.length, 10);
-        offers.forEach((offer) => {
+
+        assert.equal(data.items.length, 10);
+        assert.equal(data.itemsCount, 10);
+        assert.equal(data.perPage, 15);
+        assert.equal(data.page, 1);
+
+        data.items.forEach((offer) => {
           assert.equal(offer.offerCategoryId, offerCategory2.offerCategoryId);
         });
       });

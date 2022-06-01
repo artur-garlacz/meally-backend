@@ -4,7 +4,7 @@
 import { CommonQueryMethods, sql } from 'slonik';
 
 import logger from '@libs/utils/logger';
-import { toOptional, toRequired } from '@libs/utils/query';
+import { chainOptional, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
 import { UserDetailsEntity, UserEntity } from './entities';
@@ -70,6 +70,31 @@ export function usersQueries(db: CommonQueryMethods) {
                 ${userDetails.phoneNumber},
                 ${userDetails.userId}
             ) RETURNING *`);
+    },
+    updateUserDetails(
+      userDetails: Partial<
+        Omit<UserDetailsEntity, 'userId' | 'userDetailsId'>
+      > &
+        Pick<UserDetailsEntity, 'userDetailsId'>,
+    ): Promise<UserDetailsEntity> {
+      logger.debug('DbClient.updateUserDetails', userDetails);
+
+      return db.one(sql`
+          UPDATE "offer"
+          SET
+          ${chainOptional(
+            {
+              address1: userDetails.address1,
+              address2: userDetails.address2,
+              city: userDetails.city,
+              postalCode: userDetails.postalCode,
+              country: userDetails.country,
+              phoneNumber: userDetails.phoneNumber,
+            },
+            'update',
+          )}
+          WHERE "userDetailsId" = ${userDetails.userDetailsId}
+          RETURNING *`);
     },
     getUserDetails(userId: string): Promise<UserDetailsEntity | null> {
       logger.debug('DbClient.getUserDetails');

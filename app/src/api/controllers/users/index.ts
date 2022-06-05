@@ -9,6 +9,7 @@ import { wrap } from '@libs/utils/express';
 
 import { getMyUserController } from './get-my-user-controller';
 import { authUserSchema, loginUserController } from './login-user-controller';
+import { getUserDetailsController } from './user-details-controller';
 
 export function userApiRouter(services: AppServices) {
   const router = express.Router();
@@ -26,7 +27,18 @@ export function userApiRouter(services: AppServices) {
     wrap(loginUserController(services)),
   );
 
+  // basic auth user data
   router.get('/me', auth, wrap(getMyUserController(services)));
+
+  // detailed auth user data
+  router.get('/details', auth, wrap(getUserDetailsController(services)));
+
+  // detailed auth user data
+  router.get(
+    '/:userId/details',
+    auth,
+    wrap(getUserDetailsController(services)),
+  );
 
   return router;
 }

@@ -1,9 +1,10 @@
 import { AuthTokens, UserCredentails } from '@commons/api/users';
+import { ErrorType } from '@commons/errors';
 import bcrypt from 'bcrypt';
-import createError from 'http-errors';
 
 import { DbClient } from '@libs/db';
 import { uuid } from '@libs/utils/common';
+import { HttpErrorResponse } from '@libs/utils/errors';
 import {
   signAccessToken,
   signRefreshToken,
@@ -29,38 +30,56 @@ class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
 
-    const {
-      password: { p },
-      ...user
-    } = await this.dbClient.createUser({
+    const user = await this.dbClient.createUser({
       userId: uuid(),
       email,
       createdAt: new Date(),
       updatedAt: new Date(),
-      password: hashPassword,
     });
 
-    logger.info('User created');
+    await this.dbClient.createUserPassword({
+      userPasswordId: uuid(),
+      password: hashPassword,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: user.userId,
+    });
+
+    logger.info('[Action] User created');
 
     const accessToken = (await signAccessToken(user.userId)) as string;
     const refreshToken = (await signRefreshToken(user.userId)) as string;
-    console.log(user, 'user');
     return { user, accessToken, refreshToken };
   }
 
   async login({ email, password }: UserCredentails) {
-    if (!email || !password) {
-      throw new createError.Unauthorized('Email address or password not exist');
-    }
-
     const user = await this.dbClient.getUserByEmail(email);
 
     if (!user) {
-      throw new createError.NotFound('User does not exist');
+      throw new HttpErrorResponse(404, {
+        message: 'User does not exist',
+        kind: ErrorType.NotFound,
+      });
     }
-    const checkPassword = bcrypt.compareSync(password, user.password);
-    if (!checkPassword)
-      throw new createError.Unauthorized('Email address or password not valid');
+
+    const userPassword = await this.dbClient.getUserPassword({
+      userId: user.userId,
+    });
+
+    if (!userPassword) {
+      throw new HttpErrorResponse(404, {
+        message: 'User password does not exist',
+        kind: ErrorType.NotFound,
+      });
+    }
+
+    const checkPassword = bcrypt.compareSync(password, userPassword.password);
+    if (!checkPassword) {
+      throw new HttpErrorResponse(401, {
+        message: 'Email address or password not valid',
+        kind: ErrorType.Unauthorized,
+      });
+    }
 
     const accessToken = await signAccessToken(user.userId);
     const refreshToken = await signRefreshToken(user.userId);

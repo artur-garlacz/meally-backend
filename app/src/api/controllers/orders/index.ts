@@ -6,21 +6,33 @@ import { validateMiddleware } from '@api/middlewares/validator-middleware';
 
 import { wrap } from '@libs/utils/express';
 
+import { updateOfferStatusController } from '../offers/update-offer-status-controller';
 import {
   createOrderController,
   createOrderSchema,
 } from './create-order-controller';
+import { getCutomerOrdersController } from './get-cutomer-orders-controller';
+import { getMerchantOrdersController } from './get-merchant-orders-controller';
+import { updateOrderStatusSchema } from './update-order-status-controller';
 
 export function orderApiRouter(services: AppServices) {
   const router = Router();
 
   const auth = authMiddleware(services.dbClient);
-  // /:offerId/order   -
-  // /:offerId/updateStatus  - PUT
+
+  //orders/:orderId/updateStatus  - PUT
+  router.put(
+    '/:orderId/update-status',
+    auth,
+    validateMiddleware(updateOrderStatusSchema),
+    wrap(updateOfferStatusController(services)),
+  );
 
   //orders/customer  <-- customerId
+  router.get('/customer', auth, wrap(getCutomerOrdersController(services)));
 
   //orders/merchant   <-- userId
+  router.get('/merchant', auth, wrap(getMerchantOrdersController(services)));
 
   router.post(
     '/create',

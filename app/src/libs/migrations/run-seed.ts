@@ -1,9 +1,4 @@
-// import { DatabasePoolType } from 'slonik';
-// import logger from 'najba/utils/logger';
-// import { createDbClient } from 'najba/db';
-// import { PromotionDiscountType } from 'najba/commons/model';
-// import { uuid } from 'najba/commons';
-// import { dummies } from 'najba/tests/dummies';
+import bcrypt from 'bcrypt';
 import { DatabasePool } from 'slonik';
 
 import { createDbClient } from '@libs/db';
@@ -21,33 +16,63 @@ export async function runSeed(dbPool: DatabasePool) {
     }),
   );
 
+  const user2 = await dbClient.createUser(
+    dummies.user({
+      email: 'dev2@gmail.com',
+    }),
+  );
+
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash('test', salt);
+
+  await dbClient.createUserPassword(
+    dummies.userPassword({
+      userId: user1.userId,
+      password: hashPassword,
+    }),
+  );
+
+  await dbClient.createUserPassword(
+    dummies.userPassword({
+      userId: user2.userId,
+      password: hashPassword,
+    }),
+  );
+
   const offerCategory1 = await dbClient.createOfferCategory(
     dummies.offerCategory({
-      name: 'Kuchnia włoska',
+      name: 'Italian kitchen',
     }),
   );
 
   const offerCategory2 = await dbClient.createOfferCategory(
     dummies.offerCategory({
-      name: 'Kuchnia polska',
+      name: 'Polish kitchen',
     }),
   );
   const offerCategory3 = await dbClient.createOfferCategory(
     dummies.offerCategory({
-      name: 'Kuchnia chińska',
+      name: 'Chinese kitchen',
     }),
   );
 
   for (let i = 0; i < 20; i++) {
-    await dbClient.createOffer(
+    let offer = await dbClient.createOffer(
       dummies.offer({
-        userId: user1.userId,
+        userId: i % 2 == 0 ? user1.userId : user2.userId,
         offerCategoryId:
           i % 3 == 0
             ? offerCategory3.offerCategoryId
             : i % 2 == 0
             ? offerCategory2.offerCategoryId
             : offerCategory1.offerCategoryId,
+      }),
+    );
+
+    await dbClient.createOrder(
+      dummies.order({
+        offerId: offer.offerId,
+        customerId: i % 2 == 1 ? user1.userId : user2.userId,
       }),
     );
   }

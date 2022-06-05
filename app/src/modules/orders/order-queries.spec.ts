@@ -3,7 +3,6 @@ import { getTestDbClient } from '@setup-integration-tests.spec';
 import { assert } from 'chai';
 
 import { DbClient } from '@libs/db';
-import { uuid } from '@libs/utils/common';
 
 import { OfferCategoryEntity } from '@modules/offers/entities';
 import { UserEntity } from '@modules/users/entities';

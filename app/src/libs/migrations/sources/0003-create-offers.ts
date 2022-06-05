@@ -42,9 +42,6 @@ const migration: Migration = {
           "country"       varchar(40) NOT NULL,
           "offerId"       uuid NOT NULL REFERENCES "offer" ("offerId") ON DELETE CASCADE
         );
-
-        ALTER TABLE "user" 
-          ALTER COLUMN "password" TYPE varchar;
     `);
   },
 };

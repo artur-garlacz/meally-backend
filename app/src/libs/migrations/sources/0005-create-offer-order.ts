@@ -23,9 +23,10 @@ const migration: Migration = {
               "userPasswordId" uuid PRIMARY KEY CHECK (
                   "userPasswordId" <> '00000000-0000-0000-0000-000000000000'
               ),
-              "createdAt"             timestamp  NOT NULL,
-              "updatedAt"             timestamp  NOT NULL,
-              "userId"                uuid NOT NULL REFERENCES "user" ("userId") ON DELETE CASCADE
+              "password"              varchar(250)  NOT NULL,
+              "createdAt"             timestamp     NOT NULL,
+              "updatedAt"             timestamp     NOT NULL,
+              "userId"                uuid NOT NULL UNIQUE REFERENCES "user" ("userId") ON DELETE CASCADE
             );
 
             CREATE TABLE "userReview" (

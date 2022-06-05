@@ -1,13 +1,17 @@
 import { Orders } from '@commons/api';
 import {
-  PaginationResponse,
   setPaginationParams,
   setPaginationResponse,
 } from '@commons/pagination';
 import { CommonQueryMethods, sql } from 'slonik';
 
 import logger from '@libs/utils/logger';
-import { chainOptional, toMany, toOptional } from '@libs/utils/query';
+import {
+  chainOptional,
+  toMany,
+  toOptional,
+  toRequired,
+} from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
 import { OfferEntity } from '@modules/offers/entities';
@@ -17,7 +21,7 @@ import { OrderEntity } from './entities';
 export function ordersQueries(db: CommonQueryMethods) {
   return Object.freeze({
     createOrder(order: OrderEntity): Promise<OrderEntity> {
-      logger.debug('DbClient.createOrder');
+      logger.info('[Command] DbClient.createOrder');
 
       return db.one(sql`
               INSERT INTO "offerOrder" (
@@ -41,6 +45,8 @@ export function ordersQueries(db: CommonQueryMethods) {
     getOrderById<T extends { offerOrderId: OrderEntity['offerOrderId'] }>(
       args: T,
     ): Promise<OrderEntity | null> {
+      logger.info('[Command] DbClient.getOrderById');
+
       return db
         .maybeOne(
           sql`
@@ -53,11 +59,30 @@ export function ordersQueries(db: CommonQueryMethods) {
         )
         .then(toOptional(OrderEntity));
     },
+    updateOrderStatus(args: {
+      status: OrderEntity['status'];
+      orderId: OrderEntity['offerOrderId'];
+    }): Promise<OrderEntity> {
+      logger.info('[Command] DbClient.getOrderById');
+
+      return db
+        .query(
+          sql`
+          UPDATE "offer"
+          SET "status"=${args.status}
+          WHERE "offerOrderId"=${args.orderId}
+          RETURNING *
+            `,
+        )
+        .then(toRequired(OrderEntity));
+    },
     async getPaginatedCustomerOrders(
       args: Orders.GetCustomerOrdersRequestQuery & {
         customerId: OrderEntity['customerId'];
       },
     ): Promise<Orders.GetOrdersResponse> {
+      logger.info('[Command] DbClient.getPaginatedCustomerOrders');
+
       const { paginateCondition, whereCondition, perPage, page } =
         setPaginationParams<Orders.GetCustomerOrdersRequestQuery>(args);
 
@@ -81,6 +106,8 @@ export function ordersQueries(db: CommonQueryMethods) {
       ...args
     }: Orders.GetMerchantOrdersRequestQuery &
       Pick<OfferEntity, 'userId'>): Promise<Orders.GetOrdersResponse> {
+      logger.info('[Command] DbClient.getPaginatedMerchantOrders');
+
       const { paginateCondition, page, perPage } =
         setPaginationParams<Orders.GetMerchantOrdersRequestQuery>(args);
 

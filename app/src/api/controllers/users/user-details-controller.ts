@@ -1,9 +1,11 @@
 import { AppServices } from '@app-services';
+import { ErrorType } from '@commons/errors';
 import { AuthRequest } from '@commons/request';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { z } from 'zod';
 
 import { uuid } from '@libs/utils/common';
+import { HttpErrorResponse } from '@libs/utils/errors';
 
 export const createOrUpdateUserDetailsController = (app: AppServices) => {
   return async (req: AuthRequest, res: Response<any>) => {
@@ -13,8 +15,19 @@ export const createOrUpdateUserDetailsController = (app: AppServices) => {
 
     const isUserDetailExists = await app.dbClient.getUserDetails(userId);
 
+    let userDetails;
     if (isUserDetailExists) {
-      const userDetails = await app.dbClient.createUserDetails({
+      userDetails = await app.dbClient.updateUserDetails({
+        userDetailsId: isUserDetailExists.userDetailsId,
+        address1,
+        address2,
+        city,
+        postalCode,
+        country,
+        phoneNumber,
+      });
+    } else {
+      userDetails = await app.dbClient.createUserDetails({
         userDetailsId: uuid(),
         address1,
         address2,
@@ -26,25 +39,35 @@ export const createOrUpdateUserDetailsController = (app: AppServices) => {
       });
     }
 
-    const userDetails = await app.dbClient.createUserDetails({
-      userDetailsId: uuid(),
-      address1,
-      address2,
-      city,
-      postalCode,
-      country,
-      phoneNumber,
-      userId,
-    });
-
     return res.status(200).send({ userDetails });
   };
 };
 
 export const getUserDetailsController = (app: AppServices) => {
-  return async (req: AuthRequest, res: Response<any>) => {
-    const { userId } = req.sender;
+  return async (req: AuthRequest<{ userId?: string }>, res: Response) => {
+    const { sender, params } = req;
+
+    const userId = params.userId
+      ? params.userId
+      : sender
+      ? sender.userId
+      : null;
+
+    if (!userId) {
+      throw new HttpErrorResponse(404, {
+        message: 'User details not found',
+        kind: ErrorType.NotFound,
+      });
+    }
+
     const userDetails = await app.dbClient.getUserDetails(userId);
+
+    if (!userDetails) {
+      throw new HttpErrorResponse(404, {
+        message: 'User details not found',
+        kind: ErrorType.NotFound,
+      });
+    }
 
     return res.status(200).send({ data: userDetails });
   };

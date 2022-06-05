@@ -6,7 +6,12 @@ import {
 import { CommonQueryMethods, sql } from 'slonik';
 
 import logger from '@libs/utils/logger';
-import { chainOptional, toMany, toOptional } from '@libs/utils/query';
+import {
+  chainOptional,
+  toMany,
+  toOptional,
+  toRequired,
+} from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
 import { OfferEntity } from '@modules/offers/entities';
@@ -53,6 +58,23 @@ export function ordersQueries(db: CommonQueryMethods) {
             `,
         )
         .then(toOptional(OrderEntity));
+    },
+    updateOrderStatus(args: {
+      status: OrderEntity['status'];
+      orderId: OrderEntity['offerOrderId'];
+    }): Promise<OrderEntity> {
+      logger.info('[Command] DbClient.getOrderById');
+
+      return db
+        .query(
+          sql`
+          UPDATE "offer"
+          SET "status"=${args.status}
+          WHERE "offerOrderId"=${args.orderId}
+          RETURNING *
+            `,
+        )
+        .then(toRequired(OrderEntity));
     },
     async getPaginatedCustomerOrders(
       args: Orders.GetCustomerOrdersRequestQuery & {

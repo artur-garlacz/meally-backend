@@ -1,4 +1,4 @@
-import { Column, Entity, Index, OneToMany } from 'typeorm';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity({ name: 'room' })
 export class RoomEntity {
@@ -7,6 +7,7 @@ export class RoomEntity {
   roomId: string;
 }
 
+@Entity({ name: 'roomParticipant' })
 export class RoomParticipantEntity {
   @Index()
   @Column({ type: 'uuid' })

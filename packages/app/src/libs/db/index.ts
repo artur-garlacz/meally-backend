@@ -6,6 +6,7 @@ import {
 
 import { offersQueries } from '@modules/offers/offer-queries';
 import { ordersQueries } from '@modules/orders/order-quieres';
+import { reviewsQueries } from '@modules/reviews/review-queries';
 import { usersQueries } from '@modules/users/user-queries';
 
 import { wrapDbClientByErrorLogger } from './setup';
@@ -35,5 +36,6 @@ export function createDbQueries(
     ...usersQueries(db),
     ...offersQueries(db),
     ...ordersQueries(db),
+    ...reviewsQueries(db),
   });
 }

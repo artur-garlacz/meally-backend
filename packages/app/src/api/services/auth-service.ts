@@ -11,6 +11,7 @@ import {
   verifyRefreshToken,
 } from '@libs/utils/jwt';
 import logger from '@libs/utils/logger';
+import { toPasswordHash } from '@libs/utils/password';
 
 import { UserEntity } from '@modules/users/entities';
 
@@ -24,11 +25,8 @@ class AuthService {
   async register({
     password,
     email,
-  }: UserCredentails): Promise<
-    AuthTokens & { user: Omit<UserEntity, 'password'> }
-  > {
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+  }: UserCredentails): Promise<AuthTokens & { user: UserEntity }> {
+    const hashPassword = await toPasswordHash(password);
 
     const user = await this.dbClient.createUser({
       userId: uuid(),

@@ -1,4 +1,14 @@
 /.vscode
 /secrets
 /logs
+
+#node_modules
 /node_modules
+/packages/*/node_modules
+
+#envs
+/packages/*/.env
+/packages/*/.env.local
+/packages/*/.env.development.local
+/packages/*/.env.test.local
+/packages/*/.env.production.local

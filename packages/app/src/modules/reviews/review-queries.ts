@@ -1,3 +1,4 @@
+import { Reviews } from '@commons/api';
 import {
   setPaginationParams,
   setPaginationResponse,
@@ -5,11 +6,12 @@ import {
 import { CommonQueryMethods, sql } from 'slonik';
 
 import logger from '@libs/utils/logger';
+import { toMany } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
 import { UserReviewEntity } from './entities';
 
-export function ordersQueries(db: CommonQueryMethods) {
+export function reviewsQueries(db: CommonQueryMethods) {
   return Object.freeze({
     createUserReview(review: UserReviewEntity): Promise<UserReviewEntity> {
       logger.info('[Command] DbClient.createUserReview');
@@ -32,6 +34,29 @@ export function ordersQueries(db: CommonQueryMethods) {
                       ${review.userId}
               ) RETURNING *
             `);
+    },
+    async getPaginatedUserReviews(
+      args: Reviews.GetUserReviewsRequestQuery,
+    ): Promise<Reviews.GetUserReviewsResponse> {
+      logger.info('[Command] DbClient.getPaginatedUserReviews');
+
+      const { paginateCondition, whereCondition, perPage, page } =
+        setPaginationParams<Reviews.GetUserReviewsRequestQuery>(args);
+
+      const items = await db
+        .query(
+          sql`
+              SELECT * FROM "userReview" WHERE ${whereCondition}
+                ORDER BY userReviewId" ${paginateCondition};
+            `,
+        )
+        .then(toMany(UserReviewEntity));
+
+      return setPaginationResponse<UserReviewEntity>({
+        items,
+        perPage,
+        page,
+      });
     },
   });
 }

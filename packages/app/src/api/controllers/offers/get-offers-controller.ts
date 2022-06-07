@@ -1,6 +1,5 @@
 import { AppServices } from '@app-services';
 import { Offers } from '@commons/api';
-import { setPaginationResponse } from '@commons/pagination';
 import { Request, Response } from 'express';
 
 export const getOffersController = (app: AppServices) => {

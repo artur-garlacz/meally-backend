@@ -103,3 +103,21 @@ export class Schedule {
   @IsNotEmpty()
   readonly userScheduleId: string;
 }
+
+export class RefreshTokenEntity {
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly refreshTokenId: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly refreshToken: string;
+  @IsDate()
+  @Type(() => Date)
+  readonly createdAt: Date;
+  @IsDate()
+  @Type(() => Date)
+  readonly updatedAt: Date;
+  @IsUUID('4')
+  @IsNotEmpty()
+  readonly userId: string;
+}

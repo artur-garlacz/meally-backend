@@ -4,6 +4,16 @@
   "repository": "https://github.com/artur-garlacz/meally-backend.git",
   "author": "artur-garlacz <garlacz.artur@gmail.com>",
   "license": "MIT",
+  "husky":{
+    "hooks": {
+      "pre-commit": "npm run test:precommit && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,tsx,js,jsx,json,css,scss,graphql}": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",

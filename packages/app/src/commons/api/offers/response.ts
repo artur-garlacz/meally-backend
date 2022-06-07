@@ -7,6 +7,6 @@ import { OfferCategoryEntity, OfferEntity } from '@modules/offers/entities';
 export type GetOffersResponse = PaginationResponse<OfferEntity>;
 
 //index
-export type GetOfferResponse = ResponseDetails<OfferEntity> | ResponseAction;
+export type GetOfferResponse = ResponseDetails<OfferEntity>;
 
 export type GetOfferCategoriesResponse = ResponseDetails<OfferCategoryEntity[]>;

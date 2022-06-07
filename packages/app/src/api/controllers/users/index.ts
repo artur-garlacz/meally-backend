@@ -7,7 +7,12 @@ import { validateMiddleware } from '@api/middlewares/validator-middleware';
 
 import { wrap } from '@libs/utils/express';
 
+import {
+  createUserReviewController,
+  createUserReviewSchema,
+} from './create-user-review-controller';
 import { getMyUserController } from './get-my-user-controller';
+import { getUserReviewsController } from './get-user-reviews-controller';
 import { authUserSchema, loginUserController } from './login-user-controller';
 import { getUserDetailsController } from './user-details-controller';
 
@@ -38,6 +43,16 @@ export function userApiRouter(services: AppServices) {
     '/:userId/details',
     auth,
     wrap(getUserDetailsController(services)),
+  );
+
+  // user reviews
+  router.get('/:userId/reviews', wrap(getUserReviewsController(services)));
+
+  router.post(
+    '/:userId/reviews',
+    auth,
+    validateMiddleware(createUserReviewSchema),
+    wrap(createUserReviewController(services)),
   );
 
   return router;

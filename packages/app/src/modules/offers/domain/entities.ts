@@ -1,4 +1,3 @@
-import { OfferStatusType } from '@commons/api/offers';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -9,6 +8,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { OfferStatusType } from '../api/get-offers';
 
 export class OfferCategoryEntity {
   @IsUUID('4')

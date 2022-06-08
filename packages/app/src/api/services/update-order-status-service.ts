@@ -1,4 +1,4 @@
-import { Orders } from '@commons/api';
+import { Orders } from '@commons/domain';
 import { ErrorType } from '@commons/errors';
 
 import { HttpErrorResponse } from '@libs/utils/errors';

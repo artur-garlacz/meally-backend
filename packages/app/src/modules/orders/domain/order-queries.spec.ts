@@ -1,10 +1,10 @@
-import { Orders } from '@commons/api';
+import { Orders } from '@commons/domain';
 import { getTestDbClient } from '@setup-integration-tests.spec';
 import { assert } from 'chai';
 
 import { DbClient } from '@libs/db';
 
-import { OfferCategoryEntity } from '@modules/offers/entities';
+import { OfferCategoryEntity } from '@modules/offers/domain/entities';
 import { UserEntity } from '@modules/users/entities';
 
 import { dummies } from '@tests/dummies';

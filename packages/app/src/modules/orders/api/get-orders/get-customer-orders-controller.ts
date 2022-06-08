@@ -1,16 +1,15 @@
 import { AppServices } from '@app-services';
-import { Orders } from '@commons/api';
 import { AuthRequest } from '@commons/request';
 import { Response } from 'express';
 
+import {
+  GetCustomerOrdersRequestQuery,
+  GetOrdersResponse,
+} from './get-orders-dtos';
+
 export const getCutomerOrdersController = (app: AppServices) => {
   return async (
-    req: AuthRequest<
-      {},
-      Orders.GetOrdersResponse,
-      {},
-      Orders.GetCustomerOrdersRequestQuery
-    >,
+    req: AuthRequest<{}, GetOrdersResponse, {}, GetCustomerOrdersRequestQuery>,
     res: Response,
   ) => {
     const {

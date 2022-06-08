@@ -1,7 +1,5 @@
 import { AppServices } from '@app-services';
-import { Orders } from '@commons/api';
-import { GetOfferResponse } from '@commons/api/offers';
-import { ErrorType } from '@commons/errors';
+import { Orders } from '@commons/domain';
 import { Request, Response } from 'express';
 
 import { HttpErrorResponse } from '@libs/utils/errors';

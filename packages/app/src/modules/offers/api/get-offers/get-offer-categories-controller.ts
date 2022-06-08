@@ -1,5 +1,5 @@
 import { AppServices } from '@app-services';
-import { Offers } from '@commons/api';
+import { Offers } from '@commons/domain';
 import { Request, Response } from 'express';
 
 export const getOfferCategoriesController = (app: AppServices) => {

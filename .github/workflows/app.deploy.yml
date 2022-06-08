@@ -1,0 +1,15 @@
+name: 'App deploy'
+
+on:
+  workflow_run:
+    workflows: ['App test']
+    types: [completed]
+    branches: master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2

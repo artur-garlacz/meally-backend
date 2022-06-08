@@ -9,6 +9,7 @@ export const ApiRoutes = {
     register: () => `${userApiPath}/register`,
   },
   offers: {
+    createOffer: () => `${offerApiPath}/create`,
     getOffer: ({ offerId }: { offerId: string }) =>
       `${offerApiPath}/${offerId}`,
     getOffers: () => `${offerApiPath}`,

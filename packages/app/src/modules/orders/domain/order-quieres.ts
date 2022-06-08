@@ -1,4 +1,4 @@
-import { Orders } from '@commons/api';
+import { Orders } from '@commons/domain';
 import {
   setPaginationParams,
   setPaginationResponse,
@@ -14,7 +14,7 @@ import {
 } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
-import { OfferEntity } from '@modules/offers/entities';
+import { OfferEntity } from '@modules/offers/domain/entities';
 
 import { OrderEntity } from './entities';
 

@@ -2,23 +2,27 @@ import { AppServices } from '@app-services';
 import { Router } from 'express';
 
 import { authMiddleware } from '@api/middlewares/auth-middleware';
+import { testAuthMiddleware } from '@api/middlewares/test-auth-middleware';
 import { validateMiddleware } from '@api/middlewares/validator-middleware';
 
+import { Environment } from '@libs/utils/env';
 import { wrap } from '@libs/utils/express';
 
-import { updateOfferStatusController } from '../offers/update-offer-status-controller';
-import {
-  createOrderController,
-  createOrderSchema,
-} from './create-order-controller';
-import { getCutomerOrdersController } from './get-cutomer-orders-controller';
-import { getMerchantOrdersController } from './get-merchant-orders-controller';
-import { updateOrderStatusSchema } from './update-order-status-controller';
+import { createOrderController, createOrderSchema } from './create-order';
+import { getMerchantOrdersController } from './get-orders';
+import { getCutomerOrdersController } from './get-orders/get-customer-orders-controller';
+import { updateOfferStatusController } from './update-offer';
+import { updateOrderStatusSchema } from './update-order/update-order-status-controller';
 
 export function orderApiRouter(services: AppServices) {
+  const { appConfig } = services;
+
   const router = Router();
 
-  const auth = authMiddleware(services.dbClient);
+  const auth =
+    appConfig.environment === Environment.test
+      ? testAuthMiddleware
+      : authMiddleware(services.dbClient);
 
   //orders/:orderId/updateStatus  - PUT
   router.put(

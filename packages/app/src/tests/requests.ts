@@ -1,6 +1,7 @@
 import { AppServices, buildAppServices } from '@app-services';
 import { AuthRequest, RequestSender } from '@commons/request';
 import { getTestDbClient } from '@setup-integration-tests.spec';
+import * as R from 'ramda';
 import request from 'supertest';
 
 import { TEST_AUTH_HEADER } from '@api/middlewares/test-auth-middleware';
@@ -62,8 +63,8 @@ export async function getTestRequest(args?: Partial<AppServices>) {
   };
 }
 
-// export const requestAuth = R.curry(
-//   (sender: AuthRequest['sender'], req: request.Test): request.Test => {
-//     return req.set('mock-test-auth', JSON.stringify(sender));
-//   },
-// );
+export const requestAuth = R.curry(
+  (sender: AuthRequest['sender'], req: request.Test): request.Test => {
+    return req.set('mock-test-auth', JSON.stringify(sender));
+  },
+);

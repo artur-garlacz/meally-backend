@@ -1,10 +1,11 @@
 import { AppServices } from '@app-services';
-import { OfferStatus } from '@commons/api/offers';
 import { AuthRequest } from '@commons/request';
 import { Response } from 'express';
-import { z } from 'zod';
 
 import { uuid } from '@libs/utils/common';
+
+import { OfferStatus } from '../get-offers';
+import { CreateOfferRequestBody } from './create-offer-dtos';
 
 export const createOfferController = (app: AppServices) => {
   return async (
@@ -34,24 +35,3 @@ export const createOfferController = (app: AppServices) => {
     return res.status(200).send({ data: newOffer });
   };
 };
-
-type CreateOfferRequestBody = z.infer<typeof createOfferSchema>;
-
-export const createOfferSchema = z.object({
-  body: z.object({
-    offer: z.object({
-      title: z.string({
-        required_error: 'Title is required',
-      }),
-      unitPrice: z.number({ required_error: 'Unit price is required' }),
-      longDesc: z.string({ required_error: 'Description is required' }),
-      shortDesc: z
-        .string({ required_error: 'Short description is required' })
-        .max(300, 'Max length is 300 chars'),
-      availableQuantity: z.number({
-        required_error: 'Available quantity is required',
-      }),
-      offerCategoryId: z.string({ required_error: 'Category id is required' }),
-    }),
-  }),
-});

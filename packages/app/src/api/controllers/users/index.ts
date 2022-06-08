@@ -3,8 +3,10 @@ import express from 'express';
 
 import { registerUserController } from '@api/controllers/users/register-user-controller';
 import { authMiddleware } from '@api/middlewares/auth-middleware';
+import { testAuthMiddleware } from '@api/middlewares/test-auth-middleware';
 import { validateMiddleware } from '@api/middlewares/validator-middleware';
 
+import { Environment } from '@libs/utils/env';
 import { wrap } from '@libs/utils/express';
 
 import {
@@ -17,8 +19,13 @@ import { authUserSchema, loginUserController } from './login-user-controller';
 import { getUserDetailsController } from './user-details-controller';
 
 export function userApiRouter(services: AppServices) {
+  const { appConfig } = services;
+
   const router = express.Router();
-  const auth = authMiddleware(services.dbClient);
+  const auth =
+    appConfig.environment === Environment.test
+      ? testAuthMiddleware
+      : authMiddleware(services.dbClient);
 
   router.post(
     '/register',

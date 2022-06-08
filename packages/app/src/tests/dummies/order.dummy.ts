@@ -1,9 +1,9 @@
-import { Orders } from '@commons/api';
+import { Orders } from '@commons/domain';
 import faker from '@faker-js/faker';
 
 import { uuid } from '@libs/utils/common';
 
-import { OrderEntity } from '@modules/orders/entities';
+import { OrderEntity } from '@modules/orders/domain/entities';
 
 import { MockBuilder } from './user.dummy';
 

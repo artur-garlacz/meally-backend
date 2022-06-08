@@ -6,7 +6,8 @@ import helmet from 'helmet';
 import { wrap } from '@libs/utils/express';
 import logger from '@libs/utils/logger';
 
-import { offerApiRouter, orderApiRouter, userApiRouter } from './controllers';
+import { offerApiRouter } from '@modules/offers/api';
+
 import { errorsMiddleware } from './middlewares';
 
 export async function buildRouter(services: AppServices) {
@@ -26,8 +27,6 @@ export async function buildRouter(services: AppServices) {
     }),
   );
 
-  app.use('/api/user', express.json(), wrap(userApiRouter(services)));
-  app.use('/api/orders', express.json(), wrap(orderApiRouter(services)));
   app.use('/api/offers', express.json(), wrap(offerApiRouter(services)));
   // ---
   // end middlewares

@@ -31,6 +31,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Test types
-        run: npm run test:types
+        run: npm run test:types:app
       - name: Test integration
-        run: npm run test:integration
+        run: npm run test:integration:app

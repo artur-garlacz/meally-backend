@@ -6,7 +6,7 @@ import {
   UserDetailsEntity,
   UserEntity,
   UserPasswordEntity,
-} from '@modules/users/entities';
+} from '@modules/users/domain/entities';
 
 export type MockBuilder<Entity> = (partial?: Partial<Entity>) => Entity;
 

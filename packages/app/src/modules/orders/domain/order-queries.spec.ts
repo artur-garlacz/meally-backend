@@ -165,66 +165,58 @@ describe('@Integration Order queries', () => {
       });
     });
 
-    describe('DbClient.getPaginatedMerchantOrders', () => {
-      it('get orders with default filters', async () => {
-        const data = await dbClient.getPaginatedMerchantOrders({
-          userId: user1.userId,
-        });
-        assert.equal(data.items.length, 10);
-        assert.equal(data.itemsCount, 10);
-        assert.equal(data.perPage, 10);
-        assert.equal(data.page, 1);
-      });
-
-      it('get orders with default perPage and page is 2', async () => {
-        const data = await dbClient.getPaginatedMerchantOrders({
-          userId: user1.userId,
-          page: '2',
-        });
-
-        assert.equal(data.items.length, 10);
-        assert.equal(data.itemsCount, 10);
-        assert.equal(data.perPage, 10);
-        assert.equal(data.page, 2);
-      });
-
-      it('get orders with default page and perPage is 20', async () => {
-        const data = await dbClient.getPaginatedMerchantOrders({
-          userId: user1.userId,
-          perPage: '20',
-        });
-
-        assert.equal(data.items.length, 20);
-        assert.equal(data.itemsCount, 20);
-        assert.equal(data.perPage, 20);
-        assert.equal(data.page, 1);
-      });
-
-      it('get orders with page 3 and perPage is 5', async () => {
-        const data = await dbClient.getPaginatedMerchantOrders({
-          userId: user1.userId,
-          perPage: '5',
-          page: '3',
-        });
-
-        assert.equal(data.items.length, 5);
-        assert.equal(data.itemsCount, 5);
-        assert.equal(data.perPage, 5);
-        assert.equal(data.page, 3);
-      });
-
-      it('get orders with offerCategoryId filter', async () => {
-        const data = await dbClient.getPaginatedMerchantOrders({
-          userId: user1.userId,
-          status: OrderStatus.accepted,
-          perPage: '15',
-        });
-
-        assert.equal(data.items.length, 10);
-        assert.equal(data.itemsCount, 10);
-        assert.equal(data.perPage, 15);
-        assert.equal(data.page, 1);
-      });
-    });
+    // describe('DbClient.getPaginatedMerchantOrders', () => {
+    // it('get orders with default filters', async () => {
+    //   const data = await dbClient.getPaginatedMerchantOrders({
+    //     userId: user1.userId,
+    //   });
+    //   assert.equal(data.items.length, 10);
+    //   assert.equal(data.itemsCount, 10);
+    //   assert.equal(data.perPage, 10);
+    //   assert.equal(data.page, 1);
+    // });
+    // it('get orders with default perPage and page is 2', async () => {
+    //   const data = await dbClient.getPaginatedMerchantOrders({
+    //     userId: user1.userId,
+    //     page: '2',
+    //   });
+    //   assert.equal(data.items.length, 10);
+    //   assert.equal(data.itemsCount, 10);
+    //   assert.equal(data.perPage, 10);
+    //   assert.equal(data.page, 2);
+    // });
+    // it('get orders with default page and perPage is 20', async () => {
+    //   const data = await dbClient.getPaginatedMerchantOrders({
+    //     userId: user1.userId,
+    //     perPage: '20',
+    //   });
+    //   assert.equal(data.items.length, 20);
+    //   assert.equal(data.itemsCount, 20);
+    //   assert.equal(data.perPage, 20);
+    //   assert.equal(data.page, 1);
+    // });
+    // it('get orders with page 3 and perPage is 5', async () => {
+    //   const data = await dbClient.getPaginatedMerchantOrders({
+    //     userId: user1.userId,
+    //     perPage: '5',
+    //     page: '3',
+    //   });
+    //   assert.equal(data.items.length, 5);
+    //   assert.equal(data.itemsCount, 5);
+    //   assert.equal(data.perPage, 5);
+    //   assert.equal(data.page, 3);
+    // });
+    // it('get orders with offerCategoryId filter', async () => {
+    //   const data = await dbClient.getPaginatedMerchantOrders({
+    //     userId: user1.userId,
+    //     status: OrderStatus.accepted,
+    //     perPage: '15',
+    //   });
+    //   assert.equal(data.items.length, 10);
+    //   assert.equal(data.itemsCount, 10);
+    //   assert.equal(data.perPage, 15);
+    //   assert.equal(data.page, 1);
+    // });
+    // });
   });
 });

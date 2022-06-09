@@ -6,7 +6,6 @@ import { assert } from 'chai';
 import { describe } from 'mocha';
 
 import { DbClient } from '@libs/db';
-import { serializeJson } from '@libs/utils/serialization';
 
 import { dummies } from '@tests/dummies';
 import { TestRequest, TestResponse, getTestRequest } from '@tests/requests';

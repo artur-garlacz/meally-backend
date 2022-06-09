@@ -4,6 +4,12 @@
   "repository": "https://github.com/artur-garlacz/meally-backend.git",
   "author": "artur-garlacz <garlacz.artur@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test:types:app": "lerna run test:types --scope app --stream",
+    "test:integration:app": "lerna run test:integration --scope app --stream",
+    "test:logic:app": "lerna run test:logic --scope app --stream",
+    "test:unit:app": "lerna run test:unit --scope app --stream"
+  },
   "husky":{
     "hooks": {
       "pre-commit": "npm run test:precommit && lint-staged"

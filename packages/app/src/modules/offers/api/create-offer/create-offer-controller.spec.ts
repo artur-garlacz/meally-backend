@@ -16,7 +16,7 @@ import {
   requestAuth,
 } from '@tests/requests';
 
-describe.only('@Integration CreateOffer', () => {
+describe('@Integration CreateOffer', () => {
   let dbClient: DbClient;
   let testRequest: TestRequest;
   let user1: UserEntity;

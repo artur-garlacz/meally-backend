@@ -10,9 +10,11 @@ import { wrap } from '@libs/utils/express';
 
 import { createOrderController, createOrderSchema } from './create-order';
 import { getMerchantOrdersController } from './get-orders';
-import { getCutomerOrdersController } from './get-orders/get-customer-orders-controller';
-import { updateOfferStatusController } from './update-offer';
-import { updateOrderStatusSchema } from './update-order/update-order-status-controller';
+import { getCutomerOrdersController } from './get-orders';
+import {
+  updateOrderStatusController,
+  updateOrderStatusSchema,
+} from './update-order';
 
 export function orderApiRouter(services: AppServices) {
   const { appConfig } = services;
@@ -29,7 +31,7 @@ export function orderApiRouter(services: AppServices) {
     '/:orderId/update-status',
     auth,
     validateMiddleware(updateOrderStatusSchema),
-    wrap(updateOfferStatusController(services)),
+    wrap(updateOrderStatusController(services)),
   );
 
   //orders/customer  <-- customerId

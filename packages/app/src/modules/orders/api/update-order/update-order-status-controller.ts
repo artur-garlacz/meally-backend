@@ -3,11 +3,12 @@ import { Orders } from '@commons/domain';
 import { ErrorType } from '@commons/errors';
 import { AuthRequest } from '@commons/request';
 import { Response } from 'express';
-import { z } from 'zod';
 
 import { verifyOrderStatus } from '@api/services/update-order-status-service';
 
 import { HttpErrorResponse } from '@libs/utils/errors';
+
+import { UpdateOrderStatusRequestBody } from './update-order-dtos';
 
 export const updateOrderStatusController = (app: AppServices) => {
   return async (
@@ -46,19 +47,3 @@ export const updateOrderStatusController = (app: AppServices) => {
     });
   };
 };
-
-type UpdateOrderStatusRequestBody = z.infer<typeof updateOrderStatusSchema>;
-
-export const updateOrderStatusSchema = z.object({
-  body: z.object({
-    order: z.object({
-      status: z.enum([
-        Orders.OrderStatus.created,
-        Orders.OrderStatus.accepted,
-        Orders.OrderStatus.prepared,
-        Orders.OrderStatus.delivered,
-        Orders.OrderStatus.rejected,
-      ]),
-    }),
-  }),
-});

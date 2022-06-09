@@ -1,18 +1,18 @@
 import { AppServices } from '@app-services';
-import { Orders } from '@commons/api';
-import { GetOrderResponse } from '@commons/api/orders';
 import { ErrorType } from '@commons/errors';
 import { AuthRequest } from '@commons/request';
 import { Response } from 'express';
-import { z } from 'zod';
 
 import { uuid } from '@libs/utils/common';
 import { HttpErrorResponse } from '@libs/utils/errors';
 
+import { OrderStatus } from '../get-orders';
+import { CreateOrderRequestBody } from './create-order-dtos';
+
 export const createOrderController = (app: AppServices) => {
   return async (
     req: AuthRequest<{ offerId?: string }, {}, CreateOrderRequestBody['body']>,
-    res: Response<Orders.GetOrderResponse>,
+    res: Response,
   ) => {
     const {
       sender: { userId },
@@ -45,7 +45,7 @@ export const createOrderController = (app: AppServices) => {
           customerId: userId,
           createdAt: new Date(),
           updatedAt: new Date(),
-          status: Orders.OrderStatus.created,
+          status: OrderStatus.created,
         });
 
         return order;
@@ -66,15 +66,3 @@ export const createOrderController = (app: AppServices) => {
     });
   };
 };
-
-type CreateOrderRequestBody = z.infer<typeof createOrderSchema>;
-
-export const createOrderSchema = z.object({
-  body: z.object({
-    offerOrder: z.object({
-      quantity: z.number({
-        required_error: 'Quantity is required',
-      }),
-    }),
-  }),
-});

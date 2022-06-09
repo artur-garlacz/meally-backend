@@ -1,16 +1,6 @@
 import { Request } from 'express';
 
-import { UserEntity } from '@modules/users/entities';
-
-export type UserCredentails = {
-  email: string;
-  password: string;
-};
-
-export type AuthTokens = {
-  accessToken: string;
-  refreshToken: string;
-};
+import { UserEntity } from '@modules/users/domain/entities';
 
 export interface UserParam {
   user: UserEntity;

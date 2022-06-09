@@ -1,4 +1,3 @@
-import { Offers } from '@commons/api';
 import {
   PaginationResponse,
   setPaginationParams,
@@ -10,6 +9,7 @@ import logger from '@libs/utils/logger';
 import { chainOptional, toMany, toOptional } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
 
+import { GetOffersRequestQuery, UpdateOfferType } from '../api/get-offers';
 import { OfferCategoryEntity, OfferEntity } from './entities';
 
 export function offersQueries(db: CommonQueryMethods) {
@@ -53,7 +53,7 @@ export function offersQueries(db: CommonQueryMethods) {
     }: {
       offerId: OfferEntity['offerId'];
       userId: OfferEntity['userId'];
-      updateOffer: Offers.UpdateOfferType;
+      updateOffer: UpdateOfferType;
     }): Promise<OfferEntity> {
       logger.info('[Command] DbClient.updateOffer');
 
@@ -77,12 +77,12 @@ export function offersQueries(db: CommonQueryMethods) {
         RETURNING *`);
     },
     async getPaginatedOffers(
-      args: Offers.GetOffersRequestQuery,
+      args: GetOffersRequestQuery,
     ): Promise<PaginationResponse<OfferEntity>> {
       logger.info('[Command] DbClient.getAllOffers');
 
       const { paginateCondition, whereCondition, page, perPage } =
-        setPaginationParams<Offers.GetOffersRequestQuery>(args);
+        setPaginationParams<GetOffersRequestQuery>(args);
 
       const items = await db
         .query(

@@ -1,13 +1,14 @@
-import { Orders } from '@commons/domain';
 import { getTestDbClient } from '@setup-integration-tests.spec';
 import { assert } from 'chai';
 
 import { DbClient } from '@libs/db';
 
 import { OfferCategoryEntity } from '@modules/offers/domain/entities';
-import { UserEntity } from '@modules/users/entities';
+import { UserEntity } from '@modules/users/domain/entities';
 
 import { dummies } from '@tests/dummies';
+
+import { OrderStatus } from '../api/get-orders';
 
 describe('@Integration Order queries', () => {
   let dbClient: DbClient;
@@ -96,10 +97,7 @@ describe('@Integration Order queries', () => {
           dummies.order({
             offerId: offer.offerId,
             customerId: user2.userId,
-            status:
-              i % 2 == 0
-                ? Orders.OrderStatus.accepted
-                : Orders.OrderStatus.delivered,
+            status: i % 2 == 0 ? OrderStatus.accepted : OrderStatus.delivered,
           }),
         );
       }
@@ -156,7 +154,7 @@ describe('@Integration Order queries', () => {
       it('get orders with offerCategoryId filter', async () => {
         const data = await dbClient.getPaginatedCustomerOrders({
           customerId: user2.userId,
-          status: Orders.OrderStatus.accepted,
+          status: OrderStatus.accepted,
           perPage: '15',
         });
 
@@ -218,7 +216,7 @@ describe('@Integration Order queries', () => {
       it('get orders with offerCategoryId filter', async () => {
         const data = await dbClient.getPaginatedMerchantOrders({
           userId: user1.userId,
-          status: Orders.OrderStatus.accepted,
+          status: OrderStatus.accepted,
           perPage: '15',
         });
 

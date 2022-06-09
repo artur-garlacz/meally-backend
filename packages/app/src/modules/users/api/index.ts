@@ -1,7 +1,6 @@
 import { AppServices } from '@app-services';
 import express from 'express';
 
-import { registerUserController } from '@api/controllers/users/register-user-controller';
 import { authMiddleware } from '@api/middlewares/auth-middleware';
 import { testAuthMiddleware } from '@api/middlewares/test-auth-middleware';
 import { validateMiddleware } from '@api/middlewares/validator-middleware';
@@ -10,13 +9,19 @@ import { Environment } from '@libs/utils/env';
 import { wrap } from '@libs/utils/express';
 
 import {
+  authRefreshTokenSchema,
+  authUserSchema,
+  loginUserController,
+  logoutUserController,
+  registerUserController,
+} from './auth-user';
+import { getMyUserController } from './get-user/get-my-user-controller';
+import { getUserDetailsController } from './get-user/user-details-controller';
+import {
   createUserReviewController,
   createUserReviewSchema,
-} from './create-user-review-controller';
-import { getMyUserController } from './get-my-user-controller';
-import { getUserReviewsController } from './get-user-reviews-controller';
-import { authUserSchema, loginUserController } from './login-user-controller';
-import { getUserDetailsController } from './user-details-controller';
+} from './user-review';
+import { getUserReviewsController } from './user-review/get-user-reviews-controller';
 
 export function userApiRouter(services: AppServices) {
   const { appConfig } = services;
@@ -38,6 +43,14 @@ export function userApiRouter(services: AppServices) {
     validateMiddleware(authUserSchema),
     wrap(loginUserController(services)),
   );
+
+  router.post(
+    '/refresh-token',
+    validateMiddleware(authRefreshTokenSchema),
+    wrap(loginUserController(services)),
+  );
+
+  router.delete('/logout', wrap(logoutUserController(services)));
 
   // basic auth user data
   router.get('/me', auth, wrap(getMyUserController(services)));

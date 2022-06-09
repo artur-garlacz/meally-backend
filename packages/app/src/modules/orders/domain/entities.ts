@@ -1,6 +1,6 @@
-import { OrderStatusType } from '@commons/api/orders';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
+import { OrderStatusType } from '../api/get-orders';
 
 export class OrderEntity {
   @IsUUID('4')

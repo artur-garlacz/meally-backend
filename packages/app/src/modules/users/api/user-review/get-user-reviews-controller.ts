@@ -1,16 +1,20 @@
 import { AppServices } from '@app-services';
-import { Reviews } from '@commons/api';
 import { Request, Response } from 'express';
+
+import {
+  GetUserReviewsRequestQuery,
+  GetUserReviewsResponse,
+} from './user-review-dtos';
 
 export const getUserReviewsController = (app: AppServices) => {
   return async (
     req: Request<
       { userId?: string },
-      Reviews.GetUserReviewsResponse,
+      GetUserReviewsResponse,
       {},
-      Reviews.GetUserReviewsRequestQuery
+      GetUserReviewsRequestQuery
     >,
-    res: Response<Reviews.GetUserReviewsResponse>,
+    res: Response<GetUserReviewsResponse>,
   ) => {
     const { page, perPage } = req.query;
 

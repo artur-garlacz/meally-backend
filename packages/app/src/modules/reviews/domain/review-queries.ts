@@ -1,4 +1,4 @@
-import { Reviews } from '@commons/api';
+import { Reviews } from '@commons/domain';
 import {
   setPaginationParams,
   setPaginationResponse,

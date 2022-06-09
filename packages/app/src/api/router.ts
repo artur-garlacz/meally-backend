@@ -7,11 +7,12 @@ import { wrap } from '@libs/utils/express';
 import logger from '@libs/utils/logger';
 
 import { offerApiRouter } from '@modules/offers/api';
+import { orderApiRouter } from '@modules/orders/api';
+import { userApiRouter } from '@modules/users/api';
 
 import { errorsMiddleware } from './middlewares';
 
 export async function buildRouter(services: AppServices) {
-  const { appConfig } = services;
   logger.debug('Building app router');
   // ---
   // start middlewares
@@ -27,6 +28,8 @@ export async function buildRouter(services: AppServices) {
     }),
   );
 
+  app.use('/api/user', express.json(), wrap(userApiRouter(services)));
+  app.use('/api/orders', express.json(), wrap(orderApiRouter(services)));
   app.use('/api/offers', express.json(), wrap(offerApiRouter(services)));
   // ---
   // end middlewares

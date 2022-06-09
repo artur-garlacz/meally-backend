@@ -1,10 +1,10 @@
 import { AppServices } from '@app-services';
-import { OfferStatus } from '@commons/api/offers';
 import { AuthRequest } from '@commons/request';
 import { Response } from 'express';
-import { z } from 'zod';
 
 import { uuid } from '@libs/utils/common';
+
+import { CreateUserReviewRequestBody } from './user-review-dtos';
 
 export const createUserReviewController = (app: AppServices) => {
   return async (
@@ -35,17 +35,3 @@ export const createUserReviewController = (app: AppServices) => {
     return res.status(200).send({ data: newUserReview });
   };
 };
-
-type CreateUserReviewRequestBody = z.infer<typeof createUserReviewSchema>;
-
-export const createUserReviewSchema = z.object({
-  body: z.object({
-    userReview: z.object({
-      rate: z
-        .number({ required_error: 'Rate is required' })
-        .min(1, 'Min value is 1')
-        .max(5, 'Max value is 5'),
-      message: z.string({ required_error: 'Message is required' }),
-    }),
-  }),
-});

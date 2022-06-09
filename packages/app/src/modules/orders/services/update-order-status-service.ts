@@ -1,11 +1,41 @@
-import { Orders } from '@commons/domain';
 import { ErrorType } from '@commons/errors';
 
+import { DbClient } from '@libs/db';
 import { HttpErrorResponse } from '@libs/utils/errors';
 
+import { OrderStatus, OrderStatusType } from '../api/get-orders';
+import { UpdateOrderStatusRequestBody } from '../api/update-order';
+
+export const updateOrderStatus =
+  (dbClient: DbClient) =>
+  async ({
+    order,
+    orderId,
+  }: UpdateOrderStatusRequestBody['body'] & { orderId: string }) => {
+    const currOrder = await dbClient.getOrderById({
+      offerOrderId: orderId!,
+    });
+
+    if (!currOrder) {
+      throw new HttpErrorResponse(404, {
+        message: 'Order not found',
+        kind: ErrorType.NotFound,
+      });
+    }
+
+    const newStatus = verifyOrderStatus(currOrder.status, order.status);
+
+    const updatedOrder = await dbClient.updateOrderStatus({
+      orderId: orderId!,
+      status: newStatus,
+    });
+
+    return updatedOrder;
+  };
+
 export function verifyOrderStatus(
-  currStatus: Orders.OrderStatusType,
-  newStatus: Orders.OrderStatusType,
+  currStatus: OrderStatusType,
+  newStatus: OrderStatusType,
 ) {
   if (currStatus === 'rejected') {
     throw new HttpErrorResponse(400, {
@@ -17,7 +47,7 @@ export function verifyOrderStatus(
   switch (newStatus) {
     case 'accepted':
       if (currStatus === 'created') {
-        return Orders.OrderStatus.accepted;
+        return OrderStatus.accepted;
       }
       throw new HttpErrorResponse(400, {
         message: 'Cannot change order status',
@@ -25,7 +55,7 @@ export function verifyOrderStatus(
       });
     case 'prepared':
       if (currStatus === 'accepted') {
-        return Orders.OrderStatus.prepared;
+        return OrderStatus.prepared;
       }
       throw new HttpErrorResponse(400, {
         message: 'Cannot change order status',
@@ -33,7 +63,7 @@ export function verifyOrderStatus(
       });
     case 'delivered':
       if (currStatus === 'prepared') {
-        return Orders.OrderStatus.delivered;
+        return OrderStatus.delivered;
       }
       throw new HttpErrorResponse(400, {
         message: 'Cannot change order status',

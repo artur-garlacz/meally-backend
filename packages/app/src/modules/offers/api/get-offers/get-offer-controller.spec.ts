@@ -1,4 +1,3 @@
-import { Offers } from '@commons/domain';
 import { ErrorType, HttpErrorResponseBody } from '@commons/errors';
 import { ApiRoutes } from '@commons/routes';
 import { getTestDbClient } from '@setup-integration-tests.spec';
@@ -6,9 +5,12 @@ import { assert } from 'chai';
 import { describe } from 'mocha';
 
 import { DbClient } from '@libs/db';
+import { serializeJson } from '@libs/utils/serialization';
 
 import { dummies } from '@tests/dummies';
 import { TestRequest, TestResponse, getTestRequest } from '@tests/requests';
+
+import { GetOfferResponse } from './get-offer-dtos';
 
 describe('@Integration GetSingleOffer', () => {
   let dbClient: DbClient;
@@ -50,13 +52,11 @@ describe('@Integration GetSingleOffer', () => {
 
     assert.isNotNull(receivedOffer);
 
-    const { body }: TestResponse<Offers.GetOfferResponse> = await testRequest
+    const { body }: TestResponse<GetOfferResponse> = await testRequest
       .get(ApiRoutes.offers.getOffer({ offerId: receivedOffer?.offerId! }))
       .expect(200);
 
-    // assert.equal()
-
-    // assert.deepEqual(serializeJson(body.data), serializeJson(offer));
-    // assert.deepEqual(serializeJson(body.data), serializeJson(receivedOffer));
+    assert.deepEqual(serializeJson(body.data), serializeJson(offer));
+    assert.deepEqual(serializeJson(body.data), serializeJson(receivedOffer));
   });
 });

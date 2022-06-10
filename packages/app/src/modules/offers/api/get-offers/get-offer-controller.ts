@@ -1,14 +1,15 @@
 import { AppServices } from '@app-services';
-import { Offers } from '@commons/domain';
 import { ErrorType } from '@commons/errors';
 import { Request, Response } from 'express';
 
 import { HttpErrorResponse } from '@libs/utils/errors';
 
+import { GetOfferResponse } from './get-offer-dtos';
+
 export const getOfferController = (app: AppServices) => {
   return async (
-    req: Request<{ offerId?: string }, Offers.GetOfferResponse, {}, {}>,
-    res: Response<Offers.GetOfferResponse>,
+    req: Request<{ offerId?: string }, GetOfferResponse, {}, {}>,
+    res: Response<GetOfferResponse>,
   ) => {
     const { offerId } = req.params;
 

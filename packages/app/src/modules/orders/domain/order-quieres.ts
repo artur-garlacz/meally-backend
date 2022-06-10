@@ -1,4 +1,3 @@
-import { Orders } from '@commons/domain';
 import {
   setPaginationParams,
   setPaginationResponse,
@@ -16,6 +15,11 @@ import { serializeDate } from '@libs/utils/serialization';
 
 import { OfferEntity } from '@modules/offers/domain/entities';
 
+import {
+  GetCustomerOrdersRequestQuery,
+  GetMerchantOrdersRequestQuery,
+  GetOrdersResponse,
+} from '../api/get-orders';
 import { OrderEntity } from './entities';
 
 export function ordersQueries(db: CommonQueryMethods) {
@@ -77,14 +81,14 @@ export function ordersQueries(db: CommonQueryMethods) {
         .then(toRequired(OrderEntity));
     },
     async getPaginatedCustomerOrders(
-      args: Orders.GetCustomerOrdersRequestQuery & {
+      args: GetCustomerOrdersRequestQuery & {
         customerId: OrderEntity['customerId'];
       },
-    ): Promise<Orders.GetOrdersResponse> {
+    ): Promise<GetOrdersResponse> {
       logger.info('[Command] DbClient.getPaginatedCustomerOrders');
 
       const { paginateCondition, whereCondition, perPage, page } =
-        setPaginationParams<Orders.GetCustomerOrdersRequestQuery>(args);
+        setPaginationParams<GetCustomerOrdersRequestQuery>(args);
 
       const items = await db
         .query(
@@ -104,12 +108,12 @@ export function ordersQueries(db: CommonQueryMethods) {
     async getPaginatedMerchantOrders({
       userId,
       ...args
-    }: Orders.GetMerchantOrdersRequestQuery &
-      Pick<OfferEntity, 'userId'>): Promise<Orders.GetOrdersResponse> {
+    }: GetMerchantOrdersRequestQuery &
+      Pick<OfferEntity, 'userId'>): Promise<GetOrdersResponse> {
       logger.info('[Command] DbClient.getPaginatedMerchantOrders');
 
       const { paginateCondition, page, perPage } =
-        setPaginationParams<Orders.GetMerchantOrdersRequestQuery>(args);
+        setPaginationParams<GetMerchantOrdersRequestQuery>(args);
 
       const items = await db
         .query(

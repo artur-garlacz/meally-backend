@@ -1,4 +1,3 @@
-import { Reviews } from '@commons/domain';
 import {
   setPaginationParams,
   setPaginationResponse,
@@ -8,6 +7,11 @@ import { CommonQueryMethods, sql } from 'slonik';
 import logger from '@libs/utils/logger';
 import { toMany } from '@libs/utils/query';
 import { serializeDate } from '@libs/utils/serialization';
+
+import {
+  GetUserReviewsRequestQuery,
+  GetUserReviewsResponse,
+} from '@modules/users/api/user-review';
 
 import { UserReviewEntity } from './entities';
 
@@ -36,12 +40,12 @@ export function reviewsQueries(db: CommonQueryMethods) {
             `);
     },
     async getPaginatedUserReviews(
-      args: Reviews.GetUserReviewsRequestQuery,
-    ): Promise<Reviews.GetUserReviewsResponse> {
+      args: GetUserReviewsRequestQuery,
+    ): Promise<GetUserReviewsResponse> {
       logger.info('[Command] DbClient.getPaginatedUserReviews');
 
       const { paginateCondition, whereCondition, perPage, page } =
-        setPaginationParams<Reviews.GetUserReviewsRequestQuery>(args);
+        setPaginationParams<GetUserReviewsRequestQuery>(args);
 
       const items = await db
         .query(

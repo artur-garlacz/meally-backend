@@ -5,6 +5,7 @@
   "author": "artur-garlacz <garlacz.artur@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lerna": "lerna",
     "test:types:app": "lerna run test:types --scope app --stream",
     "test:integration:app": "lerna run test:integration --scope app --stream",
     "test:logic:app": "lerna run test:logic --scope app --stream",

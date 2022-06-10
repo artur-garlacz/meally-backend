@@ -29,8 +29,8 @@ jobs:
         with:
           node-version: 16.x
       - name: Install dependencies
-        run: npm install
+        run: yarn
       - name: Test types
-        run: npm run test:types:app
+        run: yarn test:types:app
       - name: Test integration
-        run: npm run test:integration:app
+        run: yarn test:integration:app

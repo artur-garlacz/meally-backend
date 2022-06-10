@@ -1,1 +1,1 @@
-export * from '@api/controllers/users';
+export * from '@modules/users/api';

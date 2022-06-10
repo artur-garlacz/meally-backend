@@ -4,7 +4,7 @@ import { assert } from 'chai';
 import { DbClient } from '@libs/db';
 import { uuid } from '@libs/utils/common';
 
-import { UserEntity } from '@modules/users/entities';
+import { UserEntity } from '@modules/users/domain/entities';
 
 import { dummies } from '@tests/dummies';
 

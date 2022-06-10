@@ -7,7 +7,7 @@
   "scripts": {
     "lerna": "lerna",
     "init": "rm -rf node_modules packages/*/node_modules && npm install && git checkout -- package-lock.json && npm run bootstrap",
-    "bootstrap": "lerna bootstrap --hois",
+    "bootstrap": "lerna bootstrap --hoist",
     "test:types:app": "lerna run test:types --scope app --stream",
     "test:integration:app": "lerna run test:integration --scope app --stream",
     "test:logic:app": "lerna run test:logic --scope app --stream",

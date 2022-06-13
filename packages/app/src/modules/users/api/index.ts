@@ -59,11 +59,7 @@ export function userApiRouter(services: AppServices) {
   router.get('/details', auth, wrap(getUserDetailsController(services)));
 
   // detailed auth user data
-  router.get(
-    '/:userId/details',
-    auth,
-    wrap(getUserDetailsController(services)),
-  );
+  router.get('/:userId/details', wrap(getUserDetailsController(services)));
 
   // user reviews
   router.get('/:userId/reviews', wrap(getUserReviewsController(services)));

@@ -1,7 +1,9 @@
+import { ErrorType } from '@commons/errors';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 
 import { getEnv } from './env';
+import { HttpErrorResponse } from './errors';
 
 const accessTokenSecret = getEnv('ACCESS_TOKEN_SECRET');
 const refreshTokenSecret = getEnv('REFRESH_TOKEN_SECRET');
@@ -57,7 +59,12 @@ export const verifyAccessToken = (token: string) =>
       if (err) {
         const message =
           err.name == 'JsonWebTokenError' ? 'Unauthorized' : err.message;
-        return reject(new createError.Unauthorized(message));
+        return reject(
+          new HttpErrorResponse(401, {
+            message: 'Access token is required',
+            kind: ErrorType.Unauthorized,
+          }),
+        );
       }
       resolve(payload);
     });

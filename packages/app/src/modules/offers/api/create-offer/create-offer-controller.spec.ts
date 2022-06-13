@@ -13,7 +13,6 @@ import {
   TestRequest,
   TestResponse,
   getTestRequest,
-  requestAuth,
 } from '@tests/requests';
 
 describe('@Integration CreateOffer', () => {

@@ -26,16 +26,6 @@ export function offerApiRouter(services: AppServices) {
       ? testAuthMiddleware
       : authMiddleware(services.dbClient);
 
-  // /:offerId/updateStatus  - PUT
-  router.put(
-    '/:offerId/update-status',
-    auth,
-    validateMiddleware(updateOfferStatusSchema),
-    wrap(updateOfferStatusController(services)),
-  );
-
-  router.get('/:offerId', wrap(getOfferController(services)));
-
   router.post(
     '/create',
     auth,
@@ -46,6 +36,16 @@ export function offerApiRouter(services: AppServices) {
   router.get('/category', wrap(getOfferCategoriesController(services)));
 
   router.get('/', wrap(getOffersController(services)));
+
+  // /:offerId/updateStatus  - PUT
+  router.put(
+    '/:offerId/update-status',
+    auth,
+    validateMiddleware(updateOfferStatusSchema),
+    wrap(updateOfferStatusController(services)),
+  );
+
+  router.get('/:offerId', wrap(getOfferController(services)));
 
   return router;
 }

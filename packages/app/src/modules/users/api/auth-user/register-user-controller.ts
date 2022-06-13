@@ -15,7 +15,7 @@ export const registerUserController = (app: AppServices) => {
   ) => {
     const { user } = req.body;
 
-    const newUser = await registerUser(app.dbClient)(user);
+    const newUser = await registerUser(app)(user);
 
     return res.status(200).send(newUser);
   };

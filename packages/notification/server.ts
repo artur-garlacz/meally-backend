@@ -1,6 +1,9 @@
 import { createServer } from 'http';
 
 import logger from '@lib/utils/logger';
+import { getEnv } from '@notify/utils/env';
+import { buildAppServices } from '@notify/implementation/app-services';
+import { buildRouter } from '@notify/implementation/express/router';
 
 async function main() {
   const httpPort = getEnv('APP_PORT');

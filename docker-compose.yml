@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_PASSWORD: artur
       PGDATA: /data/postgres
-      DATABASE: meally
+      DATABASE_APP: meally
       DATABASE_TESTS: meally_tests
     volumes:
       - ./packages/app/scripts/db:/docker-entrypoint-initdb.d

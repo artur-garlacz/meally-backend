@@ -1,8 +1,7 @@
-import { ErrorType, HttpErrorResponseBody } from '@app/commons/errors';
+import { ErrorType, HttpErrorResponseBody } from '@commons/errors';
 import { NextFunction, Request, Response } from 'express';
 
-import { HttpErrorResponse, TransformError } from '@app/libs/utils/errors';
-
+import { HttpErrorResponse, TransformError } from '@libs/utils/errors';
 import logger from '@lib/utils/logger';
 
 export function errorsMiddleware() {

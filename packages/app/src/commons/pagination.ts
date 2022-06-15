@@ -1,6 +1,6 @@
 import { sql } from 'slonik';
 
-import { chainOptional } from '@libs/utils/query';
+import { chainOptional } from '@app/libs/utils/query';
 
 export type PaginationResponse<T> = {
   items: T[];

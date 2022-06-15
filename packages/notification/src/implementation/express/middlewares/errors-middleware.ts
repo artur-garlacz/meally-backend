@@ -1,7 +1,10 @@
-import { ErrorType, HttpErrorResponseBody } from '@app/commons/errors';
+import {
+  ErrorType,
+  HttpErrorResponseBody,
+  HttpErrorResponse,
+  TransformError,
+} from '@notify/utils/errors';
 import { NextFunction, Request, Response } from 'express';
-
-import { HttpErrorResponse, TransformError } from '@app/libs/utils/errors';
 
 import logger from '@lib/utils/logger';
 

@@ -14,7 +14,7 @@
     "test:logic:app": "lerna run test:logic --scope app --stream",
     "test:unit:app": "lerna run test:unit --scope app --stream"
   },
-  "husky":{
+  "husky": {
     "hooks": {
       "pre-commit": "npm run test:precommit && lint-staged"
     }
@@ -28,6 +28,7 @@
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
     "husky": "^8.0.1",
-    "lerna": "^5.0.0"
+    "lerna": "^5.0.0",
+    "typescript": "^4.7.3"
   }
 }

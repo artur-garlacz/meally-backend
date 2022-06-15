@@ -1,18 +1,17 @@
-import {
-  CognitoClient,
-  createCognitoClient,
-} from '@clients/aws/cognito-client';
+import { DbClient, createDbClient } from '@app/libs/db';
+import { createDbPool } from '@app/libs/db/setup';
+import { QueueClient, createQueueClient } from '@app/libs/queue';
+import { AppConfig, getAppConfig } from '@app/libs/utils/config';
 
-import { DbClient, createDbClient } from '@libs/db';
-import { createDbPool } from '@libs/db/setup';
-import { QueueClient, createQueueClient } from '@libs/queue';
-import { AppConfig, getAppConfig } from '@libs/utils/config';
-import logger from '@libs/utils/logger';
+import logger from '@lib/utils/logger';
+
+import { SwaggerClient, createSwaggerClient } from './libs/swagger';
 
 export type AppServices = {
   appConfig: AppConfig;
   dbClient: DbClient;
-  queueClient: QueueClient;
+  queueClient?: QueueClient;
+  swaggerClient: SwaggerClient;
   // cognitoClient: any;
 };
 
@@ -26,11 +25,14 @@ export const buildAppServices = async (
     args.dbClient || (await createDbClient(await createDbPool(appConfig)));
   // const cognitoClient = args.cognitoClient || createCognitoClient(appConfig);
   const queueClient = await createQueueClient();
+  const swaggerClient =
+    args.swaggerClient || (await createSwaggerClient(appConfig));
 
   return {
     appConfig,
     dbClient,
     queueClient,
+    swaggerClient,
     // cognitoClient,
   };
 };

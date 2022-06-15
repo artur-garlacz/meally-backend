@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt';
 import { DatabasePool } from 'slonik';
 
-import { createDbClient } from '@libs/db';
-import logger from '@libs/utils/logger';
+import { createDbClient } from '@app/libs/db';
 
-import { dummies } from '@tests/dummies';
+import logger from '@lib/utils/logger';
+
+import { dummies } from '@app/tests/dummies';
 
 export async function runSeed(dbPool: DatabasePool) {
   logger.info('Running db seed', {});

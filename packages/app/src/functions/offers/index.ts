@@ -1,1 +1,1 @@
-export * from '@modules/offers/api';
+export * from '@app/modules/offers/api';

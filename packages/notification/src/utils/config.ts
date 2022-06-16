@@ -21,6 +21,7 @@ export async function getAppConfig(): Promise<AppConfig> {
     appUrl: readOptionalString('APP_URL', 'no-url'),
     dbConfig: readDbConfig(),
     queueConfig: readQueueConfig(),
+    mailConfig: getMailConfig(),
   });
 }
 
@@ -41,6 +42,9 @@ export class AppConfig {
   @ValidateNested()
   @Type(() => QueueConfig)
   readonly queueConfig: QueueConfig;
+
+  @IsObject()
+  readonly mailConfig: MailConfig;
 }
 
 export function getDbConfig(): Promise<DbConfig> {
@@ -99,5 +103,37 @@ function readQueueConfig(): QueueConfig {
   return {
     host: readOptionalString('QUEUE_HOST', 'localhost'),
     port: readOptionalString('QUEUE_PORT', '5672'),
+  };
+}
+
+export class MailConfig {
+  @IsString()
+  readonly fromEmail: string;
+
+  @IsString()
+  readonly toEmail: string;
+
+  @IsString()
+  readonly gmailUser: string;
+
+  @IsString()
+  readonly gmailPassword: string;
+
+  @IsString()
+  readonly host: string;
+
+  @IsPort()
+  readonly port: string;
+}
+
+function getMailConfig(): MailConfig {
+  const { readOptionalString } = createEnvReader(process.env);
+  return {
+    fromEmail: readOptionalString('FROM_EMAIL', 'localhost'),
+    toEmail: readOptionalString('TO_EMAIL', 'localhost'),
+    gmailUser: getEnv('MAIL_USER'),
+    gmailPassword: getEnv('MAIL_PASSWORD'),
+    host: readOptionalString('SMTP_HOST', 'localhost'),
+    port: readOptionalString('SMTP_PORT', '5672'),
   };
 }

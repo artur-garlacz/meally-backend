@@ -1,11 +1,11 @@
-import { getTestDbClient } from '@setup-integration-tests.spec';
+import { getTestDbClient } from '@app/setup-integration-tests.spec';
 import { assert, expect } from 'chai';
 import { UniqueIntegrityConstraintViolationError } from 'slonik';
 
-import { DbClient } from '@libs/db';
+import { DbClient } from '@app/libs/db';
 
-import { assertThrows } from '@tests/assertions';
-import { dummies } from '@tests/dummies';
+import { assertThrows } from '@app/tests/assertions';
+import { dummies } from '@app/tests/dummies';
 
 describe('@Integration User queries', () => {
   let dbClient: DbClient;

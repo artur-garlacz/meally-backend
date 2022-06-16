@@ -1,19 +1,15 @@
-import { HttpErrorResponseBody } from '@commons/errors';
-import { ApiRoutes } from '@commons/routes';
-import { getTestDbClient } from '@setup-integration-tests.spec';
+import { HttpErrorResponseBody } from '@app/commons/errors';
+import { ApiRoutes } from '@app/commons/routes';
+import { getTestDbClient } from '@app/setup-integration-tests.spec';
 import { assert } from 'chai';
 import { describe } from 'mocha';
 
-import { DbClient } from '@libs/db';
+import { DbClient } from '@app/libs/db';
 
-import { UserEntity } from '@modules/users/domain/entities';
+import { UserEntity } from '@app/modules/users/domain/entities';
 
-import { dummies } from '@tests/dummies';
-import {
-  TestRequest,
-  TestResponse,
-  getTestRequest,
-} from '@tests/requests';
+import { dummies } from '@app/tests/dummies';
+import { TestRequest, TestResponse, getTestRequest } from '@app/tests/requests';
 
 describe('@Integration CreateOffer', () => {
   let dbClient: DbClient;

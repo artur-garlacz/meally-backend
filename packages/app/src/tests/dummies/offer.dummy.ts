@@ -1,12 +1,12 @@
 import faker from '@faker-js/faker';
 
-import { uuid } from '@libs/utils/common';
+import { uuid } from '@app/libs/utils/common';
 
-import { OfferStatus } from '@modules/offers/api/get-offers';
+import { OfferStatus } from '@app/modules/offers/api/get-offers';
 import {
   OfferCategoryEntity,
   OfferEntity,
-} from '@modules/offers/domain/entities';
+} from '@app/modules/offers/domain/entities';
 
 import { MockBuilder } from './user.dummy';
 

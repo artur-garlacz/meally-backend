@@ -1,1 +1,1 @@
-export * from '@modules/users/api';
+export * from '@app/modules/users/api';

@@ -6,6 +6,7 @@ import logger from '@lib/utils/logger';
 import { errorsMiddleware } from './middlewares';
 import helmet from 'helmet';
 import cors from 'cors';
+import { useChannels } from './channels';
 
 export async function buildRouter(services: AppServices) {
   logger.debug('Building app router');
@@ -23,6 +24,8 @@ export async function buildRouter(services: AppServices) {
       optionsSuccessStatus: 200,
     }),
   );
+
+  useChannels(services);
 
   // ---
   // end middlewares

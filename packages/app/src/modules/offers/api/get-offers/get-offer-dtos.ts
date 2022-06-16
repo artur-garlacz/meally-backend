@@ -1,14 +1,14 @@
-import { ResponseDetails } from '@commons/data';
+import { ResponseDetails } from '@app/commons/data';
 import {
   GetItemsRequestQuery,
   ItemsFilterQuery,
   PaginationResponse,
-} from '@commons/pagination';
+} from '@app/commons/pagination';
 
 import {
   OfferCategoryEntity,
   OfferEntity,
-} from '@modules/offers/domain/entities';
+} from '@app/modules/offers/domain/entities';
 
 // Requests
 type OffersQueryString = Partial<

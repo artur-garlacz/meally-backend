@@ -1,17 +1,17 @@
 import {
   setPaginationParams,
   setPaginationResponse,
-} from '@commons/pagination';
+} from '@app/commons/pagination';
 import { CommonQueryMethods, sql } from 'slonik';
 
-import logger from '@libs/utils/logger';
-import { toMany } from '@libs/utils/query';
-import { serializeDate } from '@libs/utils/serialization';
+import logger from '@app/libs/utils/logger';
+import { toMany } from '@app/libs/utils/query';
+import { serializeDate } from '@app/libs/utils/serialization';
 
 import {
   GetUserReviewsRequestQuery,
   GetUserReviewsResponse,
-} from '@modules/users/api/user-review';
+} from '@app/modules/users/api/user-review';
 
 import { UserReviewEntity } from './entities';
 

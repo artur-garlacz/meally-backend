@@ -1,10 +1,10 @@
-import { AppServices } from '@app-services';
-import { ErrorType } from '@commons/errors';
-import { AuthRequest } from '@commons/request';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
+import { AuthRequest } from '@app/commons/request';
 import { Response } from 'express';
 
-import { uuid } from '@libs/utils/common';
-import { HttpErrorResponse } from '@libs/utils/errors';
+import { uuid } from '@app/libs/utils/common';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
 
 import { OrderStatus } from '../get-orders';
 import { CreateOrderRequestBody } from './create-order-dtos';

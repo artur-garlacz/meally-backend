@@ -2,12 +2,13 @@ import {
   PaginationResponse,
   setPaginationParams,
   setPaginationResponse,
-} from '@commons/pagination';
+} from '@app/commons/pagination';
 import { CommonQueryMethods, sql } from 'slonik';
 
-import logger from '@libs/utils/logger';
-import { chainOptional, toMany, toOptional } from '@libs/utils/query';
-import { serializeDate } from '@libs/utils/serialization';
+import { chainOptional, toMany, toOptional } from '@app/libs/utils/query';
+
+import logger from '@lib/utils/logger';
+import { serializeDate } from '@lib/utils/serialization';
 
 import { GetOffersRequestQuery, UpdateOfferType } from '../api/get-offers';
 import { OfferCategoryEntity, OfferEntity } from './entities';

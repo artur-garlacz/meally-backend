@@ -1,17 +1,20 @@
-import { AppServices } from '@app-services';
-import { ErrorType } from '@commons/errors';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
 
-import { HttpErrorResponse } from '@libs/utils/errors';
-import { signAccessToken, signRefreshToken } from '@libs/utils/jwt';
-import logger from '@libs/utils/logger';
-import { toPasswordHash } from '@libs/utils/password';
-import { serializeJson } from '@libs/utils/serialization';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
+import { signAccessToken, signRefreshToken } from '@app/libs/utils/jwt';
+import { toPasswordHash } from '@app/libs/utils/password';
+import { serializeJson } from '@app/libs/utils/serialization';
 
 import { QueueChannels } from '@lib/commons/queue';
 import { uuid } from '@lib/utils/common';
+import logger from '@lib/utils/logger';
 
-import { AuthTokens, AuthUserRequestBody } from '@modules/users/api/auth-user';
-import { UserEntity } from '@modules/users/domain/entities';
+import {
+  AuthTokens,
+  AuthUserRequestBody,
+} from '@app/modules/users/api/auth-user';
+import { UserEntity } from '@app/modules/users/domain/entities';
 
 export const registerUser =
   (app: AppServices) =>
@@ -49,6 +52,7 @@ export const registerUser =
 
     logger.info('[Action] User created');
 
+    await app.queueClient.channel.assertQueue(QueueChannels.user);
     app.queueClient.channel.sendToQueue(
       QueueChannels.user,
       Buffer.from(serializeJson(user)),

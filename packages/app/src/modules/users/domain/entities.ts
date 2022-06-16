@@ -1,4 +1,4 @@
-import { IsNullable } from '@libs/utils/validation';
+import { IsNullable } from '@lib/utils/validation';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,

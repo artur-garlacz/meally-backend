@@ -1,4 +1,4 @@
-import { ErrorType } from '@commons/errors';
+import { ErrorType } from '@app/commons/errors';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 

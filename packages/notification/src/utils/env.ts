@@ -12,6 +12,14 @@ type NameToType = {
   readonly POSTGRES_DB: string;
   readonly POSTGRES_PORT: number;
   readonly APP_PORT: number;
+  readonly MAIL_USER: string;
+  readonly MAIL_PASSWORD: string;
+  readonly FROM_EMAIL: string;
+  readonly TO_EMAIL: string;
+  readonly SMTP_HOST: string;
+  readonly SMTP_PORT: number;
+  readonly SMTP_USER: string;
+  readonly SMTP_PASSWORD: string;
 };
 
 export function getEnv<Env extends keyof NameToType>(

@@ -1,7 +1,10 @@
-import { GetItemsRequestQuery, PaginationResponse } from '@commons/pagination';
+import {
+  GetItemsRequestQuery,
+  PaginationResponse,
+} from '@app/commons/pagination';
 import { z } from 'zod';
 
-import { UserReviewEntity } from '@modules/reviews/domain/entities';
+import { UserReviewEntity } from '@app/modules/reviews/domain/entities';
 
 // GET Request
 type UserReviewsQueryString = Pick<UserReviewEntity, 'userId'> &

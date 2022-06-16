@@ -1,19 +1,20 @@
 import {
   setPaginationParams,
   setPaginationResponse,
-} from '@commons/pagination';
+} from '@app/commons/pagination';
 import { CommonQueryMethods, sql } from 'slonik';
 
-import logger from '@libs/utils/logger';
 import {
   chainOptional,
   toMany,
   toOptional,
   toRequired,
-} from '@libs/utils/query';
-import { serializeDate } from '@libs/utils/serialization';
+} from '@app/libs/utils/query';
 
-import { OfferEntity } from '@modules/offers/domain/entities';
+import logger from '@lib/utils/logger';
+import { serializeDate } from '@lib/utils/serialization';
+
+import { OfferEntity } from '@app/modules/offers/domain/entities';
 
 import {
   GetCustomerOrdersRequestQuery,

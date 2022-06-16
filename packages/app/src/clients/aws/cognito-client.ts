@@ -1,14 +1,15 @@
+import { ErrorType } from '@app/commons/errors';
 import {
   AdminGetUserCommand,
   CognitoIdentityProviderClient,
   ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { ErrorType } from '@commons/errors';
 import CognitoExpress, { JwtToken } from 'cognito-express';
 
-import { AppConfig } from '@libs/utils/config';
-import { HttpErrorResponse } from '@libs/utils/errors';
-import logger from '@libs/utils/logger';
+import { AppConfig } from '@app/libs/utils/config';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
+
+import logger from '@lib/utils/logger';
 
 export type CognitoClient = ReturnType<typeof createCognitoClient>;
 

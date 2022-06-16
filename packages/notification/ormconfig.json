@@ -1,0 +1,16 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "artur",
+    "password": "artur",
+    "database": "notify_meally",
+    "entities": ["src/domain/entities/*.ts"],
+    "migrations": ["src/implementation/db/migrations/*.ts"],
+    "logging": true,
+    "synchronize": true,
+    "cli": {
+        "entitiesDir": "src/domain/entities",
+        "migrationsDir": "src/implementation/db/migrations"
+    }
+  }

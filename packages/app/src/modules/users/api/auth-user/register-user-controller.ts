@@ -1,10 +1,7 @@
-import { AppServices } from '@app-services';
-import { ErrorType } from '@commons/errors';
+import { AppServices } from '@app/app-services';
 import { Request, Response } from 'express';
-import createError from 'http-errors';
-import { z } from 'zod';
 
-import { registerUser } from '@modules/users/services';
+import { registerUser } from '@app/modules/users/services';
 
 import { AuthUserRequestBody } from './auth-user-dtos';
 

@@ -1,11 +1,11 @@
-import { ResponseDetails } from '@commons/data';
+import { ResponseDetails } from '@app/commons/data';
 import {
   GetItemsRequestQuery,
   ItemsFilterQuery,
   PaginationResponse,
-} from '@commons/pagination';
+} from '@app/commons/pagination';
 
-import { OrderEntity } from '@modules/orders/domain/entities';
+import { OrderEntity } from '@app/modules/orders/domain/entities';
 
 export enum OrderStatus {
   created = 'created',

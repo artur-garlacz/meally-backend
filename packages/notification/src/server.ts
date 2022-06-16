@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 
-import logger from '@lib/utils/logger';
+import logger from '@notify/utils/logger';
 import { getEnv } from '@notify/utils/env';
 import { buildAppServices } from '@notify/implementation/app-services';
 import { buildRouter } from '@notify/implementation/express/router';

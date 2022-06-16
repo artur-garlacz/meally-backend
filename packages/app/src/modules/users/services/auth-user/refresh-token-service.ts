@@ -2,7 +2,7 @@ import {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
-} from '@libs/utils/jwt';
+} from '@app/libs/utils/jwt';
 
 export const refreshToken = async (refreshToken: string) => {
   const userId = (await verifyRefreshToken(refreshToken)) as string;

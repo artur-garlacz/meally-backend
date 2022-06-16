@@ -1,7 +1,7 @@
-import { AppServices } from '@app-services';
+import { AppServices } from '@app/app-services';
 import { Request, Response } from 'express';
 
-import { loginUser } from '@modules/users/services';
+import { loginUser } from '@app/modules/users/services';
 
 import { AuthUserRequestBody } from './auth-user-dtos';
 

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-import { UserEntity } from '@modules/users/domain/entities';
+import { UserEntity } from '@app/modules/users/domain/entities';
 
 export interface UserParam {
   user: UserEntity;

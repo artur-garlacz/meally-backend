@@ -1,12 +1,12 @@
 import Reporter from 'mocha-dd-reporter';
 import { DatabasePool, sql } from 'slonik';
 
-import { DbClient, createDbClient } from '@libs/db';
-import { createDbPool } from '@libs/db/setup';
-import { runMigrations } from '@libs/migrations/run-migrations';
-import { DbConfig } from '@libs/utils/config';
-import { Environment, createEnvReader } from '@libs/utils/env';
-import { transformToClass } from '@libs/utils/validation';
+import { DbClient, createDbClient } from '@app/libs/db';
+import { createDbPool } from '@app/libs/db/setup';
+import { runMigrations } from '@app/libs/migrations/run-migrations';
+import { DbConfig } from '@app/libs/utils/config';
+import { Environment, createEnvReader } from '@app/libs/utils/env';
+import { transformToClass } from '@app/libs/utils/validation';
 
 let testDbClient: DbClient;
 

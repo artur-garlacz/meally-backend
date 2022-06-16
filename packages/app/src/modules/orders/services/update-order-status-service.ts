@@ -1,7 +1,7 @@
-import { ErrorType } from '@commons/errors';
+import { ErrorType } from '@app/commons/errors';
 
-import { DbClient } from '@libs/db';
-import { HttpErrorResponse } from '@libs/utils/errors';
+import { DbClient } from '@app/libs/db';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
 
 import { OrderStatus, OrderStatusType } from '../api/get-orders';
 import { UpdateOrderStatusRequestBody } from '../api/update-order';

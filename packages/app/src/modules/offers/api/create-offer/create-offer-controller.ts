@@ -1,8 +1,8 @@
-import { AppServices } from '@app-services';
-import { AuthRequest } from '@commons/request';
+import { AppServices } from '@app/app-services';
+import { AuthRequest } from '@app/commons/request';
 import { Response } from 'express';
 
-import { uuid } from '@libs/utils/common';
+import { uuid } from '@app/libs/utils/common';
 
 import { OfferStatus } from '../get-offers';
 import { CreateOfferRequestBody } from './create-offer-dtos';

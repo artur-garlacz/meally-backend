@@ -1,4 +1,4 @@
-import { AppServices } from '@app-services';
+import { AppServices } from '@app/app-services';
 import { Request, Response } from 'express';
 
 import {

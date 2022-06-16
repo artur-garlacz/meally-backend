@@ -1,11 +1,12 @@
-import { AppServices } from '@app-services';
-import { ErrorType } from '@commons/errors';
-import { AuthRequest } from '@commons/request';
-import { Request, Response } from 'express';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
+import { AuthRequest } from '@app/commons/request';
+import { Response } from 'express';
 import { z } from 'zod';
 
-import { uuid } from '@libs/utils/common';
-import { HttpErrorResponse } from '@libs/utils/errors';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
+
+import { uuid } from '@lib/utils/common';
 
 export const createOrUpdateUserDetailsController = (app: AppServices) => {
   return async (req: AuthRequest, res: Response<any>) => {

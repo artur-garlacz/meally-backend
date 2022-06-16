@@ -1,12 +1,14 @@
 // import { QueueClient, createQueueClient } from '@libs/queue';
 import { AppConfig, getAppConfig } from '@notify/utils/config';
 import logger from '@lib/utils/logger';
-import { createQueueClient } from './queue';
+import { createQueueClient, QueueClient } from './queue';
+import { createMailClient, MailClient } from './mailer';
 
 export type AppServices = {
   appConfig: AppConfig;
   dbClient: any;
-  queueClient: any;
+  queueClient: QueueClient;
+  mailClient: MailClient;
 };
 
 export const buildAppServices = async (
@@ -17,10 +19,12 @@ export const buildAppServices = async (
 
   const dbClient = args.dbClient;
   const queueClient = await createQueueClient();
+  const mailClient = await createMailClient(appConfig);
 
   return {
     appConfig,
     dbClient,
     queueClient,
+    mailClient,
   };
 };

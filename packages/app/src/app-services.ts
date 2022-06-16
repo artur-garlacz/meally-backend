@@ -10,7 +10,7 @@ import { SwaggerClient, createSwaggerClient } from './libs/swagger';
 export type AppServices = {
   appConfig: AppConfig;
   dbClient: DbClient;
-  queueClient?: QueueClient;
+  queueClient: QueueClient;
   swaggerClient: SwaggerClient;
   // cognitoClient: any;
 };

@@ -6,7 +6,7 @@ import { signAccessToken, signRefreshToken } from '@app/libs/utils/jwt';
 import { toPasswordHash } from '@app/libs/utils/password';
 import { serializeJson } from '@app/libs/utils/serialization';
 
-import { QueueChannels } from '@lib/commons/queue';
+import { QueueChannels, QueueCommands } from '@lib/commons/queue';
 import { uuid } from '@lib/utils/common';
 import logger from '@lib/utils/logger';
 
@@ -55,10 +55,10 @@ export const registerUser =
     await app.queueClient.channel.assertQueue(QueueChannels.user);
     app.queueClient.channel.sendToQueue(
       QueueChannels.user,
-      Buffer.from(serializeJson(user)),
+      Buffer.from(serializeJson({ data: user, type: QueueCommands.created })),
     );
 
-    logger.debug('[Action] Created user sent to queue');
+    logger.info('[Action] User created sent to queue');
 
     const accessToken = (await signAccessToken(user.userId)) as string;
     const refreshToken = (await signRefreshToken(user.userId)) as string;

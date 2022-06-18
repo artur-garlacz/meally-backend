@@ -4,6 +4,9 @@ import { Response } from 'express';
 
 import { uuid } from '@app/libs/utils/common';
 
+import { QueueChannels, QueueCommands } from '@lib/commons/queue';
+import { serializeJson } from '@lib/utils/serialization';
+
 import { OfferStatus } from '../get-offers';
 import { CreateOfferRequestBody } from './create-offer-dtos';
 
@@ -31,6 +34,17 @@ export const createOfferController = (app: AppServices) => {
       userId: sender.userId,
       offerCategoryId: offer.offerCategoryId,
     });
+
+    await app.queueClient.channel.assertQueue(QueueChannels.offer);
+    app.queueClient.channel.sendToQueue(
+      QueueChannels.offer,
+      Buffer.from(
+        serializeJson({
+          data: { ...newOffer, email: sender.email },
+          type: QueueCommands.created,
+        }),
+      ),
+    );
 
     return res.status(200).send({ data: newOffer });
   };

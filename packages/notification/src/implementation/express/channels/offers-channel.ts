@@ -1,6 +1,8 @@
+import { OfferEntity } from '@app/modules/offers/domain/entities';
 import { AppServices } from '@notify/implementation/app-services';
 import { ConsumedChannelData, QueueChannels } from '@lib/commons/queue';
 import logger from '@lib/utils/logger';
+import { request } from 'express';
 
 export const offerChannel = async (app: AppServices) => {
   const { channel } = app.queueClient;
@@ -8,20 +10,21 @@ export const offerChannel = async (app: AppServices) => {
   await channel.assertQueue(QueueChannels.offer, { durable: true });
 
   await channel.consume(QueueChannels.offer, async (data) => {
-    logger.info(`[USER CHANNEL]: Received ${Buffer.from(data!.content)}`);
+    logger.info(`[OFFER CHANNEL]: Received ${Buffer.from(data!.content)}`);
 
     if (data) {
-      const user: ConsumedChannelData<{ email: string }> = JSON.parse(
-        data.content.toString('utf-8'),
-      );
+      const offer: ConsumedChannelData<OfferEntity & { email: string }> =
+        JSON.parse(data.content.toString('utf-8'));
 
       const mailOptions = {
         from: '"Meally" <garlacz.artur@gmail.com>',
-        to: user.data.email,
-        subject: 'Welcome!',
-        template: 'welcome-mail',
+        to: offer.data.email,
+        subject: 'Offer created!',
+        template: 'offer-created-mail',
         context: {
-          name: 'Archie',
+          title: offer.data.title,
+          status: offer.data.status,
+          longDesc: offer.data.longDesc,
         },
       };
 

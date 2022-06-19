@@ -2,7 +2,7 @@ import { ErrorType } from '@app/commons/errors';
 
 import { DbClient } from '@app/libs/db';
 import { HttpErrorResponse } from '@app/libs/utils/errors';
-import { signAccessToken, signRefreshToken } from '@app/libs/utils/jwt';
+import { signAccessToken } from '@app/libs/utils/jwt';
 import { verifyPassword } from '@app/libs/utils/password';
 
 import { AuthUserRequestBody } from '@app/modules/users/api/auth-user';
@@ -39,7 +39,6 @@ export const loginUser =
     }
 
     const accessToken = await signAccessToken(user.userId);
-    const refreshToken = await signRefreshToken(user.userId);
 
-    return { email, accessToken, refreshToken };
+    return { email, accessToken };
   };

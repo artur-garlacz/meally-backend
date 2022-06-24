@@ -25,8 +25,6 @@ export async function buildRouter(services: AppServices) {
     }),
   );
 
-  useChannels(services);
-
   // ---
   // end middlewares
   // ---

@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { DatabasePool } from 'slonik';
 
 import { createDbClient } from '@app/libs/db';
@@ -6,6 +5,8 @@ import { createDbClient } from '@app/libs/db';
 import logger from '@lib/utils/logger';
 
 import { dummies } from '@app/tests/dummies';
+
+import { toPasswordHash } from '../utils/password';
 
 export async function runSeed(dbPool: DatabasePool) {
   logger.info('Running db seed', {});
@@ -23,8 +24,7 @@ export async function runSeed(dbPool: DatabasePool) {
     }),
   );
 
-  const salt = await bcrypt.genSalt(10);
-  const hashPassword = await bcrypt.hash('test', salt);
+  const hashPassword = await toPasswordHash('test');
 
   await dbClient.createUserPassword(
     dummies.userPassword({

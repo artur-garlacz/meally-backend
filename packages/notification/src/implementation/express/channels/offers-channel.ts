@@ -1,10 +1,9 @@
 import { OfferEntity } from '@app/modules/offers/domain/entities';
-import { AppServices } from '@notify/implementation/app-services';
 import { ConsumedChannelData, QueueChannels } from '@lib/commons/queue';
 import logger from '@lib/utils/logger';
-import { request } from 'express';
+import { UseChannelServices } from '.';
 
-export const offerChannel = async (app: AppServices) => {
+export const offerChannel = async (app: UseChannelServices) => {
   const { channel } = app.queueClient;
 
   await channel.assertQueue(QueueChannels.offer, { durable: true });

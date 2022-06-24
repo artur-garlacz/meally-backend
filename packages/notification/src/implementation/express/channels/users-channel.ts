@@ -1,8 +1,8 @@
-import { AppServices } from '@notify/implementation/app-services';
 import { ConsumedChannelData, QueueChannels } from '@lib/commons/queue';
 import logger from '@lib/utils/logger';
+import { UseChannelServices } from '.';
 
-export const userChannel = async (app: AppServices) => {
+export const userChannel = async (app: UseChannelServices) => {
   const { channel } = app.queueClient;
 
   await channel.assertQueue(QueueChannels.user, { durable: true });
@@ -14,6 +14,8 @@ export const userChannel = async (app: AppServices) => {
       const user: ConsumedChannelData<{ email: string }> = JSON.parse(
         data.content.toString('utf-8'),
       );
+
+      // create row in db
 
       const mailOptions = {
         from: '"Meally" <garlacz.artur@gmail.com>',
@@ -28,9 +30,12 @@ export const userChannel = async (app: AppServices) => {
       app.mailClient.transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           return console.log(error);
+          // update row in db failed :/
         }
 
         logger.info('Message sent: ' + info.response);
+
+        // update row in db
       });
     }
 

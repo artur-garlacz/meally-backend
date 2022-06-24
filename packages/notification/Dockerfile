@@ -13,7 +13,7 @@ RUN npm install
 
 # Bundle app source
 COPY ./packages/lib ./packages/lib
-COPY ./packages/app ./packages/app
+COPY ./packages/notification ./packages/notification
 
 # "lerna boostrap" will install all packages of base and backend
 RUN npx lerna bootstrap

@@ -52,15 +52,17 @@ export const registerUser =
 
     logger.info('[Action] User created');
 
-    await app.queueClient.channel.assertQueue(QueueChannels.user);
-    app.queueClient.channel.sendToQueue(
-      QueueChannels.user,
-      Buffer.from(serializeJson({ data: user, type: QueueCommands.created })),
-    );
-
-    logger.info('[Action] User created sent to queue');
+    app.queueEmitter.emitUserEvent(user);
 
     const accessToken = (await signAccessToken(user.userId)) as string;
-    const refreshToken = (await signRefreshToken(user.userId)) as string;
+    const refreshToken = (await signRefreshToken((token) =>
+      app.dbClient.createRefreshToken({
+        refreshTokenId: uuid(),
+        userId: user.userId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        refreshToken: token,
+      }),
+    )(user.userId)) as string;
     return { user, accessToken, refreshToken };
   };

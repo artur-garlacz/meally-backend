@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "types": ["node"],
     "baseUrl": "./packages",
+    "outDir": "./dist",
     "alwaysStrict": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
@@ -19,7 +20,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "paths": {
-      // "@*": ["*"],
       "@app/*": ["./app/src/*"],
       "@notify/*": ["./notification/src/*"],
       "@lib/*": ["./lib/*"]

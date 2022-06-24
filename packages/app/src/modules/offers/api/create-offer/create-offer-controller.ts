@@ -35,16 +35,9 @@ export const createOfferController = (app: AppServices) => {
       offerCategoryId: offer.offerCategoryId,
     });
 
-    await app.queueClient.channel.assertQueue(QueueChannels.offer);
-    app.queueClient.channel.sendToQueue(
-      QueueChannels.offer,
-      Buffer.from(
-        serializeJson({
-          data: { ...newOffer, email: sender.email },
-          type: QueueCommands.created,
-        }),
-      ),
-    );
+    if (sender.email) {
+      app.queueEmitter.emitOfferEvent({ ...newOffer, email: sender.email });
+    }
 
     return res.status(200).send({ data: newOffer });
   };

@@ -27,7 +27,7 @@ const config = {
     descriptionFiles: ['package.json'],
     modules: ['node_modules'],
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, './'),
     },
   },
   output: {

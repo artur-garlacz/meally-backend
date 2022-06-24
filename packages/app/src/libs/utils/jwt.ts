@@ -28,7 +28,7 @@ export const signAccessToken = (userId: string) => {
 };
 
 export const signRefreshToken =
-  (setToken: (token: string) => Promise<void>) => (userId: string) => {
+  (setToken: (token: string) => any) => (userId: string) => {
     return new Promise((resolve, reject) => {
       jwt.sign(
         { userId },

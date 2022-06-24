@@ -3,6 +3,7 @@ import { AppConfig, getAppConfig } from '@notify/utils/config';
 import logger from '@lib/utils/logger';
 import { createQueueClient, QueueClient } from './queue';
 import { createMailClient, MailClient } from './mailer';
+import { useChannels } from './express/channels';
 
 export type AppServices = {
   appConfig: AppConfig;
@@ -20,6 +21,8 @@ export const buildAppServices = async (
   const dbClient = args.dbClient;
   const queueClient = await createQueueClient();
   const mailClient = await createMailClient(appConfig);
+
+  useChannels({ queueClient, mailClient });
 
   return {
     appConfig,

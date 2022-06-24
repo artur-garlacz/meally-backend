@@ -5,12 +5,13 @@ import { AppConfig, getAppConfig } from '@app/libs/utils/config';
 
 import logger from '@lib/utils/logger';
 
+import { QueueEmitter, buildEmiter } from './libs/queue/emitter';
 import { SwaggerClient, createSwaggerClient } from './libs/swagger';
 
 export type AppServices = {
   appConfig: AppConfig;
   dbClient: DbClient;
-  queueClient: QueueClient;
+  queueEmitter: QueueEmitter;
   swaggerClient: SwaggerClient;
   // cognitoClient: any;
 };
@@ -24,14 +25,16 @@ export const buildAppServices = async (
   const dbClient =
     args.dbClient || (await createDbClient(await createDbPool(appConfig)));
   // const cognitoClient = args.cognitoClient || createCognitoClient(appConfig);
-  const queueClient = await createQueueClient();
+  const queueEmitter = buildEmiter(
+    await createQueueClient(appConfig.queueConfig),
+  );
   const swaggerClient =
     args.swaggerClient || (await createSwaggerClient(appConfig));
 
   return {
     appConfig,
     dbClient,
-    queueClient,
+    queueEmitter,
     swaggerClient,
     // cognitoClient,
   };

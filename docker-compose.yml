@@ -31,9 +31,23 @@ services:
              npm --prefix packages/app run start"
     ports:
       - "8082:8081"
-      # ["npm", "--prefix", "packages/app", "run", "start"]
     volumes:
       - ./packages/app:/meally/packages/app
+      - ./packages/lib:/meally/packages/lib
+    networks:
+      - meally
+  notification_service:
+    build:
+      context: .
+      dockerfile: ./packages/notification/Dockerfile
+    environment:
+      - QUEUE_HOST=rabbitmq
+    command: >
+      sh -c "npm --prefix packages/notification run start"
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./packages/notification:/meally/packages/notification
       - ./packages/lib:/meally/packages/lib
     networks:
       - meally
@@ -48,22 +62,7 @@ services:
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - meally
-  notification_service:
-    build:
-      context: .
-      dockerfile: ./packages/notification/Dockerfile
-    environment:
-      - QUEUE_HOST=rabbitmq
-    command: >
-      sh -c "npm --prefix packages/app run migrations:run
-             npm --prefix packages/app run start"
-    ports:
-      - "8083:8083"
-    volumes:
-      - ./packages/notification:/meally/packages/notification
-      - ./packages/lib:/meally/packages/lib
-    networks:
-      - meally
+
   
 
 networks:

@@ -20,7 +20,7 @@ export const updateOrderStatusController = (app: AppServices) => {
       body: { order },
     } = req;
 
-    const data = await updateOrderStatus(app.dbClient)({
+    const data = await updateOrderStatus(app)({
       orderId: orderId!,
       order,
     });

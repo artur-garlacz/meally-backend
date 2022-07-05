@@ -54,10 +54,10 @@ export function getDbConfig(): Promise<DbConfig> {
 function readDbConfig(): DbConfig {
   const { readOptionalString } = createEnvReader();
   const host = readOptionalString('POSTGRES_HOST', 'localhost');
-  const port = readOptionalString('POSTGRES_PORT', '5432');
-  const database = readOptionalString('POSTGRES_DB', 'meally');
-  const user = readOptionalString('POSTGRES_USER', 'lambda');
-  const password = readOptionalString('POSTGRES_PASSWORD', 'changeme');
+  const port = readOptionalString('POSTGRES_PORT', 5432) as number;
+  const database = readOptionalString('POSTGRES_DB', 'meally_notify');
+  const user = readOptionalString('POSTGRES_USER', 'notify');
+  const password = readOptionalString('POSTGRES_PASSWORD', 'notify');
   const databaseUrl = `postgresql://${user}:${password}@${host}:${port}/${database}`;
 
   return {
@@ -75,7 +75,7 @@ export class DbConfig {
   readonly host: string;
 
   @IsPort()
-  readonly port: string;
+  readonly port: number;
 
   @IsString()
   readonly database: string;

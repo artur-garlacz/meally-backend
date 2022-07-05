@@ -17,12 +17,3 @@ COPY ./packages/app ./packages/app
 
 # "lerna boostrap" will install all packages of base and backend
 RUN npx lerna bootstrap
-# # compile lib: ts -> js
-# RUN npm run build:lib
-# # compile app: ts -> js
-# RUN npm run build:app
-# RUN npm run migrations:run:app
-# RUN npm run start:app
-
-# EXPOSE 8082
-# CMD [ "npm", "--prefix", "packages/app", "run", "prod" ]

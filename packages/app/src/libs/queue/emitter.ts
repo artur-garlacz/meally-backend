@@ -17,25 +17,46 @@ export function buildEmiter(queueClient: QueueClient) {
       QueueChannels.user,
       Buffer.from(serializeJson({ data: user, type: QueueCommands.created })),
     );
-    logger.info('[Action] User created sent to queue');
+    logger.info('[Action] User action sent to queue');
   }
 
-  async function emitOfferEvent<T extends EmailEvent>(data: T) {
+  async function emitOfferEvent<T extends EmailEvent>(
+    data: T,
+    type: QueueCommands,
+  ) {
     await queueClient.channel.assertQueue(QueueChannels.offer);
     queueClient.channel.sendToQueue(
       QueueChannels.offer,
       Buffer.from(
         serializeJson({
           data,
-          type: QueueCommands.created,
+          type,
         }),
       ),
     );
-    logger.info('[Action] Offer created sent to queue');
+    logger.info('[Action] Offer action sent to queue');
+  }
+
+  async function emitOrderEvent<T extends EmailEvent>(
+    data: T,
+    type: QueueCommands,
+  ) {
+    await queueClient.channel.assertQueue(QueueChannels.order);
+    queueClient.channel.sendToQueue(
+      QueueChannels.order,
+      Buffer.from(
+        serializeJson({
+          data,
+          type,
+        }),
+      ),
+    );
+    logger.info('[Action] Order action sent to queue');
   }
 
   return {
     emitUserEvent,
     emitOfferEvent,
+    emitOrderEvent,
   };
 }

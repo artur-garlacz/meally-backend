@@ -15,9 +15,7 @@ export const userChannel = async (app: UseChannelServices) => {
         data.content.toString('utf-8'),
       );
 
-      // create row in db
-
-      const mailOptions = {
+      app.mailService.sendMail({
         from: '"Meally" <garlacz.artur@gmail.com>',
         to: user.data.email,
         subject: 'Welcome!',
@@ -25,18 +23,18 @@ export const userChannel = async (app: UseChannelServices) => {
         context: {
           name: 'Archie',
         },
-      };
-
-      app.mailClient.transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          return console.log(error);
-          // update row in db failed :/
-        }
-
-        logger.info('Message sent: ' + info.response);
-
-        // update row in db
       });
+
+      // app.mailClient.transporter.sendMail(mailOptions, function (error, info) {
+      //   if (error) {
+      //     return console.log(error);
+      //     // update row in db failed :/
+      //   }
+
+      //   logger.info('Message sent: ' + info.response);
+
+      //   // update row in db
+      // });
     }
 
     channel.ack(data!);

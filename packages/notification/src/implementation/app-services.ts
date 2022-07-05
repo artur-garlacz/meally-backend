@@ -4,12 +4,16 @@ import logger from '@lib/utils/logger';
 import { createQueueClient, QueueClient } from './queue';
 import { createMailClient, MailClient } from './mailer';
 import { useChannels } from './express/channels';
+import { createDbClient, DbClient } from './db';
+import { createDbPool } from './db/setup';
+import { createMailService, MailService } from './mailer/mail-service';
 
 export type AppServices = {
   appConfig: AppConfig;
-  dbClient: any;
+  dbClient: DbClient;
   queueClient: QueueClient;
   mailClient: MailClient;
+  mailService: MailService;
 };
 
 export const buildAppServices = async (
@@ -18,16 +22,22 @@ export const buildAppServices = async (
   logger.info('Building app services');
   const appConfig = args.appConfig || (await getAppConfig());
 
-  const dbClient = args.dbClient;
-  const queueClient = await createQueueClient();
+  //clients
+  const dbClient =
+    args.dbClient || createDbClient(await createDbPool(appConfig));
+  const queueClient = await createQueueClient(appConfig.queueConfig);
   const mailClient = await createMailClient(appConfig);
 
-  useChannels({ queueClient, mailClient });
+  // service
+  const mailService = createMailService({ mailClient, dbClient });
+
+  useChannels({ queueClient, mailService });
 
   return {
     appConfig,
     dbClient,
     queueClient,
     mailClient,
+    mailService,
   };
 };

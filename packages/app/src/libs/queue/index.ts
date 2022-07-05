@@ -17,7 +17,6 @@ export async function createQueueClient(
   const connection: Connection = await amqplib.connect(amqpServer);
   const channel: Channel = await connection.createChannel();
 
-  // make sure that the order channel is created, if not this statement will create it
   return {
     connection,
     channel,

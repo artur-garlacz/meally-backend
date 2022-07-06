@@ -4,7 +4,10 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/server.ts",
-    "typeorm": "DOTENV_CONFIG_PATH=.env.dev npm run ts-run ../../node_modules/typeorm/cli.js -- -f ./src/db/ormconfig.ts"
+    "migrations:generate": "ts-node src/db/migrations/generate.ts",
+    "migrations:run": "ts-node src/scripts/migrate.ts",
+    "migrations:run-force": "ts-node src/scripts/migrate.ts --force --seed",
+    "migrations:seed": "ts-node src/scripts/seed.ts"
   },
   "dependencies": {
     "amqplib": "^0.10.0",

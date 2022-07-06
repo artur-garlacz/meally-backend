@@ -34,13 +34,9 @@ export class AppConfig {
   readonly appUrl: string;
 
   @IsObject()
-  @ValidateNested()
-  @Type(() => DbConfig)
   readonly dbConfig: DbConfig;
 
   @IsObject()
-  @ValidateNested()
-  @Type(() => QueueConfig)
   readonly queueConfig: QueueConfig;
 
   @IsObject()

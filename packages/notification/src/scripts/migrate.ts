@@ -1,9 +1,8 @@
-import { createDbPool } from '@app/libs/db/setup';
-import { runMigrations } from '@app/libs/migrations/run-migrations';
-import { runSeed } from '@app/libs/migrations/run-seed';
-import { getAppConfig } from '@app/libs/utils/config';
-
 import logger from '@lib/utils/logger';
+import { runMigrations } from '@notify/implementation/db/migrations/run-migrations';
+import { runSeed } from '@notify/implementation/db/migrations/run-seed';
+import { createDbPool } from '@notify/implementation/db/setup';
+import { getAppConfig } from '@notify/utils/config';
 
 run()
   .then(() => {

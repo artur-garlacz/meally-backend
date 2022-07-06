@@ -24,7 +24,7 @@ export const buildAppServices = async (
 
   //clients
   const dbClient =
-    args.dbClient || createDbClient(await createDbPool(appConfig));
+    args.dbClient || (await createDbClient(await createDbPool(appConfig)));
   const queueClient = await createQueueClient(appConfig.queueConfig);
   const mailClient = await createMailClient(appConfig);
 

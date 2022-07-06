@@ -5,11 +5,10 @@ services:
     environment:
       POSTGRES_USER: artur
       POSTGRES_PASSWORD: artur
-      POSTGRES_DB: meally
+      POSTGRES_MULTIPLE_DATABASES: meally_app, meally_notify
       PGDATA: /data/postgres
-      DATABASE_TESTS: meally_tests
     volumes:
-      - ./packages/app/scripts/db:/docker-entrypoint-initdb.d
+      - ./scripts/db:/docker-entrypoint-initdb.d
     ports:
       - '5433:5432'
     networks:
@@ -21,7 +20,7 @@ services:
       dockerfile: ./packages/app/Dockerfile
     environment:
       - POSTGRES_HOST=db
-      - POSTGRES_DB=meally
+      - POSTGRES_DB=meally_app
       - POSTGRES_PORT=5432
       - POSTGRES_USER=artur
       - POSTGRES_PASSWORD=artur
@@ -41,9 +40,15 @@ services:
       context: .
       dockerfile: ./packages/notification/Dockerfile
     environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=meally_notify
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=artur
+      - POSTGRES_PASSWORD=artur
       - QUEUE_HOST=rabbitmq
     command: >
-      sh -c "npm --prefix packages/notification run start"
+      sh -c "npm --prefix packages/notification run migrations:run
+             npm --prefix packages/notification run start"
     ports:
       - "8083:8083"
     volumes:

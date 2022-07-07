@@ -6,6 +6,7 @@ import { Response } from 'express';
 import { uuid } from '@app/libs/utils/common';
 import { HttpErrorResponse } from '@app/libs/utils/errors';
 
+import { createOrder } from '../../services/create-order-service';
 import { OrderStatus } from '../get-orders';
 import { CreateOrderRequestBody } from './create-order-dtos';
 
@@ -20,49 +21,52 @@ export const createOrderController = (app: AppServices) => {
       body: { offerOrder },
     } = req;
 
-    const currOffer = await app.dbClient.getOfferById(offerId!);
+    // const currOffer = await app.dbClient.getOfferById(offerId!);
 
-    if (!currOffer) {
+    if (!offerId) {
       throw new HttpErrorResponse(404, {
         message: 'Offer not found',
         kind: ErrorType.NotFound,
       });
     }
 
-    const isQuantityEnough =
-      currOffer.availableQuantity - offerOrder.quantity >= 0;
+    // const isQuantityEnough =
+    //   currOffer.availableQuantity - offerOrder.quantity >= 0;
 
-    const newOrder = await app.dbClient.runTransaction(
-      async (dbTransaction) => {
-        if (!isQuantityEnough) {
-          throw new Error();
-        }
+    // const newOrder = await app.dbClient.runTransaction(
+    //   async (dbTransaction) => {
+    //     if (!isQuantityEnough) {
+    //       throw new HttpErrorResponse(422, {
+    //         message:
+    //           'The order cannot be continued due to insufficient quantity',
+    //         kind: ErrorType.InsufficientQuantity,
+    //       });
+    //     }
 
-        const order = await dbTransaction.createOrder({
-          offerOrderId: uuid(),
-          quantity: offerOrder.quantity,
-          offerId: offerId!,
-          customerId: userId,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          status: OrderStatus.created,
-        });
+    //     const order = await dbTransaction.createOrder({
+    //       offerOrderId: uuid(),
+    //       quantity: offerOrder.quantity,
+    //       offerId: offerId!,
+    //       customerId: userId,
+    //       createdAt: new Date(),
+    //       updatedAt: new Date(),
+    //       status: OrderStatus.created,
+    //     });
 
-        return order;
-      },
-    );
+    //     return order;
+    //   },
+    // );
+
+    // app.queueEmitter.createdOrder({
+    //   email:
+    // })
 
     // offerOrder.status != completed
 
-    if (!isQuantityEnough) {
-      throw new HttpErrorResponse(422, {
-        message: 'The order cannot be continued due to insufficient quantity',
-        kind: ErrorType.InsufficientQuantity,
-      });
-    }
+    const order = await createOrder(app)({ offerOrder, offerId, userId });
 
     return res.status(200).send({
-      data: newOrder,
+      data: order,
     });
   };
 };

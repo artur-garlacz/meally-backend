@@ -10,6 +10,13 @@ export enum QueueCommands {
 }
 
 export type ConsumedChannelData<T> = {
-  type: typeof QueueCommands;
+  type: QueueCommands;
   data: T;
+};
+
+export type CreatedOrderEvent = {
+  email: string;
+  title: string;
+  totalPrice: number;
+  orderType: 'customer' | 'merchant';
 };

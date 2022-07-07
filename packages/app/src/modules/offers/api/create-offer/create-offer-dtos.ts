@@ -9,7 +9,10 @@ export const createOfferSchema = z.object({
       title: z.string({
         required_error: 'Title is required',
       }),
-      unitPrice: z.number({ required_error: 'Unit price is required' }),
+      unitPrice: z
+        .number({ required_error: 'Unit price is required' })
+        .min(0)
+        .max(99999),
       longDesc: z.string({ required_error: 'Description is required' }),
       shortDesc: z
         .string({ required_error: 'Short description is required' })

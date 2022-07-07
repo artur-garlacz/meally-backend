@@ -52,7 +52,7 @@ export const registerUser =
 
     logger.info('[Action] User created');
 
-    app.queueEmitter.emitUserEvent(user);
+    app.queueEmitter.createdUser(user);
 
     const accessToken = (await signAccessToken(user.userId)) as string;
     const refreshToken = (await signRefreshToken((token) =>

@@ -20,11 +20,13 @@ export const updateOrderStatusController = (app: AppServices) => {
       body: { order },
     } = req;
 
+    console.log(orderId, order);
+
     const data = await updateOrderStatus(app)({
       orderId: orderId!,
       order,
     });
 
-    return res.status(200).send(data);
+    return res.status(200).send({ data });
   };
 };

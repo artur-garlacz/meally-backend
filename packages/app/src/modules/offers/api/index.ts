@@ -9,7 +9,11 @@ import { Environment } from '@app/libs/utils/env';
 import { wrap } from '@app/libs/utils/express';
 
 import { createOfferController, createOfferSchema } from './create-offer';
-import { getOfferController, getOffersController } from './get-offers';
+import {
+  getMyOffersController,
+  getOfferController,
+  getOffersController,
+} from './get-offers';
 import { getOfferCategoriesController } from './get-offers';
 import {
   updateOfferStatusController,
@@ -35,7 +39,11 @@ export function offerApiRouter(services: AppServices) {
 
   router.get('/category', wrap(getOfferCategoriesController(services)));
 
+  // default
   router.get('/', wrap(getOffersController(services)));
+
+  // my offers
+  router.get('/my-offers', auth, wrap(getMyOffersController(services)));
 
   // /:offerId/updateStatus  - PUT
   router.put(

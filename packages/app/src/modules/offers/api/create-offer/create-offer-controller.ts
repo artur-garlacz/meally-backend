@@ -36,7 +36,7 @@ export const createOfferController = (app: AppServices) => {
     });
 
     if (sender.email) {
-      app.queueEmitter.emitOfferEvent({ ...newOffer, email: sender.email });
+      app.queueEmitter.createdOffer({ ...newOffer, email: sender.email });
     }
 
     return res.status(200).send({ data: newOffer });

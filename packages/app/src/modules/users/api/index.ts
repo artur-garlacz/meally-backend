@@ -15,8 +15,14 @@ import {
   logoutUserController,
   registerUserController,
 } from './auth-user';
+import { getUserDetailsController } from './get-user-details';
 import { getMyUserController } from './get-user/get-my-user-controller';
-import { getUserDetailsController } from './get-user/user-details-controller';
+import {
+  createUserDetailsController,
+  createUserDetailsSchema,
+  updateUserDetailsController,
+  updateUserDetailsSchema,
+} from './upsert-user-details';
 import {
   createUserReviewController,
   createUserReviewSchema,
@@ -57,6 +63,20 @@ export function userApiRouter(services: AppServices) {
 
   // detailed auth user data
   router.get('/details', auth, wrap(getUserDetailsController(services)));
+
+  router.post(
+    '/details',
+    auth,
+    validateMiddleware(createUserDetailsSchema),
+    wrap(createUserDetailsController(services)),
+  );
+
+  router.put(
+    '/details',
+    auth,
+    validateMiddleware(updateUserDetailsSchema),
+    wrap(updateUserDetailsController(services)),
+  );
 
   // detailed auth user data
   router.get('/:userId/details', wrap(getUserDetailsController(services)));

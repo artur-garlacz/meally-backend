@@ -8,6 +8,7 @@ export const createOrderSchema = z.object({
       quantity: z.number({
         required_error: 'Quantity is required',
       }),
+      offerId: z.string({ required_error: 'Offer id is required' }),
     }),
   }),
 });

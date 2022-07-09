@@ -6,6 +6,7 @@ const migration: Migration = {
   async run(db) {
     await db.query(sql`
           DROP TABLE IF EXISTS "user" CASCADE;
+          DROP TABLE IF EXISTS "refreshToken" CASCADE;
           DROP TABLE IF EXISTS "userDetails" CASCADE;
           DROP TABLE IF EXISTS "offer" CASCADE;
           DROP TABLE IF EXISTS "offerOrder" CASCADE;

@@ -106,7 +106,7 @@ export function usersQueries(db: CommonQueryMethods) {
       userDetails: UserDetailsEntity,
     ): Promise<UserDetailsEntity> {
       logger.info('DbClient.createUserDetails');
-
+      logger.info(userDetails);
       return db.one(sql`
             INSERT INTO "userDetails" (
               "userDetailsId",
@@ -137,7 +137,7 @@ export function usersQueries(db: CommonQueryMethods) {
       logger.info('DbClient.updateUserDetails', userDetails);
 
       return db.one(sql`
-          UPDATE "offer"
+          UPDATE "userDetails"
           SET
           ${chainOptional(
             {

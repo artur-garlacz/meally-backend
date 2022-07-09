@@ -1,5 +1,6 @@
 import { AppServices } from '@app/app-services';
-import { Request, Response } from 'express';
+import { AuthRequest } from '@app/commons/request';
+import { Response } from 'express';
 
 import {
   GetMerchantOrdersRequestQuery,
@@ -8,7 +9,21 @@ import {
 
 export const getMerchantOrdersController = (app: AppServices) => {
   return async (
-    req: Request<{}, GetOrdersResponse, {}, GetMerchantOrdersRequestQuery>,
+    req: AuthRequest<{}, GetOrdersResponse, {}, GetMerchantOrdersRequestQuery>,
     res: Response,
-  ) => {};
+  ) => {
+    const {
+      sender: { userId },
+      query: { page, perPage, status },
+    } = req;
+
+    const response = await app.dbClient.getPaginatedMerchantOrders({
+      userId,
+      page,
+      perPage,
+      status,
+    });
+
+    return res.status(200).send(response);
+  };
 };

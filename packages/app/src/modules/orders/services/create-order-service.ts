@@ -12,10 +12,9 @@ export const createOrder =
   (app: AppServices) =>
   async ({
     offerOrder,
-    offerId,
     userId,
-  }: CreateOrderRequestBody['body'] & { offerId: string; userId: string }) => {
-    const currOffer = await app.dbClient.getOfferById(offerId!);
+  }: CreateOrderRequestBody['body'] & { userId: string }) => {
+    const currOffer = await app.dbClient.getOfferById(offerOrder.offerId);
 
     if (!currOffer) {
       throw new HttpErrorResponse(404, {
@@ -40,7 +39,7 @@ export const createOrder =
         const order = await dbTransaction.createOrder({
           offerOrderId: uuid(),
           quantity: offerOrder.quantity,
-          offerId: offerId!,
+          offerId: offerOrder.offerId,
           customerId: userId,
           createdAt: new Date(),
           updatedAt: new Date(),

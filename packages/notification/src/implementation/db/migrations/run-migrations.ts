@@ -1,6 +1,6 @@
 import { CommonQueryMethods, DatabasePool, sql } from 'slonik';
 
-import migrations from '@app/libs/migrations/sources';
+import migrations from './sources';
 
 import logger from '@lib/utils/logger';
 

@@ -10,7 +10,6 @@ export const updateOrderStatusSchema = z.object({
   body: z.object({
     order: z.object({
       status: z.enum([
-        OrderStatus.created,
         OrderStatus.accepted,
         OrderStatus.prepared,
         OrderStatus.delivered,

@@ -1,12 +1,12 @@
-import { ErrorType } from '@commons/errors';
-import { AuthRequest } from '@commons/request';
+import { ErrorType } from '@app/commons/errors';
+import { AuthRequest } from '@app/commons/request';
 import { NextFunction, Request, Response } from 'express';
-import createError from 'http-errors';
 
-import { DbClient } from '@libs/db';
-import { HttpErrorResponse } from '@libs/utils/errors';
-import { verifyAccessToken } from '@libs/utils/jwt';
-import logger from '@libs/utils/logger';
+import { DbClient } from '@app/libs/db';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
+import { verifyAccessToken } from '@app/libs/utils/jwt';
+
+import logger from '@lib/utils/logger';
 
 export function authMiddleware(dbClient: DbClient) {
   return async (req: Request, res: Response, next: NextFunction) => {

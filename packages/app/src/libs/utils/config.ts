@@ -21,6 +21,8 @@ export async function getAppConfig(): Promise<AppConfig> {
     appVersion: readOptionalString('APP_VERSION', 'no-version-env'), // cannot use env readers fns with webpack DefineModule
     dbConfig: readDbConfig(),
     cognitoConfig: readCognitoConfig(),
+    queueConfig: readQueueConfig(),
+    swaggerConfig: swaggerConfig()
   });
 }
 
@@ -47,6 +49,16 @@ export class AppConfig {
   @ValidateNested()
   @Type(() => CognitoConfig)
   readonly cognitoConfig: CognitoConfig;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => QueueConfig)
+  readonly queueConfig: QueueConfig;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => SwaggerConfig)
+  readonly swaggerConfig: SwaggerConfig;
 }
 
 export function getDbConfig(): Promise<DbConfig> {
@@ -105,4 +117,48 @@ export class CognitoConfig {
   @IsString()
   @IsNotEmpty()
   readonly userPoolId: string;
+}
+
+export class QueueConfig {
+  @IsString()
+  readonly host: string;
+
+  @IsPort()
+  readonly port: string;
+}
+
+function readQueueConfig(): QueueConfig {
+  const { readOptionalString } = createEnvReader(process.env);
+  return {
+    host: readOptionalString(
+      'QUEUE_HOST',
+      'localhost',
+    ),
+    port: readOptionalString(
+      'QUEUE_PORT',
+      '5672',
+    ),
+  };
+}
+
+export class SwaggerConfig {
+  @IsString()
+  readonly host: string;
+
+  @IsPort()
+  readonly port: string;
+}
+
+function swaggerConfig(): SwaggerConfig {
+  const { readOptionalString } = createEnvReader(process.env);
+  return {
+    host: readOptionalString(
+      'SWAGGER_HOST',
+      'localhost',
+    ),
+    port: readOptionalString(
+      'SWAGGER_PORT',
+      '5000',
+    ),
+  };
 }

@@ -1,15 +1,19 @@
-import { AppServices } from '@app-services';
+import { AppServices } from '@app/app-services';
 import { Router } from 'express';
 
-import { authMiddleware } from '@api/middlewares/auth-middleware';
-import { testAuthMiddleware } from '@api/middlewares/test-auth-middleware';
-import { validateMiddleware } from '@api/middlewares/validator-middleware';
+import { authMiddleware } from '@app/api/middlewares/auth-middleware';
+import { testAuthMiddleware } from '@app/api/middlewares/test-auth-middleware';
+import { validateMiddleware } from '@app/api/middlewares/validator-middleware';
 
-import { Environment } from '@libs/utils/env';
-import { wrap } from '@libs/utils/express';
+import { Environment } from '@app/libs/utils/env';
+import { wrap } from '@app/libs/utils/express';
 
 import { createOfferController, createOfferSchema } from './create-offer';
-import { getOfferController, getOffersController } from './get-offers';
+import {
+  getMyOffersController,
+  getOfferController,
+  getOffersController,
+} from './get-offers';
 import { getOfferCategoriesController } from './get-offers';
 import {
   updateOfferStatusController,
@@ -35,7 +39,11 @@ export function offerApiRouter(services: AppServices) {
 
   router.get('/category', wrap(getOfferCategoriesController(services)));
 
+  // default
   router.get('/', wrap(getOffersController(services)));
+
+  // my offers
+  router.get('/my-offers', auth, wrap(getMyOffersController(services)));
 
   // /:offerId/updateStatus  - PUT
   router.put(

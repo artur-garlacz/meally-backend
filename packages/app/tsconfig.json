@@ -1,28 +1,29 @@
 {
-  "compilerOptions": {
-    "target": "es2019",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "types": ["node"],
-    "baseUrl": ".",
-    "alwaysStrict": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": false,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@*": ["./src/*"],
-      "@lib": ["../lib"]
-    }
-  },
+  // "compilerOptions": {
+  //   "target": "es2019",
+  //   "module": "commonjs",
+  //   "moduleResolution": "node",
+  //   "types": ["node"],
+  //   "baseUrl": ".",
+  //   "alwaysStrict": true,
+  //   "noImplicitThis": true,
+  //   "noImplicitReturns": true,
+  //   "noUnusedLocals": false,
+  //   "noUnusedParameters": false,
+  //   "noImplicitAny": true,
+  //   "strictNullChecks": true,
+  //   "strictFunctionTypes": true,
+  //   "strictPropertyInitialization": false,
+  //   "esModuleInterop": true,
+  //   "experimentalDecorators": true,
+  //   "resolveJsonModule": true,
+  //   "skipLibCheck": true,
+  //   "paths": {
+  //     "@*": ["./src/*"],
+  //     "@lib": ["../lib"]
+  //   }
+  // },
+  "extends": "../../tsconfig.json",
   "ts-node": {
     "require": ["tsconfig-paths/register", "reflect-metadata", "dotenv/config"],
     "transpileOnly": true

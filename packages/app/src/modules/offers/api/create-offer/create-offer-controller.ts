@@ -1,8 +1,11 @@
-import { AppServices } from '@app-services';
-import { AuthRequest } from '@commons/request';
+import { AppServices } from '@app/app-services';
+import { AuthRequest } from '@app/commons/request';
 import { Response } from 'express';
 
-import { uuid } from '@libs/utils/common';
+import { uuid } from '@app/libs/utils/common';
+
+import { QueueChannels, QueueCommands } from '@lib/commons/queue';
+import { serializeJson } from '@lib/utils/serialization';
 
 import { OfferStatus } from '../get-offers';
 import { CreateOfferRequestBody } from './create-offer-dtos';
@@ -31,6 +34,10 @@ export const createOfferController = (app: AppServices) => {
       userId: sender.userId,
       offerCategoryId: offer.offerCategoryId,
     });
+
+    if (sender.email) {
+      app.queueEmitter.createdOffer({ ...newOffer, email: sender.email });
+    }
 
     return res.status(200).send({ data: newOffer });
   };

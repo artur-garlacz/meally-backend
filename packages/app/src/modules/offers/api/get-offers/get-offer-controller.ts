@@ -1,8 +1,8 @@
-import { AppServices } from '@app-services';
-import { ErrorType } from '@commons/errors';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
 import { Request, Response } from 'express';
 
-import { HttpErrorResponse } from '@libs/utils/errors';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
 
 import { GetOfferResponse } from './get-offer-dtos';
 

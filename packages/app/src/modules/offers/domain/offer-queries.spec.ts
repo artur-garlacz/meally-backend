@@ -1,12 +1,12 @@
-import { getTestDbClient } from '@setup-integration-tests.spec';
+import { getTestDbClient } from '@app/setup-integration-tests.spec';
 import { assert } from 'chai';
 
-import { DbClient } from '@libs/db';
-import { uuid } from '@libs/utils/common';
+import { DbClient } from '@app/libs/db';
+import { uuid } from '@app/libs/utils/common';
 
-import { UserEntity } from '@modules/users/domain/entities';
+import { UserEntity } from '@app/modules/users/domain/entities';
 
-import { dummies } from '@tests/dummies';
+import { dummies } from '@app/tests/dummies';
 
 import { OfferCategoryEntity } from './entities';
 

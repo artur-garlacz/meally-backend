@@ -1,8 +1,8 @@
-import { AppServices } from '@app-services';
-import { AuthRequest } from '@commons/request';
+import { AppServices } from '@app/app-services';
+import { AuthRequest } from '@app/commons/request';
 import { Response } from 'express';
 
-import { uuid } from '@libs/utils/common';
+import { uuid } from '@lib/utils/common';
 
 import { CreateUserReviewRequestBody } from './user-review-dtos';
 

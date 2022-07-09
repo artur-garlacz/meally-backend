@@ -1,4 +1,5 @@
-import { ErrorType } from '@commons/errors';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
 import createError from 'http-errors';
 import jwt from 'jsonwebtoken';
 
@@ -26,39 +27,43 @@ export const signAccessToken = (userId: string) => {
   });
 };
 
-export const signRefreshToken = (userId: string) => {
-  return new Promise((resolve, reject) => {
-    jwt.sign(
-      { userId },
-      accessTokenSecret ?? '',
-      { expiresIn: refreshTokenTTL ?? '3d', audience: userId },
-      (err, token) => {
-        if (err) {
-          reject(new createError.InternalServerError());
-        }
+export const signRefreshToken =
+  (setToken: (token: string) => any) => (userId: string) => {
+    return new Promise((resolve, reject) => {
+      jwt.sign(
+        { userId },
+        accessTokenSecret ?? '',
+        { expiresIn: refreshTokenTTL ?? '3d', audience: userId },
+        async (err, token) => {
+          if (err) {
+            reject(
+              new HttpErrorResponse(422, {
+                message: 'Could not process token',
+                kind: ErrorType.Unhandled,
+              }),
+            );
+          }
 
-        // userId.toString(), token, { EX: 365 * 24 * 60 * 60 };
-        // client
-        //   .set(`${userId}`, `${token}`, {
-        //     EX: 365 * 24 * 60 * 60,
-        //   })
-        //   .then((res) => {
-        //     console.log(res);
-        //     resolve(res);
-        //   });
+          if (!token) {
+            reject(
+              new HttpErrorResponse(401, {
+                message: 'Could not found token',
+                kind: ErrorType.Unauthorized,
+              }),
+            );
+          }
 
-        resolve(token);
-      },
-    );
-  });
-};
+          await setToken(token!);
+          resolve(token);
+        },
+      );
+    });
+  };
 
 export const verifyAccessToken = (token: string) =>
   new Promise((resolve, reject) => {
     jwt.verify(token, accessTokenSecret ?? '', (err, payload) => {
       if (err) {
-        const message =
-          err.name == 'JsonWebTokenError' ? 'Unauthorized' : err.message;
         return reject(
           new HttpErrorResponse(401, {
             message: 'Access token is required',

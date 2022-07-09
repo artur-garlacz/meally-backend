@@ -1,14 +1,11 @@
-import { ErrorType } from '@commons/errors';
-import bcrypt from 'bcrypt';
+import { ErrorType } from '@app/commons/errors';
 
-import { DbClient } from '@libs/db';
-import { uuid } from '@libs/utils/common';
-import { HttpErrorResponse } from '@libs/utils/errors';
-import { signAccessToken, signRefreshToken } from '@libs/utils/jwt';
-import logger from '@libs/utils/logger';
-import { toPasswordHash, verifyPassword } from '@libs/utils/password';
+import { DbClient } from '@app/libs/db';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
+import { signAccessToken } from '@app/libs/utils/jwt';
+import { verifyPassword } from '@app/libs/utils/password';
 
-import { AuthUserRequestBody } from '@modules/users/api/auth-user';
+import { AuthUserRequestBody } from '@app/modules/users/api/auth-user';
 
 export const loginUser =
   (dbClient: DbClient) =>
@@ -42,7 +39,6 @@ export const loginUser =
     }
 
     const accessToken = await signAccessToken(user.userId);
-    const refreshToken = await signRefreshToken(user.userId);
 
-    return { email, accessToken, refreshToken };
+    return { email, accessToken };
   };

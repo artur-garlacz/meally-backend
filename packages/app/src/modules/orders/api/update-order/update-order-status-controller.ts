@@ -1,8 +1,8 @@
-import { AppServices } from '@app-services';
-import { AuthRequest } from '@commons/request';
+import { AppServices } from '@app/app-services';
+import { AuthRequest } from '@app/commons/request';
 import { Response } from 'express';
 
-import { updateOrderStatus } from '@modules/orders/services/update-order-status-service';
+import { updateOrderStatus } from '@app/modules/orders/services/update-order-status-service';
 
 import { UpdateOrderStatusRequestBody } from './update-order-dtos';
 
@@ -20,11 +20,13 @@ export const updateOrderStatusController = (app: AppServices) => {
       body: { order },
     } = req;
 
-    const data = await updateOrderStatus(app.dbClient)({
+    console.log(orderId, order);
+
+    const data = await updateOrderStatus(app)({
       orderId: orderId!,
       order,
     });
 
-    return res.status(200).send(data);
+    return res.status(200).send({ data });
   };
 };

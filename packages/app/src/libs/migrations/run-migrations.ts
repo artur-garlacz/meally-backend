@@ -1,7 +1,8 @@
 import { CommonQueryMethods, DatabasePool, sql } from 'slonik';
 
-import migrations from '@libs/migrations/sources';
-import logger from '@libs/utils/logger';
+import migrations from '@app/libs/migrations/sources';
+
+import logger from '@lib/utils/logger';
 
 type Migration = {
   migrationId: string;

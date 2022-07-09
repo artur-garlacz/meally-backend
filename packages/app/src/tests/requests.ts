@@ -1,15 +1,15 @@
-import { AppServices, buildAppServices } from '@app-services';
-import { AuthRequest, RequestSender } from '@commons/request';
-import { getTestDbClient } from '@setup-integration-tests.spec';
+import { AppServices, buildAppServices } from '@app/app-services';
+import { AuthRequest, RequestSender } from '@app/commons/request';
+import { getTestDbClient } from '@app/setup-integration-tests.spec';
 import * as R from 'ramda';
 import request from 'supertest';
 
-import { TEST_AUTH_HEADER } from '@api/middlewares/test-auth-middleware';
-import { buildRouter } from '@api/router';
+import { TEST_AUTH_HEADER } from '@app/api/middlewares/test-auth-middleware';
+import { buildRouter } from '@app/api/router';
 
-import { getAppConfig } from '@libs/utils/config';
-import { Environment } from '@libs/utils/env';
-import { AsyncReturnType } from '@libs/utils/types';
+import { getAppConfig } from '@app/libs/utils/config';
+import { Environment } from '@app/libs/utils/env';
+import { AsyncReturnType } from '@app/libs/utils/types';
 
 async function buildTestExpressApp(args: Partial<AppServices> = {}) {
   const dbClient = args.dbClient || (await getTestDbClient());

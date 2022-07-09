@@ -3,14 +3,39 @@
 // order
 import { CommonQueryMethods, sql } from 'slonik';
 
-import logger from '@libs/utils/logger';
-import { chainOptional, toOptional } from '@libs/utils/query';
-import { serializeDate } from '@libs/utils/serialization';
+import { chainOptional, toOptional } from '@app/libs/utils/query';
 
-import { UserDetailsEntity, UserEntity, UserPasswordEntity } from './entities';
+import logger from '@lib/utils/logger';
+import { serializeDate } from '@lib/utils/serialization';
+
+import {
+  RefreshTokenEntity,
+  UserDetailsEntity,
+  UserEntity,
+  UserPasswordEntity,
+} from './entities';
 
 export function usersQueries(db: CommonQueryMethods) {
   return Object.freeze({
+    createRefreshToken(token: RefreshTokenEntity) {
+      logger.info('[Command] DbClient.createRefreshToken');
+
+      return db.query(sql`
+        INSERT INTO "refreshToken" (
+          "refreshTokenId",
+          "refreshToken",
+          "createdAt",
+          "updatedAt",
+          "userId"
+        ) VALUES (
+          ${token.refreshTokenId},
+          ${token.refreshToken},
+          ${serializeDate(token.createdAt)},
+          ${serializeDate(token.updatedAt)},
+          ${token.userId}
+        ) RETURNING *
+      `);
+    },
     createUser(user: UserEntity): Promise<UserEntity> {
       logger.info('DbClient.createUser');
 
@@ -81,7 +106,7 @@ export function usersQueries(db: CommonQueryMethods) {
       userDetails: UserDetailsEntity,
     ): Promise<UserDetailsEntity> {
       logger.info('DbClient.createUserDetails');
-
+      logger.info(userDetails);
       return db.one(sql`
             INSERT INTO "userDetails" (
               "userDetailsId",
@@ -112,7 +137,7 @@ export function usersQueries(db: CommonQueryMethods) {
       logger.info('DbClient.updateUserDetails', userDetails);
 
       return db.one(sql`
-          UPDATE "offer"
+          UPDATE "userDetails"
           SET
           ${chainOptional(
             {

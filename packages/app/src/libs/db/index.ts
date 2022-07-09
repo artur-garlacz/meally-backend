@@ -4,10 +4,10 @@ import {
   DatabaseTransactionConnection,
 } from 'slonik';
 
-import { offersQueries } from '@modules/offers/domain/offer-queries';
-import { ordersQueries } from '@modules/orders/domain/order-quieres';
-import { reviewsQueries } from '@modules/reviews/domain/review-queries';
-import { usersQueries } from '@modules/users/domain/user-queries';
+import { offersQueries } from '@app/modules/offers/domain/offer-queries';
+import { ordersQueries } from '@app/modules/orders/domain/order-quieres';
+import { reviewsQueries } from '@app/modules/reviews/domain/review-queries';
+import { usersQueries } from '@app/modules/users/domain/user-queries';
 
 import { wrapDbClientByErrorLogger } from './setup';
 

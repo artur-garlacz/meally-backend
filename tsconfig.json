@@ -4,7 +4,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "types": ["node"],
-    "baseUrl": ".",
+    "baseUrl": "./packages",
+    "outDir": "./dist",
     "alwaysStrict": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
@@ -19,11 +20,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "paths": {
-      "@*": ["*"]
+      "@app/*": ["./app/src/*"],
+      "@notify/*": ["./notification/src/*"],
+      "@lib/*": ["./lib/*"]
     }
   },
-  "ts-node": {
-    "require": ["tsconfig-paths/register", "reflect-metadata", "dotenv/config"],
-    "transpileOnly": true
-  }
 }

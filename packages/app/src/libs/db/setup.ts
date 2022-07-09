@@ -8,9 +8,10 @@ import {
 } from 'slonik';
 import { createInterceptors } from 'slonik-interceptor-preset';
 
-import { sleep } from '@libs/utils/common';
-import { AppConfig } from '@libs/utils/config';
-import logger from '@libs/utils/logger';
+import { AppConfig } from '@app/libs/utils/config';
+
+import { sleep } from '@lib/utils/common';
+import logger from '@lib/utils/logger';
 
 type WrappedDbClient = CommonQueryMethods & {
   transaction: DatabasePool['transaction'];

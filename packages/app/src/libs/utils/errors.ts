@@ -1,4 +1,4 @@
-import { HttpErrorResponseBody } from '@commons/errors';
+import { HttpErrorResponseBody } from '@app/commons/errors';
 import { ValidationError } from 'class-validator';
 
 export class HttpErrorResponse extends Error {

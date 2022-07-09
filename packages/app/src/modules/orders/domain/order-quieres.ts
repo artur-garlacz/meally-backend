@@ -1,19 +1,20 @@
 import {
   setPaginationParams,
   setPaginationResponse,
-} from '@commons/pagination';
+} from '@app/commons/pagination';
 import { CommonQueryMethods, sql } from 'slonik';
 
-import logger from '@libs/utils/logger';
 import {
   chainOptional,
   toMany,
   toOptional,
   toRequired,
-} from '@libs/utils/query';
-import { serializeDate } from '@libs/utils/serialization';
+} from '@app/libs/utils/query';
 
-import { OfferEntity } from '@modules/offers/domain/entities';
+import logger from '@lib/utils/logger';
+import { serializeDate } from '@lib/utils/serialization';
+
+import { OfferEntity } from '@app/modules/offers/domain/entities';
 
 import {
   GetCustomerOrdersRequestQuery,
@@ -69,16 +70,14 @@ export function ordersQueries(db: CommonQueryMethods) {
     }): Promise<OrderEntity> {
       logger.info('[Command] DbClient.getOrderById');
 
-      return db
-        .query(
-          sql`
-          UPDATE "offer"
+      return db.one(
+        sql`
+          UPDATE "offerOrder"
           SET "status"=${args.status}
           WHERE "offerOrderId"=${args.orderId}
           RETURNING *
             `,
-        )
-        .then(toRequired(OrderEntity));
+      );
     },
     async getPaginatedCustomerOrders(
       args: GetCustomerOrdersRequestQuery & {
@@ -119,7 +118,7 @@ export function ordersQueries(db: CommonQueryMethods) {
         .query(
           sql`
               SELECT * FROM "offerOrder" JOIN "offer" on "offerOrder"."offerId"="offer"."offerId"
-              WHERE "offer"."offerId"=${userId} ORDER BY "offerOrder"."offerOrderId" ${paginateCondition};
+              WHERE "offer"."userId"=${userId} ORDER BY "offerOrder"."offerOrderId" ${paginateCondition};
             `,
         )
         .then(toMany(OrderEntity));

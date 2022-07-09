@@ -1,10 +1,10 @@
-import { AppServices } from '@app-services';
-import { ErrorType } from '@commons/errors';
-import { AuthRequest } from '@commons/request';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
+import { AuthRequest } from '@app/commons/request';
 import { Response } from 'express';
 import { z } from 'zod';
 
-import { HttpErrorResponse } from '@libs/utils/errors';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
 
 import { OfferStatus, OfferStatusType } from '../get-offers';
 

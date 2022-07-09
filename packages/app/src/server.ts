@@ -1,10 +1,10 @@
-import { buildAppServices } from '@app-services';
+import { buildAppServices } from '@app/app-services';
 import { createServer } from 'http';
 
-import { buildRouter } from '@api/router';
+import { buildRouter } from '@app/api/router';
 
-import { getEnv } from '@libs/utils/env';
-import logger from '@libs/utils/logger';
+import { getEnv } from '@app/libs/utils/env';
+import logger from '@app/libs/utils/logger';
 
 async function main() {
   const httpPort = getEnv('APP_PORT');

@@ -1,29 +1,77 @@
 version: '3.8'
 services:
-  app_db:
+  db:
     image: postgres:latest
     environment:
+      POSTGRES_USER: artur
       POSTGRES_PASSWORD: artur
+      POSTGRES_MULTIPLE_DATABASES: meally_app, meally_notify
       PGDATA: /data/postgres
-      DATABASE: meally
-      DATABASE_TESTS: meally_tests
     volumes:
-      - ./packages/app/scripts/db:/docker-entrypoint-initdb.d
+      - ./scripts/db:/docker-entrypoint-initdb.d
     ports:
-      - '5432:5432'
+      - '5433:5432'
+    networks:
+      - meally
     restart: unless-stopped
-  app:
+  app_service:
     build:
-      dockerfile: Dockerfile.dev
-      context: "./packages/app"
-    volumes:
-      - /app/node_modules
-      - ./app:/app
+      context: .
+      dockerfile: ./packages/app/Dockerfile
     environment:
-      - PGUSER=artur
-      - PGHOST=postgres
-      - PGDATABASE=meally
-      - PGPASSWORD=postgres_password
-      - PGPORT=5432
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=meally_app
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=artur
+      - POSTGRES_PASSWORD=artur
+      - QUEUE_HOST=rabbitmq
+    command: >
+      sh -c "npm --prefix packages/app run migrations:run-force
+             npm --prefix packages/app run start"
+    ports:
+      - "8082:8081"
+    volumes:
+      - ./packages/app:/meally/packages/app
+      - ./packages/lib:/meally/packages/lib
+    networks:
+      - meally
+  notification_service:
+    build:
+      context: .
+      dockerfile: ./packages/notification/Dockerfile
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=meally_notify
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=artur
+      - POSTGRES_PASSWORD=artur
+      - QUEUE_HOST=rabbitmq
+    command: >
+      sh -c "npm --prefix packages/notification run migrations:run
+             npm --prefix packages/notification run start"
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./packages/notification:/meally/packages/notification
+      - ./packages/lib:/meally/packages/lib
+    networks:
+      - meally
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - meally
+
+  
+
+networks:
+  meally:
+    driver: bridge
 
 

@@ -1,4 +1,4 @@
-import { AuthRequest } from '@commons/request';
+import { AuthRequest } from '@app/commons/request';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import * as core from 'express-serve-static-core';
 

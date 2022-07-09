@@ -1,18 +1,18 @@
-import { ErrorType } from '@commons/errors';
+import { AppServices } from '@app/app-services';
+import { ErrorType } from '@app/commons/errors';
 
-import { DbClient } from '@libs/db';
-import { HttpErrorResponse } from '@libs/utils/errors';
+import { HttpErrorResponse } from '@app/libs/utils/errors';
 
 import { OrderStatus, OrderStatusType } from '../api/get-orders';
 import { UpdateOrderStatusRequestBody } from '../api/update-order';
 
 export const updateOrderStatus =
-  (dbClient: DbClient) =>
+  (app: AppServices) =>
   async ({
     order,
     orderId,
   }: UpdateOrderStatusRequestBody['body'] & { orderId: string }) => {
-    const currOrder = await dbClient.getOrderById({
+    const currOrder = await app.dbClient.getOrderById({
       offerOrderId: orderId!,
     });
 
@@ -25,7 +25,7 @@ export const updateOrderStatus =
 
     const newStatus = verifyOrderStatus(currOrder.status, order.status);
 
-    const updatedOrder = await dbClient.updateOrderStatus({
+    const updatedOrder = await app.dbClient.updateOrderStatus({
       orderId: orderId!,
       status: newStatus,
     });

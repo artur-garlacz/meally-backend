@@ -13,12 +13,16 @@ export async function verifyPassword(
   passwordHash: string,
   password: string,
 ): Promise<boolean> {
-  const [salt, hashedPassword] = passwordHash.split('.');
-  const suppliedHashedPassword = await getHashedPassword(password, salt);
-  return timingSafeEqual(
-    Buffer.from(hashedPassword),
-    Buffer.from(suppliedHashedPassword),
-  );
+  try {
+    const [salt, hashedPassword] = passwordHash.split('.');
+    const suppliedHashedPassword = await getHashedPassword(password, salt);
+    return timingSafeEqual(
+      Buffer.from(hashedPassword),
+      Buffer.from(suppliedHashedPassword),
+    );
+  } catch {
+    return false;
+  }
 }
 
 export async function getHashedPassword(

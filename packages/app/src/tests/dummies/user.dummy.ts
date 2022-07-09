@@ -1,12 +1,12 @@
 import faker from '@faker-js/faker';
 
-import { uuid } from '@libs/utils/common';
+import { uuid } from '@app/libs/utils/common';
 
 import {
   UserDetailsEntity,
   UserEntity,
   UserPasswordEntity,
-} from '@modules/users/domain/entities';
+} from '@app/modules/users/domain/entities';
 
 export type MockBuilder<Entity> = (partial?: Partial<Entity>) => Entity;
 

@@ -1,7 +1,7 @@
-import { AuthRequest, RequestSender } from '@commons/request';
+import { AuthRequest, RequestSender } from '@app/commons/request';
 import { NextFunction, Request, Response } from 'express';
 
-import logger from '@libs/utils/logger';
+import logger from '@lib/utils/logger';
 
 export const TEST_AUTH_HEADER = 'mock-test-auth';
 

@@ -9,12 +9,16 @@
     "init": "rm -rf node_modules packages/*/node_modules && npm install && git checkout -- package-lock.json && npm run bootstrap",
     "bootstrap": "lerna bootstrap --hoist",
     "start:app": "lerna run start --scope app",
+    "migrations:generate:app": "lerna run migrations:generate --scope app",
+    "migrations:run:app": "lerna run migrations:run --scope app",
+    "build:lib": "tsc -b packages/lib",
+    "build:app": "tsc -b packages/app",
     "test:types:app": "lerna run test:types --scope app --stream",
     "test:integration:app": "lerna run test:integration --scope app --stream",
     "test:logic:app": "lerna run test:logic --scope app --stream",
     "test:unit:app": "lerna run test:unit --scope app --stream"
   },
-  "husky":{
+  "husky": {
     "hooks": {
       "pre-commit": "npm run test:precommit && lint-staged"
     }
@@ -28,6 +32,7 @@
     "@commitlint/cli": "^17.0.2",
     "@commitlint/config-conventional": "^17.0.2",
     "husky": "^8.0.1",
-    "lerna": "^5.0.0"
+    "lerna": "^5.0.0",
+    "typescript": "^4.7.3"
   }
 }

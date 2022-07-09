@@ -1,7 +1,7 @@
-import { AppServices } from '@app-services';
+import { AppServices } from '@app/app-services';
 import { Request, Response } from 'express';
 
-import { refreshToken } from '@modules/users/services';
+import { refreshToken } from '@app/modules/users/services';
 
 import { AuthRefreshTokenRequestBody } from './auth-user-dtos';
 

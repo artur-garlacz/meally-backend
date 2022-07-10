@@ -51,7 +51,7 @@ export function reviewsQueries(db: CommonQueryMethods) {
         .query(
           sql`
               SELECT * FROM "userReview" WHERE ${whereCondition}
-                ORDER BY userReviewId" ${paginateCondition};
+                ORDER BY "userReviewId" ${paginateCondition};
             `,
         )
         .then(toMany(UserReviewEntity));

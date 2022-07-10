@@ -26,7 +26,8 @@ services:
       - POSTGRES_PASSWORD=artur
       - QUEUE_HOST=rabbitmq
     command: >
-      sh -c "npm --prefix packages/app run migrations:run-force
+      sh -c "npm --prefix packages/app run migrations:run
+             npm --prefix packages/app run migrations:seed
              npm --prefix packages/app run start"
     ports:
       - "8082:8081"

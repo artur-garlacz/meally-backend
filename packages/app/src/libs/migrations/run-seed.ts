@@ -1,8 +1,11 @@
-import { DatabasePool } from 'slonik';
+import { DatabasePool, sql } from 'slonik';
 
 import { createDbClient } from '@app/libs/db';
+import { toMany } from '@app/libs/utils/query';
 
 import logger from '@lib/utils/logger';
+
+import { UserEntity } from '@app/modules/users/domain/entities';
 
 import { dummies } from '@app/tests/dummies';
 
@@ -11,6 +14,17 @@ import { toPasswordHash } from '../utils/password';
 export async function runSeed(dbPool: DatabasePool) {
   logger.info('Running db seed', {});
   const dbClient = createDbClient(dbPool);
+
+  const isSeeded = await dbClient.adhoc((db) =>
+    db
+      .query(sql`select count(1) where exists (select * from "user");`)
+      .then((res) => !!res.rowCount),
+  );
+
+  if (isSeeded) {
+    logger.info('Seeds skipped');
+    return;
+  }
 
   const user1 = await dbClient.createUser(
     dummies.user({
